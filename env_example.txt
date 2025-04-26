@@ -1,0 +1,82 @@
+# Environment Variables Configuration Instructions
+# ---------------------------------------------
+# 1. Copy this file and rename it to '.env'
+#    Command: cp env_example.txt .env
+#
+# 2. Replace all placeholder values below with your actual configuration
+#    DO NOT commit the .env file to version control
+#
+# 3. Make sure all required variables are set before deploying
+#    Missing environment variables may cause application errors
+#
+# 4. Keep this example file updated when adding new environment variables
+#    This helps other developers know what variables are needed
+# ---------------------------------------------
+
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=learnonline
+DB_USER=postgres
+DB_PASSWORD=your_secure_password_here
+
+# Application Settings
+APP_NAME=LearnOnline
+APP_ENV=development        # Options: development, staging, production
+APP_DEBUG=true            # Set to false in production
+APP_URL=http://localhost:3000
+APP_SECRET_KEY=your_secret_key_here
+
+# JWT Settings
+JWT_SECRET=your_jwt_secret_key_min_32_chars
+JWT_EXPIRATION=24h
+JWT_ALGORITHM=HS256
+
+# Redis Configuration
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_PASSWORD=your_redis_password_here
+
+# MinIO Configuration
+MINIO_ENDPOINT=minio:9000
+MINIO_ACCESS_KEY=your_minio_access_key
+MINIO_SECRET_KEY=your_minio_secret_key
+MINIO_BUCKET=learnonline
+
+# AI/ML Configuration
+GEMINI_API_KEY=your_gemini_api_key_here
+CHROMA_DB_PATH=/app/data/chroma
+LLM_MODEL=gemini-pro
+LLM_TEMPERATURE=0.7
+LLM_MAX_TOKENS=2048
+
+# Email Configuration
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=your_smtp_username
+SMTP_PASSWORD=your_smtp_password
+SMTP_FROM=noreply@example.com
+SMTP_SECURE=true         # Use TLS
+
+# Monitoring and Logging
+PROMETHEUS_MULTIPROC_DIR=/app/data/prometheus
+ELASTICSEARCH_HOST=elasticsearch
+ELASTICSEARCH_PORT=9200
+LOG_LEVEL=debug          # Options: debug, info, warn, error
+LOG_FORMAT=json
+
+# Streamlit Configuration
+STREAMLIT_SERVER_PORT=8501
+STREAMLIT_SERVER_ADDRESS=0.0.0.0
+STREAMLIT_THEME_BASE=light
+
+# AQTF API Configuration
+AQTF_API_URL=https://ws.sandbox.training.gov.au/Deewr.Tga.Webservices/TrainingComponentServiceV12.svc
+AQTF_API_USERNAME=WebService.Read
+AQTF_API_PASSWORD=Asdf098
+
+# Security
+CORS_ORIGINS=http://localhost:8080,http://localhost:3000
+RATE_LIMIT_REQUESTS=100
+RATE_LIMIT_PERIOD=60
+SESSION_SECRET=your_session_secret_key_here 
