@@ -37,3 +37,6 @@ learnonline.cc.code-workspace
 # Docker
 .docker/
 docker-compose.override.yml 
+
+# node modules
+frontend/node_modules/

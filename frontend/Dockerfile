@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -11,7 +11,8 @@ RUN apk add --no-cache \
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
+# Install dependencies, including devDependencies
+ENV NODE_ENV=development
 RUN npm install
 
 # Copy the rest of the application
@@ -20,14 +21,12 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Install serve to run the application
-RUN npm install -g serve
-
 # Create necessary directories
 RUN mkdir -p /app/logs
 
 # Set environment variables
 ENV NODE_ENV=production
+ENV HOST=0.0.0.0
 
-# Run the application
-CMD ["serve", "-s", "dist", "-l", "8080"] 
+# Run the application using the serve script from package.json
+CMD ["npm", "run", "start"]
