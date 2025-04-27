@@ -95,3 +95,7 @@ This document details the content generation process using AI/ML models, includi
 
 ### [AQTF Data Integration Technical Specifications](docs/technical/aqtf_integration.md)
 This document provides the technical details for integrating AQTF data, including SOAP API operations, database synchronization, XML data processing, and performance optimization.
+
+## Licence
+
+LearnOnline.cc is released under a [https://www.apache.org/licenses/LICENSE-2.0](Apache-2.0 license) . 
