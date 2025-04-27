@@ -98,4 +98,4 @@ This document provides the technical details for integrating AQTF data, includin
 
 ## Licence
 
-LearnOnline.cc is released under a [https://www.apache.org/licenses/LICENSE-2.0](Apache-2.0 license) . 
+LearnOnline.cc is released under a [Apache-2.0 license](https://www.apache.org/licenses/LICENSE-2.0). 
