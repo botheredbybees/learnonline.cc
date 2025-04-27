@@ -6,7 +6,7 @@ LearnOnline.cc is a gamified vocational training platform using the Australian Q
 
 I was previously the developer of NTISthis, a website that leveraged AQTF qualifications to generate assessment templates for vocational education. While NTISthis provided valuable tools for educators, the operational costs became unsustainable, leading me to discontinue the service.
 
-Now, with LearnOnline.cc, I'm experimenting with a more flexible and exploratory approach — what's' called "vibe programming". I'm using a mix of tools and AI assistants, including notbooklm, clive, roo, Copilot, Claude, and cline, to find what best fits my workflow. As a result, the codebase may appear a bit chaotic at times, reflecting this experimental process.
+Now, with LearnOnline.cc, I'm experimenting with vibe programming using a mix of tools and AI assistants These include notbooklm, clive, roo, Copilot, Claude, and Cline. I hope to find what best fits my workflow. Meanwhile, the codebase may appear a bit chaotic at times, reflecting this experimental process.
 
 ## Setup
 
