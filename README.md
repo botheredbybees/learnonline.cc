@@ -25,6 +25,11 @@ To get started with LearnOnline.cc, you'll need [Docker](https://www.docker.com/
 
    This will build and start all required services.
 
+For detailed instructions, please see:
+- [Development Setup Guide](DEVELOPMENT_SETUP.md) - Complete setup guide for developers
+- [Administrator Guide](docs/technical/admin_setup.md) - Instructions for setting up and using admin features
+- [Updating Guide](UPDATING.md) - Instructions for updating an existing installation
+
 ## TGA Integration
 
 LearnOnline.cc integrates with Training.gov.au (TGA) to fetch and process training packages, units of competency, qualifications, and skillsets. The integration provides the following features:
