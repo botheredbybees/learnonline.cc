@@ -39,7 +39,7 @@ DB_PARAMS = {
     'user': os.getenv('DB_USER'),
     'password': os.getenv('DB_PASSWORD'),
     'host': os.getenv('DB_HOST', 'localhost'),
-    'port': os.getenv('DB_PORT', '5432')
+    'port': os.getenv('DB_PORT', '5332')
 }
 
 # ** Training.gov.au endpoints **

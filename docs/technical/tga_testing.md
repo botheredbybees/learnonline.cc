@@ -32,7 +32,7 @@ DB_NAME=learnonline
 DB_USER=your_db_user
 DB_PASSWORD=your_db_password
 DB_HOST=localhost
-DB_PORT=5432
+DB_PORT=5332
 ```
 
 ### 3. Configure Database

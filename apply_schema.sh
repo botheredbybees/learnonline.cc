@@ -19,7 +19,7 @@ if [ -n "$(docker ps -q -f name=learnonline.cc_db)" ]; then
 else
   # Otherwise apply directly using psql
   echo "Applying schema directly using psql..."
-  psql -U ${DB_USER} -d ${DB_NAME} -h ${DB_HOST:-localhost} -p ${DB_PORT:-5432} -f schema_mvp_updated.sql
+  psql -U ${DB_USER} -d ${DB_NAME} -h ${DB_HOST:-localhost} -p ${DB_PORT:-5332} -f schema_mvp_updated.sql
 fi
 
 echo "Schema application completed!"

@@ -13,6 +13,6 @@ fi
 
 # Apply the schema updates
 echo "Creating tables for favorites and quests..."
-psql -U ${DB_USER} -d ${DB_NAME} -h ${DB_HOST:-localhost} -p ${DB_PORT:-5432} -f schema_updates/favorites_and_quests.sql
+psql -U ${DB_USER} -d ${DB_NAME} -h ${DB_HOST:-localhost} -p ${DB_PORT:-5332} -f schema_updates/favorites_and_quests.sql
 
 echo "Database updates completed successfully!"

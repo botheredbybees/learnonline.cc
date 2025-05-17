@@ -17,7 +17,7 @@ SECRET_KEY=your_secret_key_here
 
 # Database Configuration
 DB_HOST=localhost
-DB_PORT=5432
+DB_PORT=5332
 DB_NAME=learnonline
 DB_USER=postgres
 DB_PASSWORD=your_secure_password_here

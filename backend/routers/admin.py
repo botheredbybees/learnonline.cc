@@ -86,7 +86,7 @@ async def sync_training_packages(
                 user=os.getenv('DB_USER'),
                 password=os.getenv('DB_PASSWORD'),
                 host=os.getenv('DB_HOST', 'localhost'),
-                port=os.getenv('DB_PORT', '5432')
+                port=os.getenv('DB_PORT', '5332')
             )
             
             with conn:
@@ -111,7 +111,7 @@ async def sync_training_packages(
                     user=os.getenv('DB_USER'),
                     password=os.getenv('DB_PASSWORD'),
                     host=os.getenv('DB_HOST', 'localhost'),
-                    port=os.getenv('DB_PORT', '5432')
+                    port=os.getenv('DB_PORT', '5332')
                 )
                 
                 with conn:
@@ -222,7 +222,7 @@ async def process_unit_elements(
                 user=os.getenv('DB_USER'),
                 password=os.getenv('DB_PASSWORD'),
                 host=os.getenv('DB_HOST', 'localhost'),
-                port=os.getenv('DB_PORT', '5432')
+                port=os.getenv('DB_PORT', '5332')
             )
             
             with conn:
@@ -247,7 +247,7 @@ async def process_unit_elements(
                     user=os.getenv('DB_USER'),
                     password=os.getenv('DB_PASSWORD'),
                     host=os.getenv('DB_HOST', 'localhost'),
-                    port=os.getenv('DB_PORT', '5432')
+                    port=os.getenv('DB_PORT', '5332')
                 )
                 
                 with conn:

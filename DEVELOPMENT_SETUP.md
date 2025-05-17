@@ -35,7 +35,7 @@ DB_NAME=learnonline
 DB_USER=your_username
 DB_PASSWORD=your_secure_password
 DB_HOST=localhost
-DB_PORT=5432
+DB_PORT=5332
 
 # JWT Authentication
 JWT_SECRET=your_secure_jwt_secret_key_here
