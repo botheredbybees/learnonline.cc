@@ -3,6 +3,72 @@
     <h1>Admin Dashboard</h1>
     
     <el-tabs v-model="activeTab">
+      <el-tab-pane label="Users" name="users">
+        <div class="admin-section">
+          <h2>User Management</h2>
+          
+          <div class="filter-section">
+            <el-form :inline="true">
+              <el-form-item label="Filter by Level">
+                <el-select v-model="userLevelFilter" placeholder="Select level" clearable>
+                  <el-option label="Guest" value="guest" />
+                  <el-option label="Player" value="player" />
+                  <el-option label="Mentor" value="mentor" />
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="fetchUsers">Filter</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+          
+          <el-table
+            v-loading="usersLoading"
+            :data="users"
+            stripe
+            style="width: 100%">
+            <el-table-column prop="username" label="Username" />
+            <el-table-column prop="email" label="Email" />
+            <el-table-column prop="full_name" label="Full Name" />
+            <el-table-column prop="experience_points" label="Experience Points" width="150" sortable />
+            <el-table-column label="Level" width="100">
+              <template #default="scope">
+                <el-tag 
+                  :type="getLevelTagType(scope.row.level)"
+                  effect="dark">
+                  {{ scope.row.level }}
+                </el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="Actions" width="250">
+              <template #default="scope">
+                <el-button 
+                  size="small" 
+                  @click="showAwardPointsDialog(scope.row)">
+                  Award Points
+                </el-button>
+                <el-button 
+                  size="small" 
+                  type="primary"
+                  @click="viewUserDetails(scope.row)">
+                  Details
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          
+          <div class="pagination-container">
+            <el-pagination
+              v-model:currentPage="usersPagination.current"
+              :page-size="usersPagination.pageSize"
+              :total="usersPagination.total"
+              layout="prev, pager, next"
+              @current-change="handleUsersPageChange"
+            />
+          </div>
+        </div>
+      </el-tab-pane>
+      
       <el-tab-pane label="Training Packages" name="training-packages">
         <div class="admin-section">
           <h2>Training Packages</h2>
@@ -104,6 +170,69 @@
         </div>
       </el-tab-pane>
     </el-tabs>
+
+    <!-- User Details Dialog -->
+    <el-dialog
+      v-model="userDetailsVisible"
+      title="User Details"
+      width="60%">
+      <div v-if="selectedUser">
+        <el-descriptions title="User Information" :column="2" border>
+          <el-descriptions-item label="Username">{{ selectedUser.username }}</el-descriptions-item>
+          <el-descriptions-item label="Email">{{ selectedUser.email }}</el-descriptions-item>
+          <el-descriptions-item label="Full Name">{{ selectedUser.full_name || 'N/A' }}</el-descriptions-item>
+          <el-descriptions-item label="Admin">
+            <el-tag size="small" type="danger" v-if="selectedUser.is_admin">Yes</el-tag>
+            <el-tag size="small" type="info" v-else>No</el-tag>
+          </el-descriptions-item>
+          <el-descriptions-item label="Status">
+            <el-tag size="small" type="success" v-if="!selectedUser.disabled">Active</el-tag>
+            <el-tag size="small" type="danger" v-else>Disabled</el-tag>
+          </el-descriptions-item>
+          <el-descriptions-item label="Created">{{ formatDateTime(selectedUser.created_at) }}</el-descriptions-item>
+          <el-descriptions-item label="Experience Points" :span="2">
+            <el-progress 
+              :percentage="calculateLevelProgress(selectedUser)" 
+              :format="formatLevelProgress"
+              :color="getLevelColor(selectedUser.level)"
+              :stroke-width="20">
+            </el-progress>
+          </el-descriptions-item>
+          <el-descriptions-item label="Level">
+            <el-tag 
+              :type="getLevelTagType(selectedUser.level)"
+              effect="dark"
+              size="large">
+              {{ selectedUser.level }}
+            </el-tag>
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+    </el-dialog>
+    
+    <!-- Award Points Dialog -->
+    <el-dialog
+      v-model="awardPointsVisible"
+      title="Award Experience Points"
+      width="40%">
+      <div v-if="selectedUser">
+        <p>Awarding points to: <strong>{{ selectedUser.username }}</strong></p>
+        <p>Current experience: <strong>{{ selectedUser.experience_points }}</strong> points</p>
+        <p>Current level: <strong>{{ selectedUser.level }}</strong></p>
+        
+        <el-form @submit.prevent="submitAwardPoints">
+          <el-form-item label="Points to Award">
+            <el-input-number v-model="pointsToAward" :min="1" :step="10"></el-input-number>
+          </el-form-item>
+          <el-form-item label="Reason">
+            <el-input v-model="pointsReason" type="textarea" rows="3"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="submitAwardPoints" :loading="awardingPoints">Award Points</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-dialog>
 
     <!-- Task Details Dialog -->
     <el-dialog

@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-from typing import List
+from typing import List, Optional, Dict, Any
+from pydantic import BaseModel, Field
+import json
 
 from db.database import get_db
-from models.user import User, UserResponse, UserUpdate
+from models.user import User, UserResponse, UserUpdate, UserLevel
 from auth.auth_bearer import JWTBearer
 from auth.auth_handler import get_current_user
 
@@ -23,6 +25,7 @@ async def read_user_me(current_user: User = Depends(get_current_user)):
 async def read_users(
     skip: int = 0, 
     limit: int = 100, 
+    level: Optional[str] = None,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -34,19 +37,36 @@ async def read_users(
             detail="Not authorized to access user list"
         )
     
-    # Get users
-    stmt = text("""
-        SELECT id, email, username, full_name, disabled, is_admin, created_at, updated_at
+    # Build the query based on parameters
+    query = """
+        SELECT id, email, username, full_name, disabled, is_admin, 
+               experience_points, level, created_at, updated_at
         FROM users
-        ORDER BY username
-        LIMIT :limit OFFSET :skip
-    """)
+    """
     
-    result = db.execute(stmt, {"limit": limit, "skip": skip})
+    # Add filter by level if specified
+    params = {"limit": limit, "skip": skip}
+    if level:
+        query += " WHERE level::text = :level"
+        params["level"] = level
+    
+    # Add ordering and pagination
+    query += " ORDER BY experience_points DESC, username LIMIT :limit OFFSET :skip"
+    
+    # Execute query
+    stmt = text(query)
+    result = db.execute(stmt, params)
     users = result.fetchall()
     
-    # Convert to list of UserResponse
-    return [UserResponse(**dict(user)) for user in users]
+    # Convert to list of UserResponse objects
+    user_list = []
+    for user_row in users:
+        user_dict = dict(user_row)
+        # Ensure proper typing of the level field
+        user_dict["level"] = UserLevel(user_dict["level"])
+        user_list.append(UserResponse(**user_dict))
+    
+    return user_list
 
 @router.get("/{user_id}", response_model=UserResponse, dependencies=[Depends(JWTBearer())])
 async def read_user(
@@ -64,7 +84,8 @@ async def read_user(
     
     # Get user
     stmt = text("""
-        SELECT id, email, username, full_name, disabled, is_admin, created_at, updated_at
+        SELECT id, email, username, full_name, disabled, is_admin, 
+               experience_points, level, created_at, updated_at
         FROM users
         WHERE id = :user_id
     """)
@@ -75,7 +96,11 @@ async def read_user(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
-    return UserResponse(**dict(user))
+    # Convert to UserResponse with proper typing
+    user_dict = dict(user)
+    user_dict["level"] = UserLevel(user_dict["level"])
+    
+    return UserResponse(**user_dict)
 
 @router.put("/{user_id}", response_model=UserResponse, dependencies=[Depends(JWTBearer())])
 async def update_user(
@@ -125,6 +150,13 @@ async def update_user(
         if user_update.is_admin is not None:
             update_fields["is_admin"] = user_update.is_admin
             update_sql_parts.append("is_admin = :is_admin")
+            
+        # Allow admins to update experience points directly
+        if user_update.experience_points is not None:
+            update_fields["experience_points"] = user_update.experience_points
+            update_sql_parts.append("experience_points = :experience_points")
+            
+        # Level will be automatically updated via database trigger
     
     # Only update if there are fields to update
     if update_sql_parts:
@@ -136,7 +168,8 @@ async def update_user(
             UPDATE users
             SET {', '.join(update_sql_parts)}
             WHERE id = :user_id
-            RETURNING id, email, username, full_name, disabled, is_admin, created_at, updated_at
+            RETURNING id, email, username, full_name, disabled, is_admin, 
+                     experience_points, level, created_at, updated_at
         """
         
         # Add user_id to update fields
@@ -149,16 +182,122 @@ async def update_user(
         
         # Get updated user
         updated_user = result.fetchone()
-        return UserResponse(**dict(updated_user))
+        user_dict = dict(updated_user)
+        user_dict["level"] = UserLevel(user_dict["level"])
+        
+        return UserResponse(**user_dict)
     
     # If no fields to update, just return the current user
     stmt = text("""
-        SELECT id, email, username, full_name, disabled, is_admin, created_at, updated_at
+        SELECT id, email, username, full_name, disabled, is_admin,
+               experience_points, level, created_at, updated_at
         FROM users
         WHERE id = :user_id
     """)
     
     result = db.execute(stmt, {"user_id": user_id})
     user = result.fetchone()
+    user_dict = dict(user)
+    user_dict["level"] = UserLevel(user_dict["level"])
     
-    return UserResponse(**dict(user))
+    return UserResponse(**user_dict)
+
+class ExperiencePointsAward(BaseModel):
+    points: int = Field(..., gt=0, description="Number of points to award (must be positive)")
+    reason: Optional[str] = Field(None, description="Reason for awarding points")
+
+@router.post("/{user_id}/award-points", response_model=UserResponse, dependencies=[Depends(JWTBearer())])
+async def award_experience_points(
+    user_id: str,
+    award: ExperiencePointsAward,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Award experience points to a user (admin only)"""
+    # Only admins can award experience points
+    if not current_user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to award experience points"
+        )
+    
+    # Check if user exists
+    stmt = text("""
+        SELECT id FROM users WHERE id = :user_id
+    """)
+    result = db.execute(stmt, {"user_id": user_id})
+    if not result.fetchone():
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Award experience points - level will be updated by the database trigger
+    update_sql = """
+        UPDATE users
+        SET experience_points = experience_points + :points,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = :user_id
+        RETURNING id, email, username, full_name, disabled, is_admin, 
+                 experience_points, level, created_at, updated_at
+    """
+    
+    # Execute the update
+    stmt = text(update_sql)
+    result = db.execute(stmt, {"user_id": user_id, "points": award.points})
+    updated_user = result.fetchone()
+    
+    # Convert to UserResponse with proper typing
+    user_dict = dict(updated_user)
+    user_dict["level"] = UserLevel(user_dict["level"])
+    
+    # Log the award if reason is provided
+    if award.reason:
+        try:
+            # Check if the table exists
+            check_table_sql = """
+                SELECT EXISTS (
+                    SELECT FROM information_schema.tables 
+                    WHERE table_name = 'user_activity_logs'
+                )
+            """
+            table_exists = db.execute(text(check_table_sql)).scalar()
+            
+            if table_exists:
+                log_sql = """
+                    INSERT INTO user_activity_logs (user_id, activity_type, points, description, created_at)
+                    VALUES (:user_id, 'award_points', :points, :reason, CURRENT_TIMESTAMP)
+                """
+                db.execute(text(log_sql), {
+                    "user_id": user_id,
+                    "points": award.points,
+                    "reason": award.reason
+                })
+        except Exception:
+            # If logging fails, we still want to return the updated user
+            pass
+    
+    db.commit()
+    return UserResponse(**user_dict)
+
+@router.get("/leaderboard", response_model=List[Dict[str, Any]], dependencies=[Depends(JWTBearer())])
+async def get_leaderboard(
+    limit: int = 10,
+    db: Session = Depends(get_db)
+):
+    """Get user leaderboard based on experience points"""
+    stmt = text("""
+        SELECT id, username, full_name, experience_points, level
+        FROM users
+        WHERE disabled = FALSE
+        ORDER BY experience_points DESC
+        LIMIT :limit
+    """)
+    
+    result = db.execute(stmt, {"limit": limit})
+    leaderboard = []
+    
+    for i, row in enumerate(result.fetchall()):
+        user_dict = dict(row)
+        user_dict["rank"] = i + 1
+        user_dict["level"] = user_dict["level"]  # Keep as string for simpler serialization
+        leaderboard.append(user_dict)
+    
+    return leaderboard

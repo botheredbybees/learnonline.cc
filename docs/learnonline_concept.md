@@ -87,7 +87,7 @@ For detailed specifications of all integration points, see [Integration Points T
 
 ## 3. User Management
 
-### 3.1 Role Definitions
+### 3.1 User Types and Progression
 
 #### Administrator
 
@@ -97,46 +97,51 @@ For detailed specifications of all integration points, see [Integration Points T
 - Content moderation
 - System configuration
 
-#### Mentor
+#### User
 
-- Team/class management
-- Progress monitoring
-- Content creation and editing
-- Assessment creation
-- Student performance tracking
+Users progress through the following experience levels as they gain points:
 
-#### Player (Student)
+**Guest Level** (0-100 points)
+- Limited content access
+- Introduction to platform
+- Basic course browsing
 
+**Player Level** (101-1000 points)
 - Course enrollment
 - Content access
 - Assessment participation
 - Progress tracking
 - Community contributions
 
-#### Guest
-
-- Limited content access
+**Mentor Level** (1001+ points)
+- Team/class management
+- Progress monitoring
+- Content creation and editing
+- Assessment creation
+- Student performance tracking
 - Introduction to platform
 - Registration process
 
 ### 3.2 Permission Matrix
 
-| Feature | Admin | Mentor | Player | Guest |
-|---------|-------|--------|--------|-------|
+| Feature | Admin | User (Mentor Level) | User (Player Level) | User (Guest Level) |
+|---------|-------|---------------------|--------------------|--------------------|
 | AQTF Sync | ✓ | - | - | - |
 | User Management | ✓ | - | - | - |
 | Team Management | ✓ | ✓ | - | - |
-| Content Creation | ✓ | ✓ | Level 5+ | - |
+| Content Creation | ✓ | ✓ | - | - |
 | Assessment Creation | ✓ | ✓ | - | - |
 | Content Access | ✓ | ✓ | ✓ | Limited |
 | Progress Tracking | ✓ | ✓ | ✓ | - |
 | Community Features | ✓ | ✓ | ✓ | - |
 
-### 3.3 Level System
+### 3.3 Experience Level System
 
-1. Level 1-4: Basic access
-2. Level 5-9: Content creation
-3. Level 10+: Advanced features
+Users progress through experience levels as they earn points:
+
+1. **Guest Level** (0-100 points): Limited access to content, registration, basic browsing
+2. **Player Level** (101-1000 points): Full access to content, assessments, community features
+3. **Mentor Level** (1001+ points): Team management, content creation, assessment creation
 
 ## 4. Content Management
 

@@ -1,7 +1,13 @@
 from pydantic import BaseModel, EmailStr, Field
-from typing import Optional
+from typing import Optional, Literal
 from datetime import datetime
 from uuid import UUID, uuid4
+from enum import Enum
+
+class UserLevel(str, Enum):
+    GUEST = "guest"
+    PLAYER = "player" 
+    MENTOR = "mentor"
 
 class User(BaseModel):
     id: UUID = Field(default_factory=uuid4)
@@ -11,6 +17,8 @@ class User(BaseModel):
     full_name: Optional[str] = None
     disabled: bool = False
     is_admin: bool = False
+    experience_points: int = 0
+    level: UserLevel = UserLevel.GUEST
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     
@@ -42,13 +50,17 @@ class UserUpdate(BaseModel):
     full_name: Optional[str] = None
     disabled: Optional[bool] = None
     is_admin: Optional[bool] = None
+    experience_points: Optional[int] = None
+    level: Optional[UserLevel] = None
     
     class Config:
         schema_extra = {
             "example": {
                 "email": "newemail@example.com",
                 "username": "newusername",
-                "full_name": "Updated Name"
+                "full_name": "Updated Name",
+                "experience_points": 150,
+                "level": "player"
             }
         }
 
@@ -59,6 +71,8 @@ class UserResponse(BaseModel):
     full_name: Optional[str] = None
     disabled: bool
     is_admin: bool
+    experience_points: int
+    level: UserLevel
     created_at: datetime
     updated_at: datetime
     
