@@ -6,7 +6,7 @@ LearnOnline.cc is a gamified vocational training platform using the Australian Q
 
 I was previously the developer of NTISthis, a website that leveraged AQTF qualifications to generate assessment templates for vocational education. While NTISthis provided valuable tools for educators, the operational costs became unsustainable, leading me to discontinue the service.
 
-Now, with LearnOnline.cc, I'm experimenting with vibe programming using a mix of tools and AI assistants These include notbooklm, clive, roo, Copilot, Claude, and Cline. I hope to find what best fits my workflow. Meanwhile, the codebase may appear a bit chaotic at times, reflecting this experimental process.
+Now, with LearnOnline.cc, I'm experimenting with a more flexible and exploratory approach — what's' called "vibe programming". I'm using a mix of tools and AI assistants, including notbooklm, clive, roo, Copilot, Claude, and cline, to find what best fits my workflow. As a result, the codebase may appear a bit chaotic at times, reflecting this experimental process.
 
 ## Setup
 
@@ -45,7 +45,7 @@ If you encounter issues with Docker containers, try the following commands:
   ```
 ## Accessing Services
 
-Once the Docker containers are running, you can access the various services in your browser at the following endpoints:
+Once the Docker containers are running, you can access the services in your browser at the following endpoints:
 
 - **Frontend:**  
   [http://localhost:8080](http://localhost:8080)  
@@ -55,28 +55,21 @@ Once the Docker containers are running, you can access the various services in y
   [http://localhost:8000/docs](http://localhost:8000/docs)  
   Interactive API documentation and testing.
 
-- **Streamlit Dashboard:**  
-  [http://localhost:8501](http://localhost:8501)  
-  Data visualization and analytics.
+*Note: Additional services like Streamlit, Grafana, Prometheus, and the ELK stack will be added in future iterations as needed.*
 
-- **Grafana (Monitoring Dashboards):**  
-  [http://localhost:3001](http://localhost:3001)
+## Admin Interface
 
-- **Prometheus (Metrics):**  
-  [http://localhost:9090](http://localhost:9090)
+An administration interface is available at [http://localhost:8080/admin](http://localhost:8080/admin) for users with admin privileges. This interface allows:
 
-- **Kibana (Log Visualization):**  
-  [http://localhost:5601](http://localhost:5601)
+- Viewing all training packages in the system
+- Syncing training packages, units, qualifications, and skillsets from TGA
+- Monitoring background tasks
 
-- **MinIO Console (Object Storage):**  
-  [http://localhost:9001](http://localhost:9001)
-
-- **Elasticsearch (API):**  
-  [http://localhost:9200](http://localhost:9200)
+To create an admin user, set the `is_admin` flag to `true` in the database for your user.
 
 If you have changed any ports in your `docker-compose.yml` file, adjust the URLs accordingly.
 
-## Technical Documentation
+## echnical Documentation
 
 ### [LearnOnline Concept Document](docs/learnonline_concept.md)
 This document outlines the vision, target audience, key features, and development roadmap for the LearnOnline.cc platform. It serves as a high-level overview of the project.
@@ -95,7 +88,3 @@ This document details the content generation process using AI/ML models, includi
 
 ### [AQTF Data Integration Technical Specifications](docs/technical/aqtf_integration.md)
 This document provides the technical details for integrating AQTF data, including SOAP API operations, database synchronization, XML data processing, and performance optimization.
-
-## Licence
-
-LearnOnline.cc is released under a [Apache-2.0 license](https://www.apache.org/licenses/LICENSE-2.0). 

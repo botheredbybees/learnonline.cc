@@ -106,6 +106,73 @@ async def sync_training_packages(
         }
     )
 
+@router.post("/process-unit-elements", dependencies=[Depends(JWTBearer())])
+async def process_unit_elements(
+    background_tasks: BackgroundTasks,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Process units to extract elements and performance criteria"""
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Not authorized to access admin features")
+    
+    # Record the task in the database
+    task_id = db.execute("""
+        INSERT INTO admin_tasks (task_type, created_by, status, params)
+        VALUES ('process_elements', %s, 'pending', NULL)
+        RETURNING id
+    """, (str(current_user.id),)).fetchone()[0]
+    
+    db.commit()
+    
+    # Launch tp_get.py as a background task with --process-existing flag
+    def run_process_elements():
+        try:
+            cmd = [sys.executable, os.path.join(os.getcwd(), "..", "tp_get.py"), "--process-existing"]
+                
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            
+            success = result.returncode == 0
+            
+            # Update task status
+            with db.connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        UPDATE admin_tasks
+                        SET status = %s, 
+                            completed_at = %s, 
+                            result = %s
+                        WHERE id = %s
+                    """, (
+                        'completed' if success else 'failed',
+                        datetime.now(),
+                        result.stdout if success else result.stderr,
+                        task_id
+                    ))
+                    conn.commit()
+        except Exception as e:
+            # Log error and update task status
+            with db.connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        UPDATE admin_tasks
+                        SET status = 'failed', 
+                            completed_at = %s, 
+                            result = %s
+                        WHERE id = %s
+                    """, (datetime.now(), str(e), task_id))
+                    conn.commit()
+    
+    background_tasks.add_task(run_process_elements)
+    
+    return JSONResponse(
+        status_code=status.HTTP_202_ACCEPTED,
+        content={
+            "message": "Unit elements processing started",
+            "task_id": task_id
+        }
+    )
+
 @router.get("/tasks", dependencies=[Depends(JWTBearer())])
 async def get_admin_tasks(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """Get admin tasks"""

@@ -33,10 +33,11 @@ async def root():
     return {"message": "Welcome to LearnOnline API", "status": "healthy"}
 
 # Import and include routers
-from routers import users, auth, admin
+from routers import users, auth, admin, units
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(admin.router)
+app.include_router(units.router)
 
 if __name__ == "__main__":
     import uvicorn

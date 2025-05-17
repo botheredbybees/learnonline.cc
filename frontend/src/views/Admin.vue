@@ -17,6 +17,11 @@
                   Sync from TGA
                 </el-button>
               </el-form-item>
+              <el-form-item>
+                <el-button type="success" :loading="isProcessingElements" @click="processUnitElements">
+                  Process Unit Elements
+                </el-button>
+              </el-form-item>
             </el-form>
           </div>
 
@@ -121,6 +126,7 @@ export default {
     const tasks = ref([]);
     const tasksLoading = ref(false);
     const isLoading = ref(false);
+    const isProcessingElements = ref(false);
     const tpCodesInput = ref('');
     const taskDetailsVisible = ref(false);
     const selectedTask = ref(null);
@@ -180,6 +186,24 @@ export default {
         isLoading.value = false;
       }
     };
+    
+    // Process unit elements
+    const processUnitElements = async () => {
+      isProcessingElements.value = true;
+      try {
+        const response = await axios.post('/api/admin/process-unit-elements');
+        
+        ElMessage.success('Unit elements processing started');
+        
+        // Refresh task list
+        fetchTasks();
+      } catch (error) {
+        ElMessage.error('Failed to start unit elements processing');
+        console.error(error);
+      } finally {
+        isProcessingElements.value = false;
+      }
+    };
 
     // View task details
     const viewTaskDetails = (task) => {
@@ -223,12 +247,14 @@ export default {
       tasks,
       tasksLoading,
       isLoading,
+      isProcessingElements,
       tpCodesInput,
       taskDetailsVisible,
       selectedTask,
       fetchTrainingPackages,
       fetchTasks,
       syncTrainingPackages,
+      processUnitElements,
       formatDate,
       formatDateTime,
       getStatusTagType,

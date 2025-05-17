@@ -34,6 +34,30 @@ CREATE TABLE units (
     description TEXT,
     status VARCHAR(50),
     release_date DATE,
+    xml_file TEXT,
+    assessment_requirements_file TEXT,
+    elements_json JSONB, -- JSON representation of elements and PCs for quick access
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Unit Elements table
+CREATE TABLE unit_elements (
+    id SERIAL PRIMARY KEY,
+    unit_id INTEGER REFERENCES units(id) ON DELETE CASCADE,
+    element_num VARCHAR(20),
+    element_text TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Unit Performance Criteria table
+CREATE TABLE unit_performance_criteria (
+    id SERIAL PRIMARY KEY,
+    element_id INTEGER REFERENCES unit_elements(id) ON DELETE CASCADE,
+    unit_id INTEGER REFERENCES units(id) ON DELETE CASCADE, -- For faster queries
+    pc_num VARCHAR(20),
+    pc_text TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -87,6 +111,10 @@ CREATE INDEX idx_units_code ON units(code);
 CREATE INDEX idx_units_title ON units(title);
 CREATE INDEX idx_units_training_package_id ON units(training_package_id);
 
+CREATE INDEX idx_unit_elements_unit_id ON unit_elements(unit_id);
+CREATE INDEX idx_unit_performance_criteria_element_id ON unit_performance_criteria(element_id);
+CREATE INDEX idx_unit_performance_criteria_unit_id ON unit_performance_criteria(unit_id);
+
 CREATE INDEX idx_qualifications_code ON qualifications(code);
 CREATE INDEX idx_qualifications_title ON qualifications(title);
 CREATE INDEX idx_qualifications_training_package_id ON qualifications(training_package_id);
@@ -117,6 +145,16 @@ CREATE TRIGGER update_training_packages_updated_at
     
 CREATE TRIGGER update_units_updated_at
     BEFORE UPDATE ON units
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+    
+CREATE TRIGGER update_unit_elements_updated_at
+    BEFORE UPDATE ON unit_elements
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+    
+CREATE TRIGGER update_unit_performance_criteria_updated_at
+    BEFORE UPDATE ON unit_performance_criteria
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
     
