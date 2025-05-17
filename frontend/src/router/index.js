@@ -20,15 +20,10 @@ const routes = [
     meta: { guest: true }
   },
   {
-    path: '/courses',
-    name: 'Courses',
-    component: () => import('../views/Courses.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: () => import('../views/About.vue')
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('../views/Admin.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
     path: '/:pathMatch(.*)*',
@@ -45,10 +40,14 @@ const router = createRouter({
 // Navigation guards
 router.beforeEach((to, from, next) => {
   const isLoggedIn = store.state.auth.isLoggedIn
+  const isAdmin = store.state.auth.user?.is_admin
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!isLoggedIn) {
       next({ name: 'Login' })
+    } else if (to.matched.some(record => record.meta.requiresAdmin) && !isAdmin) {
+      // If route requires admin but user is not an admin
+      next({ name: 'Home' })
     } else {
       next()
     }
@@ -63,4 +62,4 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-export default router 
+export default router

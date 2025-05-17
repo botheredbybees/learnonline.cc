@@ -13,18 +13,9 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install additional dependencies for monitoring and logging
+# Install only essential dependencies
 RUN pip install --no-cache-dir \
-    prometheus-client \
-    python-json-logger \
-    elasticsearch \
-    redis \
-    celery \
-    minio \
-    google-generativeai \
-    langchain \
-    chromadb \
-    transformers
+    python-json-logger
 
 # Copy the rest of the application
 COPY . .

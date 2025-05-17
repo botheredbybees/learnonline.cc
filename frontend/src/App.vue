@@ -4,10 +4,9 @@
       <nav class="nav-header">
         <router-link to="/" class="logo">LearnOnline</router-link>
         <div class="nav-links">
-          <router-link to="/courses">Courses</router-link>
-          <router-link to="/about">About</router-link>
           <router-link to="/login" v-if="!isLoggedIn">Login</router-link>
           <router-link to="/register" v-if="!isLoggedIn">Register</router-link>
+          <router-link to="/admin" v-if="isLoggedIn && isAdmin">Admin</router-link>
           <el-dropdown v-if="isLoggedIn">
             <span class="el-dropdown-link">
               {{ username }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
@@ -48,6 +47,7 @@ export default {
     const store = useStore()
     const isLoggedIn = computed(() => store.state.auth.isLoggedIn)
     const username = computed(() => store.state.auth.user?.username || '')
+    const isAdmin = computed(() => store.state.auth.user?.is_admin || false)
 
     const logout = () => {
       store.dispatch('auth/logout')
@@ -56,6 +56,7 @@ export default {
     return {
       isLoggedIn,
       username,
+      isAdmin,
       logout
     }
   }
@@ -104,4 +105,4 @@ export default {
   padding: 20px;
   background-color: #f5f7fa;
 }
-</style> 
+</style>
