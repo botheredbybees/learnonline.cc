@@ -5,6 +5,9 @@ from typing import List
 import os
 from dotenv import load_dotenv
 
+# Import routers
+from routers import admin, auth, units, users
+
 # Load environment variables
 load_dotenv()
 
@@ -14,10 +17,6 @@ app = FastAPI(
     version="1.0.0"
 )
 
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
-
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
@@ -26,6 +25,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(auth.router, prefix="/api")
+app.include_router(users.router, prefix="/api")
+app.include_router(admin.router, prefix="/api")
+app.include_router(units.router, prefix="/api")
 
 # Health check endpoint
 @app.get("/")

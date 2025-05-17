@@ -6,9 +6,9 @@ import os
 import sys
 import json
 
-# Add parent directory to path so we can import tp_get
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from tp_get import parse_elements_and_pcs
+# Add backend directory to path so we can import tp_get from the correct location
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'backend'))
+from scripts.tga.tp_get import parse_elements_and_pcs
 
 def main():
     # Base path to XML files

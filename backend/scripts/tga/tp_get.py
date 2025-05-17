@@ -19,6 +19,7 @@ import re
 import json
 import requests
 import xml.etree.ElementTree as ET
+import inspect
 from bs4 import BeautifulSoup
 import time
 import tempfile
@@ -356,13 +357,13 @@ def parse_elements_and_pcs(unit_xml):
                     )
                     
                     if pc_pattern_match:
-                    pc_num = cell_texts[2]
-                    pc_text = cell_texts[3]
-                    
-                    current_element['performance_criteria'].append({
-                        'pc_num': pc_num,
-                        'pc_text': pc_text
-                    })
+                        pc_num = cell_texts[2]
+                        pc_text = cell_texts[3]
+                        
+                        current_element['performance_criteria'].append({
+                            'pc_num': pc_num,
+                            'pc_text': pc_text
+                        })
         
         return elements
                 

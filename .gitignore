@@ -1,8 +1,12 @@
 # Environment variables
 .env
 
-# TGA Web Service Kit
+# TGA Web Service Kit - Excluded to avoid potential copyright issues
+# Note: The test scripts require files from this directory
+# Download from: https://www.training.gov.au/WebServiceKit
 tgaWebServiceKit-2021-12-01/
+# Only include the XML files needed for tests
+!tgaWebServiceKit-2021-12-01/xml/*.xml
 
 # Python
 __pycache__/

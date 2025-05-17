@@ -1,1 +1,0 @@
-/home/peter_sha/sourcecode/learnonline.cc/backend/scripts/tga/tp_get.py

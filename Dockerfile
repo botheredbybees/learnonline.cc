@@ -15,5 +15,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application
 COPY . .
 
-# Run the script
-CMD ["python", "tp_get.py"] 
+# Run the script with the updated path
+CMD ["python", "backend/scripts/tga/tp_get.py"] 
