@@ -135,7 +135,7 @@ To access the admin features, you need to create an admin account:
 docker-compose exec db psql -U ${DB_USER} -d ${DB_NAME}
 
 # In the PostgreSQL console, run:
-INSERT INTO users (id, email, username, password_hash, full_name, disabled, is_admin, created_at, updated_at)
+INSERT INTO users (id, email, username, password, full_name, disabled, is_admin, created_at, updated_at)
 VALUES (
   gen_random_uuid(),
   'admin@example.com',
@@ -170,6 +170,43 @@ VALUES (
   CURRENT_TIMESTAMP
 );
 \q
+```
+
+### Rebuilding the Database with Updated Schema:
+
+If you need to rebuild the database with the updated schema:
+
+```bash
+# Stop the running containers
+docker-compose down
+
+# Start just the database container
+docker-compose up -d db
+
+# Connect to the database container
+docker-compose exec db bash
+
+# Inside the container, connect to PostgreSQL
+psql -U postgres
+
+# Drop the existing database (make sure no connections are active)
+DROP DATABASE IF EXISTS ${DB_NAME};
+
+# Create a new empty database
+CREATE DATABASE ${DB_NAME};
+
+# Exit psql
+\q
+
+# Apply the updated schema
+psql -U postgres -d ${DB_NAME} -f /path/to/schema_mvp_updated.sql
+
+# Exit the container
+exit
+
+# Restart all services
+docker-compose down
+docker-compose up -d
 ```
 
 ## Step 7: Log In as Administrator
@@ -220,6 +257,18 @@ docker-compose down --volumes
 
 # Rebuild and start
 docker-compose up --build
+```
+### Database Setup Note
+
+The application requires the following PostgreSQL extensions:
+- uuid-ossp (for UUID generation)
+- pgcrypto (for password hashing)
+
+These extensions are automatically enabled in the Docker setup. If you're using a local PostgreSQL installation, make sure to run:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 ```
 
 ### Database Connection Issues

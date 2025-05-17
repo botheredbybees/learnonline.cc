@@ -9,6 +9,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./schema_mvp_updated.sql:/docker-entrypoint-initdb.d/schema.sql
+      # Add volume for initialization scripts if not already present
+      - ./db-init:/docker-entrypoint-initdb.d
     ports:
       - "5332:5432"
     networks:
