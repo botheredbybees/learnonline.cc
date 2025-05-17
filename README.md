@@ -2,7 +2,7 @@
 
 ## Introduction
 
-LearnOnline.cc is a gamified vocational training platform using the Australian Quality Training Framework (AQTF) data to provide structured, nationally recognized training content with game mechanics to enhance learner engagement and motivation.
+LearnOnline.cc is a gamified vocational training platform using the Australian Quality Training Framework (AQTF) data to provide structured, nationally recognized training content with game mechanics to enhance learner engagement and motivation. The platform integrates with Training.gov.au (TGA) to fetch and process training packages, units of competency, and their elements and performance criteria.
 
 I was previously the developer of NTISthis, a website that leveraged AQTF qualifications to generate assessment templates for vocational education. While NTISthis provided valuable tools for educators, the operational costs became unsustainable, leading me to discontinue the service.
 
@@ -24,6 +24,17 @@ To get started with LearnOnline.cc, you'll need [Docker](https://www.docker.com/
    ```
 
    This will build and start all required services.
+
+## TGA Integration
+
+LearnOnline.cc integrates with Training.gov.au (TGA) to fetch and process training packages, units of competency, qualifications, and skillsets. The integration provides the following features:
+
+- Sync training packages from TGA API
+- Extract elements and performance criteria from unit XML files
+- Process locally stored XML files
+- Admin interface for managing TGA data
+
+For more information on the TGA integration, see the [TGA Integration Documentation](docs/technical/tga_integration.md) and [TGA Testing Documentation](docs/technical/tga_testing.md).
 
 ## Troubleshooting
 

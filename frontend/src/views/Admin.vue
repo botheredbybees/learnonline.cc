@@ -17,9 +17,24 @@
                   Sync from TGA
                 </el-button>
               </el-form-item>
+            </el-form>
+          </div>
+          
+          <div class="action-section">
+            <h3>Process Unit Elements</h3>
+            <el-form @submit.prevent="processUnitElements" :inline="false">
+              <el-form-item label="Unit Code (optional)">
+                <el-input v-model="unitCodeInput" placeholder="e.g. PUAAMS101" />
+              </el-form-item>
+              <el-form-item label="Unit ID (optional)">
+                <el-input v-model="unitIdInput" placeholder="Database ID of the unit" />
+              </el-form-item>
+              <el-form-item>
+                <el-checkbox v-model="useLocalFiles">Use local XML files</el-checkbox>
+              </el-form-item>
               <el-form-item>
                 <el-button type="success" :loading="isProcessingElements" @click="processUnitElements">
-                  Process Unit Elements
+                  Process Units
                 </el-button>
               </el-form-item>
             </el-form>
@@ -128,6 +143,9 @@ export default {
     const isLoading = ref(false);
     const isProcessingElements = ref(false);
     const tpCodesInput = ref('');
+    const unitCodeInput = ref('');
+    const unitIdInput = ref('');
+    const useLocalFiles = ref(false);
     const taskDetailsVisible = ref(false);
     const selectedTask = ref(null);
 
@@ -191,7 +209,25 @@ export default {
     const processUnitElements = async () => {
       isProcessingElements.value = true;
       try {
-        const response = await axios.post('/api/admin/process-unit-elements');
+        // Prepare params
+        const params = {};
+        
+        if (unitCodeInput.value) {
+          params.unit_code = unitCodeInput.value.trim();
+        }
+        
+        if (unitIdInput.value) {
+          const id = parseInt(unitIdInput.value.trim());
+          if (!isNaN(id)) {
+            params.unit_id = id;
+          }
+        }
+        
+        if (useLocalFiles.value) {
+          params.use_local_files = true;
+        }
+        
+        const response = await axios.post('/api/admin/process-unit-elements', params);
         
         ElMessage.success('Unit elements processing started');
         
@@ -249,6 +285,9 @@ export default {
       isLoading,
       isProcessingElements,
       tpCodesInput,
+      unitCodeInput,
+      unitIdInput,
+      useLocalFiles,
       taskDetailsVisible,
       selectedTask,
       fetchTrainingPackages,
