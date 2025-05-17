@@ -49,14 +49,14 @@ If you downloaded the code manually:
 
 ## Database Updates
 
-After updating the code, you may need to update your database schema:
+After updating the code, you need to update your database schema with the consolidated schema file:
 
 ```bash
 # Using Docker
-docker-compose exec db psql -U ${DB_USER} -d ${DB_NAME} -f /app/schema_updates/update_to_latest.sql
+docker-compose exec db psql -U ${DB_USER} -d ${DB_NAME} -f /app/schema_mvp_updated.sql
 
 # Without Docker
-psql -U your_username -d learnonline -f schema_updates/update_to_latest.sql
+psql -U your_username -d learnonline -f schema_mvp_updated.sql
 ```
 
 ## Updating Docker Containers

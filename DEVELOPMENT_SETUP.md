@@ -88,8 +88,8 @@ psql -U postgres
 CREATE DATABASE learnonline;
 \q
 
-# Apply the database schema
-psql -U postgres -d learnonline -f schema_mvp.sql
+# Apply the consolidated database schema
+psql -U postgres -d learnonline -f schema_mvp_updated.sql
 ```
 
 ### 5.2. Set up the Backend

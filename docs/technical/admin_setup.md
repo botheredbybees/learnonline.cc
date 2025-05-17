@@ -188,11 +188,11 @@ docker-compose up -d --build
 
 ### Database Updates
 
-If there are database schema changes:
+To update the database schema:
 
 ```bash
-# Apply database schema updates
-docker-compose exec db psql -U ${DB_USER} -d ${DB_NAME} -f /app/schema_updates/update_to_latest.sql
+# Apply the consolidated database schema
+docker-compose exec db psql -U ${DB_USER} -d ${DB_NAME} -f /app/schema_mvp_updated.sql
 ```
 
 ### Post-Update Tasks
