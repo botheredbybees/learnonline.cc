@@ -168,7 +168,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { ElMessage } from 'element-plus';
 import { CircleCheckFilled } from '@element-plus/icons-vue';
-import { getOrCreateGuestId, saveGuestProgress, getGuestProgress } from '@/utils/guestUtils';
+import { saveGuestProgress, getGuestProgress } from '@/utils/guestUtils';
 
 export default {
   name: 'IntroductoryQuest',

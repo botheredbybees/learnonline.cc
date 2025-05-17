@@ -247,7 +247,7 @@ export default {
     });
     
     // Format level progress text
-    const formatLevelProgress = (percentage) => {
+    const formatLevelProgress = () => {
       if (!user.value.experience_points) return '';
       
       const points = user.value.experience_points;

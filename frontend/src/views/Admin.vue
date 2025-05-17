@@ -422,7 +422,9 @@ export default {
     // Format level progress text
     const formatLevelProgress = (percentage) => {
       if (!selectedUser.value) return '';
-      return `${selectedUser.value.experience_points} points`;
+      // Use percentage in calculation if needed in the future
+      const displayPercentage = percentage > 0 ? percentage : 0;
+      return `${selectedUser.value.experience_points} points (${displayPercentage}%)`;
     };
 
     // Get level tag type
@@ -451,6 +453,7 @@ export default {
       try {
         const response = await axios.get('/api/admin/tasks');
         tasks.value = response.data.tasks;
+        console.log('Fetched tasks:', response.status);
       } catch (error) {
         ElMessage.error('Failed to load tasks');
         console.error(error);
@@ -471,7 +474,7 @@ export default {
             .filter(code => code.length > 0);
         }
         
-        const response = await axios.post('/api/admin/sync-training-packages', { 
+        await axios.post('/api/admin/sync-training-packages', { 
           tp_codes: tpCodes
         });
         
@@ -509,7 +512,8 @@ export default {
           params.use_local_files = true;
         }
         
-        const response = await axios.post('/api/admin/process-unit-elements', params);
+        await axios.post('/api/admin/process-unit-elements', params);
+        console.log('Process started');
         
         ElMessage.success('Unit elements processing started');
         

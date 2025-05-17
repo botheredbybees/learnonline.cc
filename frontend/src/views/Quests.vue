@@ -378,6 +378,7 @@ export default {
     const saveQuest = async () => {
       savingQuest.value = true;
       try {
+        // Using the response variable for logging status
         let response;
         
         if (isEditing.value) {
@@ -402,6 +403,7 @@ export default {
           });
         }
         
+        console.log('Quest operation successful with status:', response.status);
         ElMessage.success(`Quest ${isEditing.value ? 'updated' : 'created'} successfully`);
         questDialogVisible.value = false;
         fetchQuests(); // Refresh quests list

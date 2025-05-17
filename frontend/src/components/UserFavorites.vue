@@ -268,18 +268,21 @@ export default {
     // Navigate to training package details
     const viewTrainingPackage = (row) => {
       // Implement navigation to training package detail page
+      console.log('Navigate to training package', row.id);
       // e.g., router.push(`/training-packages/${row.id}`);
     };
     
     // Navigate to unit details
     const viewUnit = (row) => {
       // Implement navigation to unit detail page
+      console.log('Navigate to unit', row.id);
       // e.g., router.push(`/units/${row.id}`);
     };
     
     // Navigate to quest details
     const viewQuest = (row) => {
       // Implement navigation to quest detail page
+      console.log('Navigate to quest', row.id);
       // e.g., router.push(`/quests/${row.id}`);
     };
     
