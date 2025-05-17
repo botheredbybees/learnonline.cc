@@ -6,7 +6,7 @@ import os
 from dotenv import load_dotenv
 
 # Import routers
-from routers import admin, auth, units, users
+from routers import admin, auth, units, users, quests, favorites, public
 
 # Load environment variables
 load_dotenv()
@@ -31,14 +31,14 @@ app.include_router(auth.router, prefix="/api")
 app.include_router(users.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
 app.include_router(units.router, prefix="/api")
+app.include_router(quests.router, prefix="/api")
+app.include_router(favorites.router, prefix="/api")
+app.include_router(public.router, prefix="/api")  # Public routes without authentication
 
 # Health check endpoint
 @app.get("/")
 async def root():
     return {"message": "Welcome to LearnOnline API", "status": "healthy"}
-
-# Import and include routers
-from routers import users, auth, admin, units
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(admin.router)

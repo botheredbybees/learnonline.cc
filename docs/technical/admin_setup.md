@@ -8,8 +8,9 @@ The LearnOnline.cc platform includes an administrative interface that allows you
 
 1. Synchronize training packages from Training.gov.au (TGA)
 2. Process unit elements and performance criteria
-3. Manage users and permissions
-4. Monitor background tasks
+3. Manage users and their experience levels
+4. Award experience points to users
+5. Monitor background tasks
 
 ## Creating an Administrator Account
 
@@ -51,6 +52,33 @@ psql -U your_username -d learnonline
 1. Log in to the application at http://localhost:8080 (or your deployment URL)
 2. Use your admin credentials (username: `admin`, password: `adminpassword`)
 3. Navigate to the Admin Dashboard using the menu
+
+## User Management
+
+### Managing User Experience Levels
+
+Users progress through three levels as they gain experience points:
+- **Guest Level** (0-100 points): Limited access to content, registration, basic browsing
+- **Player Level** (101-1000 points): Full access to content, assessments, community features
+- **Mentor Level** (1001+ points): Team management, content creation, assessment creation
+
+To manage users:
+1. Navigate to Admin Dashboard > Users tab
+2. View all users with their experience points and current level
+3. Filter users by level to see all guests, players, or mentors
+4. Click "Details" to view detailed user information
+
+### Awarding Experience Points
+
+As an administrator, you can award experience points to users:
+
+1. Find the user in the user list
+2. Click "Award Points" for the selected user
+3. Enter the number of points to award
+4. Add a reason for awarding points (optional)
+5. Click "Award Points" to confirm
+
+Points are automatically recorded in the activity log and the user's level is updated based on their new total.
 
 ## TGA Integration Features
 

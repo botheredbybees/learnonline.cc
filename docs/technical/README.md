@@ -16,6 +16,7 @@ This directory contains technical documentation for the LearnOnline.cc platform.
 - [Content Generation](content_generation.md) - Content generation features and processes
 - [User Interaction](user_interaction.md) - User experience and interaction design
 - [Integration Points](integration_points.md) - External system integration points
+- [Favorites and Quests](favorites_and_quests.md) - User favorites and learning quests system
 
 ## Development Guides
 

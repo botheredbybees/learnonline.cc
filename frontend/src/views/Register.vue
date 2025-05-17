@@ -113,19 +113,23 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive } from 'vue'
+import { defineComponent, ref, reactive, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { transferGuestProgress, getCookie } from '@/utils/guestUtils'
 
 export default defineComponent({
   name: 'RegisterView',
   setup() {
     const store = useStore()
     const router = useRouter()
+    const route = useRoute()
     const registerForm = ref(null)
     const loading = ref(false)
     const termsDialogVisible = ref(false)
+    const fromQuest = ref(false)
+    const hasGuestProgress = ref(false)
     
     const formData = reactive({
       name: '',
@@ -206,7 +210,26 @@ export default defineComponent({
         
         if (success) {
           ElMessage.success('Registration successful')
-          router.push('/')
+          
+          // If there's guest progress, transfer it to the new account
+          if (hasGuestProgress.value) {
+            try {
+              await transferGuestProgress()
+              ElMessage.success('Your progress has been saved to your new account!')
+            } catch (err) {
+              console.error('Error transferring progress:', err)
+              // Don't show error to user, just log it - the main registration was successful
+            }
+          }
+          
+          // Redirect based on registration source
+          if (fromQuest.value) {
+            // If from quest completion, redirect to quests page
+            router.push('/quests')
+          } else {
+            // Otherwise redirect to home
+            router.push('/')
+          }
         } else {
           ElMessage.error('Registration failed')
         }
@@ -222,12 +245,27 @@ export default defineComponent({
       termsDialogVisible.value = true
     }
     
+    // Check if user has guest progress or came from an introductory quest
+    onMounted(() => {
+      // Check for quest param in URL
+      if (route.query.from === 'quest') {
+        fromQuest.value = true;
+      }
+      
+      // Check for guest progress cookie
+      if (getCookie('guest_id')) {
+        hasGuestProgress.value = true;
+      }
+    });
+    
     return {
       registerForm,
       formData,
       rules,
       loading,
       termsDialogVisible,
+      fromQuest,
+      hasGuestProgress,
       handleRegister,
       showTerms
     }

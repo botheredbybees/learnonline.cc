@@ -264,19 +264,44 @@ import axios from 'axios';
 export default {
   name: 'AdminView',
   setup() {
-    const activeTab = ref('training-packages');
+    // Tabs
+    const activeTab = ref('users');
+    
+    // Users
+    const users = ref([]);
+    const usersLoading = ref(false);
+    const userLevelFilter = ref('');
+    const selectedUser = ref(null);
+    const userDetailsVisible = ref(false);
+    const usersPagination = ref({
+      current: 1,
+      pageSize: 10,
+      total: 0
+    });
+    
+    // Award points
+    const awardPointsVisible = ref(false);
+    const pointsToAward = ref(10);
+    const pointsReason = ref('');
+    const awardingPoints = ref(false);
+    
+    // Training Packages
     const trainingPackages = ref([]);
     const trainingPackagesLoading = ref(false);
+    const isLoading = ref(false);
+    const tpCodesInput = ref('');
+    
+    // Tasks
     const tasks = ref([]);
     const tasksLoading = ref(false);
-    const isLoading = ref(false);
+    const selectedTask = ref(null);
+    const taskDetailsVisible = ref(false);
+    
+    // Unit elements processing
     const isProcessingElements = ref(false);
-    const tpCodesInput = ref('');
     const unitCodeInput = ref('');
     const unitIdInput = ref('');
     const useLocalFiles = ref(false);
-    const taskDetailsVisible = ref(false);
-    const selectedTask = ref(null);
 
     // Fetch training packages
     const fetchTrainingPackages = async () => {
@@ -289,6 +314,134 @@ export default {
         console.error(error);
       } finally {
         trainingPackagesLoading.value = false;
+      }
+    };
+
+    // Fetch users
+    const fetchUsers = async () => {
+      usersLoading.value = true;
+      try {
+        const params = {
+          skip: (usersPagination.value.current - 1) * usersPagination.value.pageSize,
+          limit: usersPagination.value.pageSize
+        };
+        
+        if (userLevelFilter.value) {
+          params.level = userLevelFilter.value;
+        }
+        
+        const response = await axios.get('/api/users', { params });
+        users.value = response.data;
+        
+        // Update pagination total if available
+        if (response.headers['x-total-count']) {
+          usersPagination.value.total = parseInt(response.headers['x-total-count']);
+        }
+      } catch (error) {
+        ElMessage.error('Failed to load users');
+        console.error(error);
+      } finally {
+        usersLoading.value = false;
+      }
+    };
+
+    // Handle page change for users
+    const handleUsersPageChange = (page) => {
+      usersPagination.value.current = page;
+      fetchUsers();
+    };
+
+    // Show user details
+    const viewUserDetails = (user) => {
+      selectedUser.value = user;
+      userDetailsVisible.value = true;
+    };
+
+    // Show award points dialog
+    const showAwardPointsDialog = (user) => {
+      selectedUser.value = user;
+      pointsToAward.value = 10;
+      pointsReason.value = '';
+      awardPointsVisible.value = true;
+    };
+
+    // Submit award points
+    const submitAwardPoints = async () => {
+      if (!selectedUser.value) return;
+      
+      awardingPoints.value = true;
+      try {
+        const response = await axios.post(`/api/users/${selectedUser.value.id}/award-points`, {
+          points: pointsToAward.value,
+          reason: pointsReason.value || undefined
+        });
+        
+        // Update the user in the list with new values
+        const updatedUser = response.data;
+        const index = users.value.findIndex(u => u.id === updatedUser.id);
+        if (index !== -1) {
+          users.value[index] = updatedUser;
+        }
+        
+        // Update selected user
+        selectedUser.value = updatedUser;
+        
+        ElMessage.success(`Awarded ${pointsToAward.value} points to ${updatedUser.username}`);
+        awardPointsVisible.value = false;
+      } catch (error) {
+        ElMessage.error('Failed to award points');
+        console.error(error);
+      } finally {
+        awardingPoints.value = false;
+      }
+    };
+
+    // Calculate level progress percentage
+    const calculateLevelProgress = (user) => {
+      if (!user) return 0;
+      
+      const points = user.experience_points;
+      let percentage = 0;
+      
+      if (user.level === 'guest') {
+        // 0-100 points for guest
+        percentage = Math.min(points / 100 * 100, 100);
+      } else if (user.level === 'player') {
+        // 101-1000 points for player
+        const playerPoints = points - 101;
+        const playerTotal = 1000 - 101;
+        percentage = Math.min(playerPoints / playerTotal * 100, 100);
+      } else if (user.level === 'mentor') {
+        // 1001+ points for mentor
+        percentage = 100; 
+      }
+      
+      return Math.round(percentage);
+    };
+
+    // Format level progress text
+    const formatLevelProgress = (percentage) => {
+      if (!selectedUser.value) return '';
+      return `${selectedUser.value.experience_points} points`;
+    };
+
+    // Get level tag type
+    const getLevelTagType = (level) => {
+      switch(level) {
+        case 'mentor': return 'success';
+        case 'player': return 'warning';
+        case 'guest': return 'info';
+        default: return 'info';
+      }
+    };
+
+    // Get level color for progress bar
+    const getLevelColor = (level) => {
+      switch(level) {
+        case 'mentor': return '#67c23a';
+        case 'player': return '#e6a23c';
+        case 'guest': return '#909399';
+        default: return '#409eff';
       }
     };
 
@@ -401,32 +554,65 @@ export default {
 
     // Load data when component mounts
     onMounted(() => {
+      fetchUsers();
       fetchTrainingPackages();
       fetchTasks();
     });
 
     return {
+      // Tabs
       activeTab,
+      
+      // User management
+      users,
+      usersLoading,
+      userLevelFilter,
+      selectedUser,
+      userDetailsVisible,
+      usersPagination,
+      fetchUsers,
+      handleUsersPageChange,
+      viewUserDetails,
+      
+      // Award points
+      awardPointsVisible,
+      pointsToAward,
+      pointsReason,
+      awardingPoints,
+      showAwardPointsDialog,
+      submitAwardPoints,
+      calculateLevelProgress,
+      formatLevelProgress,
+      getLevelTagType,
+      getLevelColor,
+      
+      // Training packages
       trainingPackages,
       trainingPackagesLoading,
+      isLoading,
+      tpCodesInput,
+      fetchTrainingPackages,
+      syncTrainingPackages,
+      
+      // Tasks
       tasks,
       tasksLoading,
-      isLoading,
+      selectedTask,
+      taskDetailsVisible,
+      fetchTasks,
+      viewTaskDetails,
+      getStatusTagType,
+      
+      // Unit elements
       isProcessingElements,
-      tpCodesInput,
       unitCodeInput,
       unitIdInput,
       useLocalFiles,
-      taskDetailsVisible,
-      selectedTask,
-      fetchTrainingPackages,
-      fetchTasks,
-      syncTrainingPackages,
       processUnitElements,
+      
+      // Utilities
       formatDate,
-      formatDateTime,
-      getStatusTagType,
-      viewTaskDetails
+      formatDateTime
     };
   }
 };
@@ -448,6 +634,16 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.pagination-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 pre {

@@ -4,17 +4,29 @@
       <nav class="nav-header">
         <router-link to="/" class="logo">LearnOnline</router-link>
         <div class="nav-links">
+          <!-- Guest links -->
           <router-link to="/login" v-if="!isLoggedIn">Login</router-link>
           <router-link to="/register" v-if="!isLoggedIn">Register</router-link>
-          <router-link to="/admin" v-if="isLoggedIn && isAdmin">Admin</router-link>
+          
+          <!-- Logged in user links -->
+          <template v-if="isLoggedIn">
+            <router-link to="/quests">Quests</router-link>
+            <router-link to="/admin" v-if="isAdmin">Admin</router-link>
+          </template>
+          
+          <!-- User dropdown -->
           <el-dropdown v-if="isLoggedIn">
             <span class="el-dropdown-link">
               {{ username }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item>Profile</el-dropdown-item>
-                <el-dropdown-item>Settings</el-dropdown-item>
+                <el-dropdown-item>
+                  <router-link to="/profile" class="dropdown-link">Profile</router-link>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <router-link to="/profile?tab=favorites" class="dropdown-link">My Favorites</router-link>
+                </el-dropdown-item>
                 <el-dropdown-item divided @click="logout">Logout</el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -98,6 +110,13 @@ export default {
 
 .nav-links a:hover {
   color: #409EFF;
+}
+
+.dropdown-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
 }
 
 .el-footer {

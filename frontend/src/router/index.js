@@ -32,6 +32,30 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/quests',
+    name: 'Quests',
+    component: () => import('../views/Quests.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/quests/:id',
+    name: 'QuestDetail',
+    component: () => import('../views/Quests.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/intro-quest/:id',
+    name: 'IntroductoryQuest',
+    component: () => import('../views/IntroductoryQuest.vue'),
+    // No auth required for introductory quests
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('../views/Profile.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('../views/NotFound.vue')
