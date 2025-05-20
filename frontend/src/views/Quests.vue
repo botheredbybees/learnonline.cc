@@ -224,7 +224,7 @@ import FavoriteButton from '@/components/FavoriteButton.vue';
 export default {
   name: 'QuestsView',
   components: {
-    FavoriteButton
+    FavoriteButton,
   },
   setup() {
     // User state

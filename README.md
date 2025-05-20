@@ -85,7 +85,7 @@ To create an admin user, set the `is_admin` flag to `true` in the database for y
 
 If you have changed any ports in your `docker-compose.yml` file, adjust the URLs accordingly.
 
-## echnical Documentation
+## Technical Documentation
 
 ### [LearnOnline Concept Document](docs/learnonline_concept.md)
 This document outlines the vision, target audience, key features, and development roadmap for the LearnOnline.cc platform. It serves as a high-level overview of the project.

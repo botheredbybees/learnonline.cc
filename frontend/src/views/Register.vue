@@ -18,8 +18,11 @@
           <el-input 
             v-model="formData.name" 
             placeholder="Enter your full name"
-            prefix-icon="el-icon-user"
-          />
+          >
+            <template #prefix>
+              <el-icon><User /></el-icon>
+            </template>
+          </el-input>
         </el-form-item>
         
         <el-form-item label="Email" prop="email">
@@ -27,8 +30,11 @@
             v-model="formData.email" 
             type="email" 
             placeholder="Enter your email"
-            prefix-icon="el-icon-message"
-          />
+          >
+            <template #prefix>
+              <el-icon><Message /></el-icon>
+            </template>
+          </el-input>
         </el-form-item>
         
         <el-form-item label="Password" prop="password">
@@ -36,9 +42,12 @@
             v-model="formData.password" 
             type="password" 
             placeholder="Create a password"
-            prefix-icon="el-icon-lock"
             show-password
-          />
+          >
+            <template #prefix>
+              <el-icon><Lock /></el-icon>
+            </template>
+          </el-input>
         </el-form-item>
         
         <el-form-item label="Confirm Password" prop="confirmPassword">
@@ -46,9 +55,12 @@
             v-model="formData.confirmPassword" 
             type="password" 
             placeholder="Confirm your password"
-            prefix-icon="el-icon-lock"
             show-password
-          />
+          >
+            <template #prefix>
+              <el-icon><Lock /></el-icon>
+            </template>
+          </el-input>
         </el-form-item>
         
         <el-form-item label="User Type" prop="userType">
@@ -117,10 +129,16 @@ import { defineComponent, ref, reactive, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { User, Message, Lock } from '@element-plus/icons-vue'
 import { transferGuestProgress, getCookie } from '@/utils/guestUtils'
 
 export default defineComponent({
   name: 'RegisterView',
+  components: {
+    User,
+    Message,
+    Lock
+  },
   setup() {
     const store = useStore()
     const router = useRouter()
@@ -320,4 +338,4 @@ export default defineComponent({
     padding: 10px;
   }
 }
-</style> 
+</style>

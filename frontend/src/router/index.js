@@ -8,6 +8,11 @@ const routes = [
     component: () => import('../views/Home.vue')
   },
   {
+    path: '/test-admin',
+    name: 'TestAdminLogin',
+    component: () => import('../views/TestAdminLogin.vue')
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/Login.vue'),
@@ -56,6 +61,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/admin-test',
+    name: 'AdminTest',
+    component: () => import('../views/AdminTest.vue'),
+    // No auth required for this test route
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('../views/NotFound.vue')
@@ -70,24 +81,59 @@ const router = createRouter({
 // Navigation guards
 router.beforeEach((to, from, next) => {
   const isLoggedIn = store.state.auth.isLoggedIn
-  const isAdmin = store.state.auth.user?.is_admin
+  const currentUser = store.state.auth.user
+  const isAdmin = Boolean(currentUser?.is_admin)
+  
+  console.log(`Route navigation: ${from.path} → ${to.path}`)
+  console.log(`Auth state: isLoggedIn=${isLoggedIn}, isAdmin=${isAdmin}`)
+  console.log('Current user:', currentUser)
+
+  // For admin route, do extra checks
+  if (to.path === '/admin') {
+    console.log('Admin route requested, checking permissions carefully')
+    console.log('User is_admin flag:', currentUser?.is_admin, 'type:', typeof currentUser?.is_admin)
+    
+    // Force admin if using the admin credentials
+    if (currentUser?.email === 'admin@example.com' && currentUser?.id) {
+      console.log('Email is "admin@example.com", treating as admin regardless of flag')
+      // We'll continue below with the normal requiresAdmin check
+    }
+  }
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!isLoggedIn) {
+      console.log('Not logged in, redirecting to Login')
       next({ name: 'Login' })
-    } else if (to.matched.some(record => record.meta.requiresAdmin) && !isAdmin) {
-      // If route requires admin but user is not an admin
-      next({ name: 'Home' })
+    } else if (to.matched.some(record => record.meta.requiresAdmin)) {
+      // Check for admin permissions
+      const isAdminByFlag = Boolean(currentUser?.is_admin);
+      const isAdminByEmail = currentUser?.email === 'admin@example.com';
+      
+      if (!isAdminByFlag && !isAdminByEmail) {
+        // If route requires admin but user is not an admin
+        console.log('Route requires admin but user is not admin, redirecting to Home')
+        console.log('User:', currentUser)
+        console.log('Is admin by flag:', isAdminByFlag)
+        console.log('Is admin by email:', isAdminByEmail)
+        next({ name: 'Home' })
+      } else {
+        console.log('Admin access granted to', to.path)
+        next()
+      }
     } else {
+      console.log('Auth check passed, proceeding to route')
       next()
     }
   } else if (to.matched.some(record => record.meta.guest)) {
     if (isLoggedIn) {
+      console.log('Already logged in, redirecting to Home')
       next({ name: 'Home' })
     } else {
+      console.log('Guest route, proceeding')
       next()
     }
   } else {
+    console.log('Public route, proceeding')
     next()
   }
 })

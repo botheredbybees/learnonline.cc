@@ -1,79 +1,95 @@
+version: '3.8'
+
 services:
   # Database
   db:
     image: postgres:14
     environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME:-learnonline}
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./schema_mvp_updated.sql:/docker-entrypoint-initdb.d/schema.sql
-      # Add volume for initialization scripts if not already present
+      - ./schema_mvp_updated.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      # Ensure pgcrypto extension is created
       - ./db-init:/docker-entrypoint-initdb.d
     ports:
       - "5332:5432"
     networks:
       - app-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-learnonline}"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  # Backend API
+  # Backend API with hot-reload
   backend:
     build: 
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     environment:
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME:-learnonline}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
       - DB_HOST=db
       - DB_PORT=5332
-      - SECRET_KEY=${SECRET_KEY}
+      - SECRET_KEY=${SECRET_KEY:-devsecrethardtoguess}
       - ALGORITHM=HS256
       - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - PYTHONUNBUFFERED=1
     volumes:
       - ./backend:/app
+      # Don't override the virtual environment
+      - backend_venv:/app/.venv
     ports:
       - "8000:8000"
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    # Add health check for backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     depends_on:
       db:
         condition: service_healthy
     networks:
       - app-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    restart: unless-stopped
 
-  # Frontend
+  # Frontend with hot-reload
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     volumes:
+      - ./frontend:/app
+      # Don't sync node_modules between host and container
       - /app/node_modules
     ports:
       - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - VUE_APP_API_URL=http://localhost:8000
+      # Enables full hot-reload with file system events
+      - CHOKIDAR_USEPOLLING=true
+    entrypoint: >
+      sh -c "
+        # Start the Vue app
+        npm run serve
+      "
     depends_on:
       - backend
     networks:
       - app-network
-    environment:
-      - HOST=0.0.0.0
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    restart: unless-stopped
 
 volumes:
   postgres_data:
+  backend_venv:
 
 networks:
   app-network:
-    driver: bridge 
+    driver: bridge

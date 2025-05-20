@@ -9,14 +9,14 @@
     "start": "serve -s dist -l 8080"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
     "axios": "^1.6.2",
     "core-js": "^3.33.3",
+    "element-plus": "^2.4.3",
+    "serve": "^14.2.1",
     "vue": "^3.3.8",
     "vue-router": "^4.2.5",
-    "vuex": "^4.1.0",
-    "element-plus": "^2.4.3",
-    "@element-plus/icons-vue": "^2.1.0",
-    "serve": "^14.2.1"
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",
@@ -26,6 +26,7 @@
     "@vue/cli-plugin-router": "~5.0.8",
     "@vue/cli-plugin-vuex": "~5.0.8",
     "@vue/cli-service": "~5.0.8",
+    "@vue/compiler-sfc": "^3.5.14",
     "eslint": "^8.54.0",
     "eslint-plugin-vue": "^9.18.1",
     "sass": "^1.69.5",

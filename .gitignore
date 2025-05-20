@@ -8,6 +8,8 @@ tgaWebServiceKit-2021-12-01/
 # Only include the XML files needed for tests
 !tgaWebServiceKit-2021-12-01/xml/*.xml
 
+backend/venv/
+
 # Python
 __pycache__/
 *.py[cod]

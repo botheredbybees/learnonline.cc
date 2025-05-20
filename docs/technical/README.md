@@ -2,6 +2,13 @@
 
 This directory contains technical documentation for the LearnOnline.cc platform.
 
+## Technology Stack
+
+- **Frontend**: Vue.js 3, Element Plus, Vue Router, Vuex
+- **Backend**: Python 3.9, FastAPI, PostgreSQL 14
+- **DevOps**: Docker, Docker Compose
+- **Infrastructure**: Node.js 18 (for frontend builds), Uvicorn (ASGI server)
+
 ## Setup and Administration
 
 - [Administrator Setup Guide](admin_setup.md) - Setting up and using admin features
@@ -17,10 +24,12 @@ This directory contains technical documentation for the LearnOnline.cc platform.
 - [User Interaction](user_interaction.md) - User experience and interaction design
 - [Integration Points](integration_points.md) - External system integration points
 - [Favorites and Quests](favorites_and_quests.md) - User favorites and learning quests system
+- [Technology Stack Guide](tech_stack.md) - Detailed explanation of the technologies for new developers
 
 ## Development Guides
 
 - [Development Setup](../../DEVELOPMENT_SETUP.md) - Complete setup guide for developers
+- [Docker Environments](docker_environments.md) - Docker setup for development and production
 
 ## Contributing
 

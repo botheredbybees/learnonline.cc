@@ -50,8 +50,10 @@
                 <el-button 
                   type="primary" 
                   size="small"
-                  :disabled="isUnitLocked(unit)"
-                  :icon="getUnitButtonIcon(unit)">
+                  :disabled="isUnitLocked(unit)">
+                  <el-icon>
+                    <component :is="getUnitButtonIcon(unit)"></component>
+                  </el-icon>
                   {{ getUnitButtonText(unit) }}
                 </el-button>
               </div>
@@ -167,13 +169,16 @@ import { ref, computed, onMounted, reactive } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { ElMessage } from 'element-plus';
-import { CircleCheckFilled } from '@element-plus/icons-vue';
+import { CircleCheckFilled, VideoPlay, Refresh, Right } from '@element-plus/icons-vue';
 import { saveGuestProgress, getGuestProgress } from '@/utils/guestUtils';
 
 export default {
   name: 'IntroductoryQuest',
   components: {
-    CircleCheckFilled
+    CircleCheckFilled,
+    VideoPlay,
+    Refresh,
+    Right
   },
   setup() {
     const router = useRouter();
@@ -416,14 +421,14 @@ export default {
       const progress = unitProgress.value[unit.unit_id];
       
       if (!progress || !progress.started) {
-        return 'el-icon-video-play';
+        return 'VideoPlay';
       }
       
       if (progress.completed) {
-        return 'el-icon-refresh';
+        return 'Refresh';
       }
       
-      return 'el-icon-right';
+      return 'Right';
     };
     
     const isUnitLocked = (unit) => {

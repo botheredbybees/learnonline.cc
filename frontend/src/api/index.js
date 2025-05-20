@@ -1,14 +1,26 @@
 import axios from 'axios'
 
+// Figure out the correct base URL
+const isProduction = process.env.NODE_ENV === 'production';
+const apiBaseURL = isProduction ? 
+  (process.env.VUE_APP_API_URL || '') : 
+  (process.env.VUE_APP_API_URL || 'http://localhost:8000');
+
 // Create an axios instance
 const api = axios.create({
-  baseURL: process.env.VUE_APP_API_URL || 'http://localhost:8000',
+  baseURL: apiBaseURL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   }
-})
+});
+
+// Set up axios default base URL as well for any direct axios usage
+axios.defaults.baseURL = apiBaseURL;
+
+// Log the baseURL for debugging
+console.log('API base URL configured as:', apiBaseURL);
 
 // Request interceptor
 api.interceptors.request.use(config => {

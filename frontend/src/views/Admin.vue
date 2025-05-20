@@ -264,6 +264,8 @@ import axios from 'axios';
 export default {
   name: 'AdminView',
   setup() {
+    console.log('Admin component initialized');
+    
     // Tabs
     const activeTab = ref('users');
     

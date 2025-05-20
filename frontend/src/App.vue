@@ -12,6 +12,9 @@
           <template v-if="isLoggedIn">
             <router-link to="/quests">Quests</router-link>
             <router-link to="/admin" v-if="isAdmin">Admin</router-link>
+            <span v-if="isAdmin" style="color: green; font-weight: bold; margin-left: 10px;">
+              (Admin: {{ isAdmin ? 'Yes' : 'No' }})
+            </span>
           </template>
           
           <!-- User dropdown -->
@@ -49,6 +52,7 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { ArrowDown } from '@element-plus/icons-vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -59,7 +63,24 @@ export default {
     const store = useStore()
     const isLoggedIn = computed(() => store.state.auth.isLoggedIn)
     const username = computed(() => store.state.auth.user?.username || '')
-    const isAdmin = computed(() => store.state.auth.user?.is_admin || false)
+    const isAdmin = computed(() => {
+      // Debug info to help track admin status
+      console.log('Computing isAdmin:', store.state.auth.user)
+      return store.state.auth.user?.is_admin === true
+    })
+    
+    // Try to fetch user data on app initialization if token exists
+    if (localStorage.getItem('token')) {
+      // Initialize axios headers
+      const token = localStorage.getItem('token')
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      
+      // Fetch user data
+      store.dispatch('auth/fetchUser').then(() => {
+        console.log('User data fetched on app initialization')
+        console.log('Admin status:', store.state.auth.user?.is_admin)
+      })
+    }
 
     const logout = () => {
       store.dispatch('auth/logout')

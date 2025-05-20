@@ -20,11 +20,29 @@ app = FastAPI(
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080"],  # Frontend URL
+    allow_origins=["*"],  # Allow all origins for development
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Root endpoint for health checks
+@app.get("/")
+async def root():
+    return {"status": "ok", "message": "LearnOnline API is running"}
+
+@app.get("/api")
+async def api_root():
+    return {"status": "ok", "message": "LearnOnline API is ready"}
+
+# Root endpoint for health checks
+@app.get("/")
+async def health_check():
+    return {"status": "ok", "message": "LearnOnline API is running"}
+
+@app.get("/api")
+async def api_ready():
+    return {"status": "ok", "message": "LearnOnline API is ready"}
 
 # Include routers
 app.include_router(auth.router, prefix="/api")
