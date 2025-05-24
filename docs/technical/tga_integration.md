@@ -23,7 +23,7 @@ For units of competency, the system extracts elements and performance criteria f
    - Tests XML parsing and database storage
    - Can process specific unit codes or all available XML files
 
-4. **Admin Interface** (`/frontend/src/views/Admin.vue`):
+4. **Admin Interface** (`/frontend/admin.html`):
    - UI for administrators to trigger TGA synchronization
    - Process elements and performance criteria
    - View task status and results
