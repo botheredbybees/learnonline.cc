@@ -4,13 +4,13 @@ This guide explains the LearnOnline.cc technology stack for developers who may b
 
 ## Overview Architecture
 
-LearnOnline.cc uses a modern three-tier architecture:
+LearnOnline.cc uses a lightweight three-tier architecture:
 
-1. **Frontend**: Vue.js single-page application
+1. **Frontend**: HTML5 + jQuery + Bootstrap static application
 2. **Backend**: FastAPI REST API
 3. **Database**: PostgreSQL relational database
 
-All components are containerized using Docker for consistent development and deployment environments.
+All components are containerized using Docker for consistent development and deployment environments. The frontend is served by Nginx and communicates with the backend via AJAX calls.
 
 ## Frontend Technologies Explained
 

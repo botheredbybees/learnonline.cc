@@ -1,20 +1,22 @@
 # System Components Technical Specifications
 
-## Frontend (Vue.js 3)
+## Frontend (HTML + jQuery + Bootstrap)
 
-- **Framework**: [Vue.js 3.2.13](https://vuejs.org/)
-- **UI Library**: [Element Plus 2.4.3](https://element-plus.org/)
-- **State Management**: [Vuex 4.0.0](https://vuex.vuejs.org/)
-- **Routing**: [Vue Router 4.0.3](https://router.vuejs.org/)
-- **Build Tool**: [Vue CLI 5.0.0](https://cli.vuejs.org/)
-- **Styling**: [SASS](https://sass-lang.com/) with [BEM methodology](https://en.bem.info/methodology/)
-- **HTTP Client**: [Axios 1.6.2](https://axios-http.com/)
+- **Core Technologies**:
+  - HTML5
+  - [jQuery 3.7.1](https://jquery.com/)
+  - [Bootstrap 5.3.2](https://getbootstrap.com/)
+- **Server**: Nginx for static file serving
+- **Build Process**: None (direct static files)
+- **HTTP Client**: jQuery AJAX with Promises
 - **Development Tools**:
-
-  - [ESLint](https://eslint.org/) for code quality
-  - [Prettier](https://prettier.io/) for code formatting
-  - [Jest](https://jestjs.io/) for unit testing
-  - [Cypress](https://www.cypress.io/) for E2E testing
+  - Browser DevTools
+  - Live server reload via Docker volumes
+- **Key Features**:
+  - Responsive design with Bootstrap
+  - Client-side routing via custom JavaScript
+  - Modular JavaScript with ES6 modules
+  - AJAX-based API communication
 
 ## Backend (FastAPI)
 

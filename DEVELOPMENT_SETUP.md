@@ -9,8 +9,8 @@ Before you begin, ensure you have the following installed:
 - **Git** - For version control
 - **Docker and Docker Compose** - For containerization
 - **Python 3.9+** - For backend development
-- **Node.js (v16+) and npm** - For frontend development
 - **PostgreSQL** (optional, if not using Docker) - For database
+- **Web Browser** with developer tools - For frontend development
 
 ## Step 1: Clone the Repository
 

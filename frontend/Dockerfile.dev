@@ -1,26 +1,12 @@
-FROM node:18-alpine
+FROM nginx:alpine
 
-WORKDIR /app
+WORKDIR /usr/share/nginx/html
 
-# Install system dependencies
-RUN apk add --no-cache \
-    curl \
-    git
+RUN apk add --no-cache curl
 
-# Copy package files first (for better caching)
-COPY package*.json ./
+# Nginx config will be mounted as a volume
+# Static files will be mounted as volumes for development
 
-# Install dependencies for development
-ENV NODE_ENV=development
-RUN npm install
+EXPOSE 80
 
-# You don't need to COPY . . because we're using volumes
-# for development to sync changes in real-time
-
-# Create necessary directories
-RUN mkdir -p /app/logs
-
-EXPOSE 8080
-
-# Start development server with hot-reload
-CMD ["npm", "run", "serve"]
+CMD ["nginx", "-g", "daemon off;"]

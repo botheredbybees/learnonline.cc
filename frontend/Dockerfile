@@ -1,36 +1,16 @@
-FROM node:18-alpine
+FROM nginx:alpine
 
-WORKDIR /app
+WORKDIR /usr/share/nginx/html
 
-# Install system dependencies
-RUN apk add --no-cache \
-    curl \
-    wget \
-    git
+# Copy static files
+COPY ./static ./static
+COPY ./js ./js
+COPY ./index.html .
+COPY ./public/favicon.ico .
 
-# Copy package files
-COPY package*.json ./
+# Copy nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Install dependencies, including devDependencies
-ENV NODE_ENV=development
-RUN npm install
+EXPOSE 80
 
-# Copy the rest of the application
-COPY . .
-
-# Add ESLint configuration to disable unused-vars rule
-RUN echo '{ "extends": ["eslint:recommended"], "rules": { "no-unused-vars": "off" } }' > .eslintrc.json
-
-# Build the application
-ENV NODE_ENV=production
-RUN npm run build
-
-# Create necessary directories
-RUN mkdir -p /app/logs
-
-# Set environment variables
-ENV NODE_ENV=production
-ENV HOST=0.0.0.0
-
-# Run the application using the serve script from package.json
-CMD ["npm", "run", "start"]
+CMD ["nginx", "-g", "daemon off;"]
