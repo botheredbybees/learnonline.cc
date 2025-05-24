@@ -1,0 +1,204 @@
+# Docker Compose configuration for testing environment
+version: '3.8'
+
+services:
+  # Test database
+  postgres-test:
+    image: postgres:13
+    container_name: learnonline_postgres_test
+    environment:
+      POSTGRES_DB: learnonline_test
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d learnonline_test"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - test-network
+
+  # Backend test service
+  backend-test:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: learnonline_backend_test
+    environment:
+      - DATABASE_URL=postgresql://test_user:test_password@postgres-test:5432/learnonline_test
+      - TGA_USERNAME=${TGA_USERNAME:-test_username}
+      - TGA_PASSWORD=${TGA_PASSWORD:-test_password}
+      - JWT_SECRET=test_jwt_secret_key_for_testing_only
+      - ENVIRONMENT=test
+      - LOG_LEVEL=DEBUG
+    ports:
+      - "8001:8000"
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - ./tests:/app/tests
+    command: >
+      sh -c "
+        echo 'Waiting for database...' &&
+        python -c 'import time; time.sleep(10)' &&
+        echo 'Running database migrations...' &&
+        alembic upgrade head &&
+        echo 'Starting test server...' &&
+        uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+      "
+    networks:
+      - test-network
+
+  # Frontend test service
+  frontend-test:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: learnonline_frontend_test
+    ports:
+      - "8081:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    depends_on:
+      - backend-test
+    networks:
+      - test-network
+
+  # Redis for caching (test environment)
+  redis-test:
+    image: redis:7-alpine
+    container_name: learnonline_redis_test
+    ports:
+      - "6380:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_test_data:/data
+    networks:
+      - test-network
+
+  # Selenium Grid Hub for browser testing
+  selenium-hub:
+    image: selenium/hub:4.15.0
+    container_name: selenium_hub_test
+    ports:
+      - "4444:4444"
+      - "4442:4442"
+      - "4443:4443"
+    environment:
+      - GRID_MAX_SESSION=16
+      - GRID_BROWSER_TIMEOUT=300
+      - GRID_TIMEOUT=300
+    networks:
+      - test-network
+
+  # Chrome browser for Selenium testing
+  selenium-chrome:
+    image: selenium/node-chrome:4.15.0
+    container_name: selenium_chrome_test
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+      - NODE_MAX_INSTANCES=4
+      - NODE_MAX_SESSION=4
+    volumes:
+      - /dev/shm:/dev/shm
+    networks:
+      - test-network
+
+  # Firefox browser for Selenium testing
+  selenium-firefox:
+    image: selenium/node-firefox:4.15.0
+    container_name: selenium_firefox_test
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+      - NODE_MAX_INSTANCES=2
+      - NODE_MAX_SESSION=2
+    volumes:
+      - /dev/shm:/dev/shm
+    networks:
+      - test-network
+
+  # Test runner service
+  test-runner:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: learnonline_test_runner
+    environment:
+      - DATABASE_URL=postgresql://test_user:test_password@postgres-test:5432/learnonline_test
+      - TGA_USERNAME=${TGA_USERNAME:-test_username}
+      - TGA_PASSWORD=${TGA_PASSWORD:-test_password}
+      - JWT_SECRET=test_jwt_secret_key_for_testing_only
+      - ENVIRONMENT=test
+      - SELENIUM_HUB_URL=http://selenium-hub:4444/wd/hub
+      - FRONTEND_URL=http://frontend-test
+      - BACKEND_URL=http://backend-test:8000
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+      backend-test:
+        condition: service_started
+      selenium-hub:
+        condition: service_started
+    volumes:
+      - ./backend:/app
+      - ./tests:/app/tests
+      - ./test-results:/app/test-results
+    working_dir: /app
+    command: >
+      sh -c "
+        echo 'Waiting for services to be ready...' &&
+        python -c 'import time; time.sleep(30)' &&
+        echo 'Running tests...' &&
+        pytest tests/ -v --tb=short --junitxml=test-results/junit.xml --cov=. --cov-report=html:test-results/coverage --cov-report=xml:test-results/coverage.xml
+      "
+    networks:
+      - test-network
+
+  # Load testing service with Locust
+  load-test:
+    build:
+      context: ./tests/performance
+      dockerfile: Dockerfile
+    container_name: learnonline_load_test
+    ports:
+      - "8089:8089"
+    environment:
+      - TARGET_HOST=http://backend-test:8000
+    depends_on:
+      - backend-test
+    volumes:
+      - ./tests/performance:/app
+      - ./test-results:/app/results
+    command: >
+      sh -c "
+        echo 'Waiting for backend to be ready...' &&
+        python -c 'import time; time.sleep(20)' &&
+        echo 'Starting Locust load testing...' &&
+        locust -f locustfile.py --host=http://backend-test:8000 --web-host=0.0.0.0 --web-port=8089
+      "
+    networks:
+      - test-network
+
+volumes:
+  postgres_test_data:
+    driver: local
+  redis_test_data:
+    driver: local
+
+networks:
+  test-network:
+    driver: bridge

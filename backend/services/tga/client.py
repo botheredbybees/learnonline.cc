@@ -11,6 +11,7 @@ from requests.auth import HTTPBasicAuth
 import xml.etree.ElementTree as ET
 from bs4 import BeautifulSoup
 import time
+import re
 
 from .exceptions import TGAClientError, TGAAuthenticationError, TGAConnectionError
 

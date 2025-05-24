@@ -19,6 +19,15 @@ const api = {
         });
     },
 
+    getToken() {
+        return localStorage.getItem('token');
+    },
+
+    getAuthHeaders() {
+        const token = this.getToken();
+        return token ? { 'Authorization': `Bearer ${token}` } : {};
+    },
+
     clearToken() {
         localStorage.removeItem('token');
         $.ajaxSetup({

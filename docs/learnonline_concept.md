@@ -31,12 +31,12 @@ LearnOnline.cc is a gamified vocational training platform that transforms tradit
 
 For detailed technical specifications of all system components, see [System Components Technical Specifications](technical/system_components.md).
 
-- Frontend: Vue.js 3 with Element Plus UI framework
+- Frontend: HTML5, [jQuery 3.7.1](https://jquery.com/), [Bootstrap 5.3.2](https://getbootstrap.com/)
 - Backend: FastAPI (Python)
 - Database: PostgreSQL
 - Containerization: Docker
 - AI/ML: Gemini API, LangChain, ChromaDB
-- Content Delivery: Streamlit, H5P
+- Content Delivery: Streamlit
 - Testing Frameworks: Selenium for UI testing, Pytest for backend
 
 ### 2.2 Data Flow
