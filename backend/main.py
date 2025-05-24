@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
@@ -6,16 +6,40 @@ import os
 from dotenv import load_dotenv
 
 # Import routers
-from routers import admin, auth, units, users, quests, favorites, public
+from routers import auth, users, roles, permissions, units, training_packages, qualifications, skillsets, assessments, user_progress, achievements, badges
+from database import get_db
+from models.tables import TrainingPackage, Unit
+from pydantic import BaseModel, ConfigDict
 
 # Load environment variables
 load_dotenv()
+
+# Create the database tables
+from database import engine
+import models.tables as models
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="LearnOnline API",
     description="Backend API for LearnOnline platform",
     version="1.0.0"
 )
+
+class TrainingPackageBase(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
+    code: str
+    title: str
+    description: str | None = None
+    status: str | None = None
+
+class UnitBase(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
+    code: str
+    title: str
+    description: str | None = None
+    training_package_id: int
 
 # Configure CORS
 app.add_middleware(
@@ -28,40 +52,37 @@ app.add_middleware(
 
 # Root endpoint for health checks
 @app.get("/")
-async def root():
-    return {"status": "ok", "message": "LearnOnline API is running"}
-
-@app.get("/api")
-async def api_root():
-    return {"status": "ok", "message": "LearnOnline API is ready"}
-
-# Root endpoint for health checks
-@app.get("/")
 async def health_check():
-    return {"status": "ok", "message": "LearnOnline API is running"}
+    return {"status": "healthy"}
 
 @app.get("/api")
 async def api_ready():
-    return {"status": "ok", "message": "LearnOnline API is ready"}
+    return {"status": "ready"}
 
-# Include routers
-app.include_router(auth.router, prefix="/api")
-app.include_router(users.router, prefix="/api")
-app.include_router(admin.router, prefix="/api")
-app.include_router(units.router, prefix="/api")
-app.include_router(quests.router, prefix="/api")
-app.include_router(favorites.router, prefix="/api")
-app.include_router(public.router, prefix="/api")  # Public routes without authentication
+@app.get("/training-packages/", response_model=List[TrainingPackageBase])
+async def list_training_packages(db: Session = Depends(get_db)):
+    """List all training packages"""
+    return db.query(TrainingPackage).all()
 
-# Health check endpoint
-@app.get("/")
-async def root():
-    return {"message": "Welcome to LearnOnline API", "status": "healthy"}
+@app.get("/units/", response_model=List[UnitBase])
+async def list_units(db: Session = Depends(get_db)):
+    """List all units"""
+    return db.query(Unit).all()
+
+# Include all routers
 app.include_router(auth.router)
 app.include_router(users.router)
-app.include_router(admin.router)
+app.include_router(roles.router)
+app.include_router(permissions.router)
 app.include_router(units.router)
+app.include_router(training_packages.router)
+app.include_router(qualifications.router)
+app.include_router(skillsets.router)
+app.include_router(assessments.router)
+app.include_router(user_progress.router)
+app.include_router(achievements.router)
+app.include_router(badges.router)
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000) 
+    uvicorn.run(app, host="0.0.0.0", port=8000)

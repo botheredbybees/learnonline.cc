@@ -10,11 +10,10 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./schema_mvp_updated.sql:/docker-entrypoint-initdb.d/01-schema.sql
-      # Ensure pgcrypto extension is created
+      - ./schema_updates/00_init_schema.sql:/docker-entrypoint-initdb.d/00-init-schema.sql
       - ./db-init:/docker-entrypoint-initdb.d
     ports:
-      - "5332:5432"
+      - "5332:5432" # Map host 5332 to container 5432
     networks:
       - app-network
     healthcheck:
@@ -33,7 +32,7 @@ services:
       - DB_USER=${DB_USER:-postgres}
       - DB_PASSWORD=${DB_PASSWORD:-postgres}
       - DB_HOST=db
-      - DB_PORT=5332
+      - DB_PORT=5432  # Keep as 5432 since this is internal to docker network
       - SECRET_KEY=${SECRET_KEY:-devsecrethardtoguess}
       - ALGORITHM=HS256
       - ACCESS_TOKEN_EXPIRE_MINUTES=30

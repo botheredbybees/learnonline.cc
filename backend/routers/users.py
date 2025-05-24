@@ -1,303 +1,276 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-from sqlalchemy import text
-from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, Field
-import json
+"""
+Users Router - Manages user accounts and profiles.
 
+This module provides endpoints for:
+- User account management (create, update, delete)
+- User profile management
+- User role assignments and permissions
+- User data retrieval and filtering
+
+All endpoints are documented with appropriate response models and error responses
+for integration with Swagger UI and ReDoc.
+"""
+
+from typing import List, Optional
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy.orm import Session
+import uuid
+from uuid import UUID
+
+from models.tables import User, UserProfile, Role
+from models.schemas import UserSchema, UserProfileSchema, UserUpdateSchema, UserProfileUpdateSchema
 from db.database import get_db
-from models.user import User, UserResponse, UserUpdate, UserLevel
 from auth.auth_bearer import JWTBearer
 from auth.auth_handler import get_current_user
 
 router = APIRouter(
-    prefix="/users",
+    prefix="/api/users",
     tags=["users"],
-    responses={404: {"description": "Not found"}},
+    responses={404: {"description": "User not found"}},
 )
 
-@router.get("/me", response_model=UserResponse)
-async def read_user_me(current_user: User = Depends(get_current_user)):
-    """Get current user information"""
-    return current_user
 
-@router.get("", response_model=List[UserResponse], dependencies=[Depends(JWTBearer())])
-async def read_users(
-    skip: int = 0, 
-    limit: int = 100, 
-    level: Optional[str] = None,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+@router.get("/", response_model=List[UserSchema], dependencies=[Depends(JWTBearer())])
+async def get_all_users(
+    skip: int = 0,
+    limit: int = 100,
+    role_id: Optional[int] = None,
+    is_active: Optional[bool] = True,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
-    """Get all users (admin only)"""
-    # Check if user is admin
-    if not current_user.is_admin:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Not authorized to access user list"
-        )
-    
-    # Build the query based on parameters
-    query = """
-        SELECT id, email, username, full_name, disabled, is_admin, 
-               experience_points, level, created_at, updated_at
-        FROM users
     """
+    Retrieve all users with pagination and filtering support.
     
-    # Add filter by level if specified
-    params = {"limit": limit, "skip": skip}
-    if level:
-        query += " WHERE level::text = :level"
-        params["level"] = level
+    Parameters:
+    - **skip**: Number of records to skip (for pagination)
+    - **limit**: Maximum number of records to return
+    - **role_id**: Filter users by role ID
+    - **is_active**: Filter users by active status
     
-    # Add ordering and pagination
-    query += " ORDER BY experience_points DESC, username LIMIT :limit OFFSET :skip"
+    Returns:
+    - List of user objects with their details
     
-    # Execute query
-    stmt = text(query)
-    result = db.execute(stmt, params)
-    users = result.fetchall()
+    Requires:
+    - Valid JWT token with administrative privileges
+    """
+    # Check if user has admin role
+    if not hasattr(current_user, "role") or current_user.role.name != "admin":
+        raise HTTPException(status_code=403, detail="Not authorized to list all users")
     
-    # Convert to list of UserResponse objects
-    user_list = []
-    for user_row in users:
-        user_dict = dict(user_row)
-        # Ensure proper typing of the level field
-        user_dict["level"] = UserLevel(user_dict["level"])
-        user_list.append(UserResponse(**user_dict))
+    query = db.query(User)
     
-    return user_list
+    if role_id is not None:
+        query = query.filter(User.role_id == role_id)
+    
+    if is_active is not None:
+        query = query.filter(User.is_active == is_active)
+    
+    users = query.offset(skip).limit(limit).all()
+    return users
 
-@router.get("/{user_id}", response_model=UserResponse, dependencies=[Depends(JWTBearer())])
-async def read_user(
-    user_id: str, 
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+
+@router.get("/{user_id}", response_model=UserSchema, dependencies=[Depends(JWTBearer())])
+async def get_user_by_id(
+    user_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
-    """Get a specific user by ID (admin or self only)"""
-    # Allow access only to admins or the user themselves
-    if not current_user.is_admin and str(current_user.id) != user_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Not authorized to access this user"
-        )
+    """
+    Retrieve a specific user by ID.
     
-    # Get user
-    stmt = text("""
-        SELECT id, email, username, full_name, disabled, is_admin, 
-               experience_points, level, created_at, updated_at
-        FROM users
-        WHERE id = :user_id
-    """)
+    Parameters:
+    - **user_id**: User UUID
     
-    result = db.execute(stmt, {"user_id": user_id})
-    user = result.fetchone()
+    Returns:
+    - User object with full details
     
+    Raises:
+    - 404: User not found
+    - 403: Not authorized to view this user
+    
+    Requires:
+    - Valid JWT token with appropriate permissions
+    """
+    # Users can view their own profile, admins can view any profile
+    if str(current_user.id) != str(user_id) and (not hasattr(current_user, "role") or current_user.role.name != "admin"):
+        raise HTTPException(status_code=403, detail="Not authorized to view this user")
+    
+    user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
-    # Convert to UserResponse with proper typing
-    user_dict = dict(user)
-    user_dict["level"] = UserLevel(user_dict["level"])
-    
-    return UserResponse(**user_dict)
+    return user
 
-@router.put("/{user_id}", response_model=UserResponse, dependencies=[Depends(JWTBearer())])
+
+@router.put("/{user_id}", response_model=UserSchema, dependencies=[Depends(JWTBearer())])
 async def update_user(
-    user_id: str,
-    user_update: UserUpdate,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    user_id: uuid.UUID,
+    user_data: UserUpdateSchema,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
-    """Update a user (admin or self only)"""
-    # Allow access only to admins or the user themselves
-    if not current_user.is_admin and str(current_user.id) != user_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Not authorized to update this user"
-        )
-    
-    # Check if user exists
-    stmt = text("""
-        SELECT id FROM users WHERE id = :user_id
-    """)
-    result = db.execute(stmt, {"user_id": user_id})
-    if not result.fetchone():
-        raise HTTPException(status_code=404, detail="User not found")
-    
-    # Prepare update fields
-    update_fields = {}
-    update_sql_parts = []
-    
-    if user_update.email is not None:
-        update_fields["email"] = user_update.email
-        update_sql_parts.append("email = :email")
-    
-    if user_update.username is not None:
-        update_fields["username"] = user_update.username
-        update_sql_parts.append("username = :username")
-    
-    if user_update.full_name is not None:
-        update_fields["full_name"] = user_update.full_name
-        update_sql_parts.append("full_name = :full_name")
-    
-    # Only admins can change disabled and admin status
-    if current_user.is_admin:
-        if user_update.disabled is not None:
-            update_fields["disabled"] = user_update.disabled
-            update_sql_parts.append("disabled = :disabled")
-        
-        if user_update.is_admin is not None:
-            update_fields["is_admin"] = user_update.is_admin
-            update_sql_parts.append("is_admin = :is_admin")
-            
-        # Allow admins to update experience points directly
-        if user_update.experience_points is not None:
-            update_fields["experience_points"] = user_update.experience_points
-            update_sql_parts.append("experience_points = :experience_points")
-            
-        # Level will be automatically updated via database trigger
-    
-    # Only update if there are fields to update
-    if update_sql_parts:
-        # Add updated_at field
-        update_sql_parts.append("updated_at = CURRENT_TIMESTAMP")
-        
-        # Construct SQL query
-        update_sql = f"""
-            UPDATE users
-            SET {', '.join(update_sql_parts)}
-            WHERE id = :user_id
-            RETURNING id, email, username, full_name, disabled, is_admin, 
-                     experience_points, level, created_at, updated_at
-        """
-        
-        # Add user_id to update fields
-        update_fields["user_id"] = user_id
-        
-        # Execute update
-        stmt = text(update_sql)
-        result = db.execute(stmt, update_fields)
-        db.commit()
-        
-        # Get updated user
-        updated_user = result.fetchone()
-        user_dict = dict(updated_user)
-        user_dict["level"] = UserLevel(user_dict["level"])
-        
-        return UserResponse(**user_dict)
-    
-    # If no fields to update, just return the current user
-    stmt = text("""
-        SELECT id, email, username, full_name, disabled, is_admin,
-               experience_points, level, created_at, updated_at
-        FROM users
-        WHERE id = :user_id
-    """)
-    
-    result = db.execute(stmt, {"user_id": user_id})
-    user = result.fetchone()
-    user_dict = dict(user)
-    user_dict["level"] = UserLevel(user_dict["level"])
-    
-    return UserResponse(**user_dict)
-
-class ExperiencePointsAward(BaseModel):
-    points: int = Field(..., gt=0, description="Number of points to award (must be positive)")
-    reason: Optional[str] = Field(None, description="Reason for awarding points")
-
-@router.post("/{user_id}/award-points", response_model=UserResponse, dependencies=[Depends(JWTBearer())])
-async def award_experience_points(
-    user_id: str,
-    award: ExperiencePointsAward,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
-    """Award experience points to a user (admin only)"""
-    # Only admins can award experience points
-    if not current_user.is_admin:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Not authorized to award experience points"
-        )
-    
-    # Check if user exists
-    stmt = text("""
-        SELECT id FROM users WHERE id = :user_id
-    """)
-    result = db.execute(stmt, {"user_id": user_id})
-    if not result.fetchone():
-        raise HTTPException(status_code=404, detail="User not found")
-    
-    # Award experience points - level will be updated by the database trigger
-    update_sql = """
-        UPDATE users
-        SET experience_points = experience_points + :points,
-            updated_at = CURRENT_TIMESTAMP
-        WHERE id = :user_id
-        RETURNING id, email, username, full_name, disabled, is_admin, 
-                 experience_points, level, created_at, updated_at
     """
+    Update user information.
     
-    # Execute the update
-    stmt = text(update_sql)
-    result = db.execute(stmt, {"user_id": user_id, "points": award.points})
-    updated_user = result.fetchone()
+    Parameters:
+    - **user_id**: User UUID
+    - **user_data**: Updated user data with fields that can be modified
     
-    # Convert to UserResponse with proper typing
-    user_dict = dict(updated_user)
-    user_dict["level"] = UserLevel(user_dict["level"])
+    Returns:
+    - Updated user object
     
-    # Log the award if reason is provided
-    if award.reason:
-        try:
-            # Check if the table exists
-            check_table_sql = """
-                SELECT EXISTS (
-                    SELECT FROM information_schema.tables 
-                    WHERE table_name = 'user_activity_logs'
-                )
-            """
-            table_exists = db.execute(text(check_table_sql)).scalar()
-            
-            if table_exists:
-                log_sql = """
-                    INSERT INTO user_activity_logs (user_id, activity_type, points, description, created_at)
-                    VALUES (:user_id, 'award_points', :points, :reason, CURRENT_TIMESTAMP)
-                """
-                db.execute(text(log_sql), {
-                    "user_id": user_id,
-                    "points": award.points,
-                    "reason": award.reason
-                })
-        except Exception:
-            # If logging fails, we still want to return the updated user
-            pass
+    Raises:
+    - 404: User not found
+    - 403: Not authorized to update this user
+    
+    Requires:
+    - Valid JWT token with appropriate permissions
+    """
+    # Users can update their own profile, admins can update any profile
+    if str(current_user.id) != str(user_id) and (not hasattr(current_user, "role") or current_user.role.name != "admin"):
+        raise HTTPException(status_code=403, detail="Not authorized to update this user")
+    
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Convert Pydantic model to dict, excluding password_hash
+    user_data_dict = user_data.model_dump(exclude={"password_hash"})
+    
+    # Don't allow users to change their own role
+    if str(current_user.id) == str(user_id) and "role_id" in user_data_dict:
+        del user_data_dict["role_id"]
+    
+    for key, value in user_data_dict.items():
+        setattr(user, key, value)
     
     db.commit()
-    return UserResponse(**user_dict)
+    db.refresh(user)
+    
+    return user
 
-@router.get("/leaderboard", response_model=List[Dict[str, Any]], dependencies=[Depends(JWTBearer())])
-async def get_leaderboard(
-    limit: int = 10,
-    db: Session = Depends(get_db)
+
+@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(JWTBearer())])
+async def delete_user(
+    user_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
-    """Get user leaderboard based on experience points"""
-    stmt = text("""
-        SELECT id, username, full_name, experience_points, level
-        FROM users
-        WHERE disabled = FALSE
-        ORDER BY experience_points DESC
-        LIMIT :limit
-    """)
+    """
+    Delete or deactivate a user account.
     
-    result = db.execute(stmt, {"limit": limit})
-    leaderboard = []
+    Parameters:
+    - **user_id**: User UUID
     
-    for i, row in enumerate(result.fetchall()):
-        user_dict = dict(row)
-        user_dict["rank"] = i + 1
-        user_dict["level"] = user_dict["level"]  # Keep as string for simpler serialization
-        leaderboard.append(user_dict)
+    Returns:
+    - 204 No Content
     
-    return leaderboard
+    Raises:
+    - 404: User not found
+    - 403: Not authorized to delete this user
+    
+    Requires:
+    - Valid JWT token with administrative privileges
+    """
+    # Only admins can delete users
+    if not hasattr(current_user, "role") or current_user.role.name != "admin":
+        raise HTTPException(status_code=403, detail="Not authorized to delete users")
+    
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # In many systems, we don't actually delete users, just deactivate them
+    setattr(user, "is_active", False)
+    db.commit()
+    
+    # Or if we want to actually delete:
+    # db.delete(user)
+    # db.commit()
+    
+    return None
+
+
+@router.get("/{user_id}/profile", response_model=UserProfileSchema, dependencies=[Depends(JWTBearer())])
+async def get_user_profile(
+    user_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Retrieve a user's profile information.
+    
+    Parameters:
+    - **user_id**: User UUID
+    
+    Returns:
+    - User profile object
+    
+    Raises:
+    - 404: User or profile not found
+    - 403: Not authorized to view this profile
+    
+    Requires:
+    - Valid JWT token with appropriate permissions
+    """
+    # Users can view their own profile, admins can view any profile
+    if str(current_user.id) != str(user_id) and (not hasattr(current_user, "role") or current_user.role.name != "admin"):
+        raise HTTPException(status_code=403, detail="Not authorized to view this profile")
+    
+    profile = db.query(UserProfile).filter(UserProfile.user_id == user_id).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="User profile not found")
+    
+    return profile
+
+
+@router.put("/{user_id}/profile", response_model=UserProfileSchema, dependencies=[Depends(JWTBearer())])
+async def update_user_profile(
+    user_id: uuid.UUID,
+    profile_data: UserProfileUpdateSchema,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Update a user's profile information.
+    
+    Parameters:
+    - **user_id**: User UUID
+    - **profile_data**: Updated profile data with fields that can be modified
+    
+    Returns:
+    - Updated profile object
+    
+    Raises:
+    - 404: User or profile not found
+    - 403: Not authorized to update this profile
+    
+    Requires:
+    - Valid JWT token with appropriate permissions
+    """
+    # Users can update their own profile, admins can update any profile
+    if str(current_user.id) != str(user_id) and (not hasattr(current_user, "role") or current_user.role.name != "admin"):
+        raise HTTPException(status_code=403, detail="Not authorized to update this profile")
+    
+    profile = db.query(UserProfile).filter(UserProfile.user_id == user_id).first()
+    
+    if not profile:
+        # Create profile if it doesn't exist
+        profile_data_dict = profile_data.model_dump()
+        profile_data_dict["user_id"] = user_id
+        new_profile = UserProfile(**profile_data_dict)
+        db.add(new_profile)
+        db.commit()
+        db.refresh(new_profile)
+        return new_profile
+    
+    # Convert Pydantic model to dict
+    profile_data_dict = profile_data.model_dump()
+    for key, value in profile_data_dict.items():
+        setattr(profile, key, value)
+    
+    db.commit()
+    db.refresh(profile)
+    
+    return profile
