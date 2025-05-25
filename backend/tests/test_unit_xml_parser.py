@@ -15,7 +15,7 @@ ROOT_DIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
 sys.path.insert(0, ROOT_DIR)
 
 # Import the modules we want to test
-from backend.scripts.tga.tp_get import parse_elements_and_pcs, store_elements_and_pcs
+from scripts.tga.tp_get import parse_elements_and_pcs, store_elements_and_pcs
 
 class TestElementParsing(unittest.TestCase):
     """Test cases for element and performance criteria parsing"""

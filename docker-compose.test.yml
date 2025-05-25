@@ -1,6 +1,4 @@
 # Docker Compose configuration for testing environment
-version: '3.8'
-
 services:
   # Test database
   postgres-test:
@@ -44,7 +42,6 @@ services:
         condition: service_healthy
     volumes:
       - ./backend:/app
-      - ./tests:/app/tests
     command: >
       sh -c "
         echo 'Waiting for database...' &&
@@ -155,7 +152,6 @@ services:
         condition: service_started
     volumes:
       - ./backend:/app
-      - ./tests:/app/tests
       - ./test-results:/app/test-results
     working_dir: /app
     command: >

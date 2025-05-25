@@ -20,7 +20,7 @@ import pathlib
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scripts.tga import parse_elements_and_pcs, process_unit_xml_from_file
+from scripts.tga.tp_get import parse_elements_and_pcs
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
