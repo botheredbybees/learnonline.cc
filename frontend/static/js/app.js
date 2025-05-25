@@ -52,6 +52,9 @@ const app = {
             case '/units':
                 this.loadUnits();
                 break;
+            case '/achievements':
+                this.loadAchievements();
+                break;
             default:
                 this.loadNotFound();
         }
@@ -428,6 +431,209 @@ const app = {
         } else {
             $('#main-content').html('<div class="alert alert-danger">Units module not loaded</div>');
         }
+    },
+
+    async loadAchievements() {
+        const html = `
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h2><i class="fas fa-trophy text-warning"></i> Achievements & Gamification</h2>
+                        <p class="lead">Track your progress, earn points, and unlock achievements!</p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0"><i class="fas fa-star"></i> Your Progress</h5>
+                            </div>
+                            <div class="card-body" id="user-progress">
+                                <div class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-8 mb-4">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0"><i class="fas fa-medal"></i> Available Achievements</h5>
+                            </div>
+                            <div class="card-body" id="achievements-list">
+                                <div class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0"><i class="fas fa-ranking-star"></i> Leaderboard</h5>
+                            </div>
+                            <div class="card-body" id="leaderboard">
+                                <div class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        $('#main-content').html(html);
+        
+        // Load gamification data
+        await this.loadGamificationData();
+    },
+
+    async loadGamificationData() {
+        try {
+            // Load user progress
+            if (auth.isAuthenticated()) {
+                const userStats = await api.get('/api/gamification/stats');
+                this.displayUserProgress(userStats);
+            } else {
+                $('#user-progress').html(`
+                    <div class="text-center">
+                        <p class="text-muted">Please <a href="#" data-page="/login">login</a> to view your progress</p>
+                    </div>
+                `);
+            }
+            
+            // Load achievements
+            const achievements = await api.get('/api/gamification/achievements/available');
+            this.displayAchievements(achievements.achievements);
+            
+            // Load leaderboard
+            const leaderboard = await api.get('/api/gamification/leaderboard');
+            this.displayLeaderboard(leaderboard);
+            
+        } catch (error) {
+            console.error('Error loading gamification data:', error);
+            $('#user-progress').html('<div class="alert alert-danger">Error loading progress data</div>');
+            $('#achievements-list').html('<div class="alert alert-danger">Error loading achievements</div>');
+            $('#leaderboard').html('<div class="alert alert-danger">Error loading leaderboard</div>');
+        }
+    },
+
+    displayUserProgress(stats) {
+        const levelProgress = ((stats.experience_points % 100) / 100) * 100;
+        const nextLevelPoints = Math.ceil(stats.experience_points / 100) * 100;
+        
+        const html = `
+            <div class="text-center mb-3">
+                <h4 class="text-primary">${stats.experience_points} XP</h4>
+                <p class="mb-1">Level ${stats.level}</p>
+                <div class="progress mb-2">
+                    <div class="progress-bar" role="progressbar" style="width: ${levelProgress}%" 
+                         aria-valuenow="${levelProgress}" aria-valuemin="0" aria-valuemax="100">
+                        ${Math.round(levelProgress)}%
+                    </div>
+                </div>
+                <small class="text-muted">${nextLevelPoints - stats.experience_points} XP to next level</small>
+            </div>
+            
+            <hr>
+            
+            <div class="row text-center">
+                <div class="col-6">
+                    <h6 class="text-success">${stats.achievements_count || 0}</h6>
+                    <small class="text-muted">Achievements</small>
+                </div>
+                <div class="col-6">
+                    <h6 class="text-info">${stats.role || 'Guest'}</h6>
+                    <small class="text-muted">Role</small>
+                </div>
+            </div>
+        `;
+        $('#user-progress').html(html);
+    },
+
+    displayAchievements(achievements) {
+        if (!achievements || achievements.length === 0) {
+            $('#achievements-list').html('<p class="text-muted">No achievements available</p>');
+            return;
+        }
+        
+        const html = achievements.map(achievement => `
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-2 text-center">
+                            <i class="fas fa-trophy fa-2x text-warning"></i>
+                        </div>
+                        <div class="col-8">
+                            <h6 class="card-title mb-1">${achievement.title}</h6>
+                            <p class="card-text text-muted mb-1">${achievement.description}</p>
+                            <small class="text-success"><i class="fas fa-star"></i> ${achievement.experience_points} XP</small>
+                        </div>
+                        <div class="col-2 text-center">
+                            ${achievement.unlocked ? 
+                                '<span class="badge bg-success">Unlocked</span>' : 
+                                '<span class="badge bg-secondary">Locked</span>'
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+        $('#achievements-list').html(html);
+    },
+
+    displayLeaderboard(data) {
+        if (!data || !data.leaderboard || data.leaderboard.length === 0) {
+            $('#leaderboard').html('<p class="text-muted">No leaderboard data available</p>');
+            return;
+        }
+        
+        const html = `
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>User</th>
+                            <th>Level</th>
+                            <th>Experience</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.leaderboard.map((user) => `
+                            <tr>
+                                <td>
+                                    <span class="badge ${user.rank <= 3 ? 'bg-warning' : 'bg-secondary'}">
+                                        #${user.rank}
+                                    </span>
+                                </td>
+                                <td>${user.first_name} ${user.last_name}</td>
+                                <td>${user.level}</td>
+                                <td>${user.experience_points} XP</td>
+                                <td>
+                                    <span class="badge bg-primary">${user.role}</span>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+        
+        $('#leaderboard').html(html);
     },
 
     loadNotFound() {

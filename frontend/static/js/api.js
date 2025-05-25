@@ -71,6 +71,66 @@ const api = {
             console.error('Registration failed:', error);
             throw error;
         }
+    },
+
+    async get(endpoint) {
+        try {
+            const response = await $.ajax({
+                url: `${this.baseUrl}${endpoint}`,
+                method: 'GET',
+                headers: this.getAuthHeaders()
+            });
+            return response;
+        } catch (error) {
+            console.error(`GET ${endpoint} failed:`, error);
+            throw error;
+        }
+    },
+
+    async post(endpoint, data) {
+        try {
+            const response = await $.ajax({
+                url: `${this.baseUrl}${endpoint}`,
+                method: 'POST',
+                contentType: 'application/json',
+                headers: this.getAuthHeaders(),
+                data: JSON.stringify(data)
+            });
+            return response;
+        } catch (error) {
+            console.error(`POST ${endpoint} failed:`, error);
+            throw error;
+        }
+    },
+
+    async put(endpoint, data) {
+        try {
+            const response = await $.ajax({
+                url: `${this.baseUrl}${endpoint}`,
+                method: 'PUT',
+                contentType: 'application/json',
+                headers: this.getAuthHeaders(),
+                data: JSON.stringify(data)
+            });
+            return response;
+        } catch (error) {
+            console.error(`PUT ${endpoint} failed:`, error);
+            throw error;
+        }
+    },
+
+    async delete(endpoint) {
+        try {
+            const response = await $.ajax({
+                url: `${this.baseUrl}${endpoint}`,
+                method: 'DELETE',
+                headers: this.getAuthHeaders()
+            });
+            return response;
+        } catch (error) {
+            console.error(`DELETE ${endpoint} failed:`, error);
+            throw error;
+        }
     }
 };
 

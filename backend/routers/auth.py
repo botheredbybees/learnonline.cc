@@ -251,6 +251,7 @@ async def register_user(
     return {
         "id": str(new_user.id),
         "email": new_user.email,
+        "username": new_user.email,  # Added username field using email
         "first_name": new_user.first_name,
         "last_name": new_user.last_name,
         "role": default_role.name,

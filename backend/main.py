@@ -1,12 +1,12 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 import os
 from dotenv import load_dotenv
 
 # Import routers
-from routers import auth, users, roles, permissions, units, training_packages, qualifications, skillsets, assessments, user_progress, achievements, badges
+from routers import auth, users, roles, permissions, units, training_packages, qualifications, skillsets, assessments, user_progress, achievements, badges, gamification
 from database import get_db
 from models.tables import TrainingPackage, Unit
 from pydantic import BaseModel, ConfigDict
@@ -14,10 +14,11 @@ from pydantic import BaseModel, ConfigDict
 # Load environment variables
 load_dotenv()
 
-# Create the database tables
-from database import engine
-import models.tables as models
-models.Base.metadata.create_all(bind=engine)
+# Create the database tables (only in non-test environments)
+if os.getenv('ENVIRONMENT') != 'test':
+    from database import engine
+    import models.tables as models
+    models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="LearnOnline API",
@@ -30,15 +31,15 @@ class TrainingPackageBase(BaseModel):
     
     code: str
     title: str
-    description: str | None = None
-    status: str | None = None
+    description: Optional[str] = None
+    status: Optional[str] = None
 
 class UnitBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     
     code: str
     title: str
-    description: str | None = None
+    description: Optional[str] = None
     training_package_id: int
 
 # Configure CORS
@@ -82,6 +83,7 @@ app.include_router(assessments.router)
 app.include_router(user_progress.router)
 app.include_router(achievements.router)
 app.include_router(badges.router)
+app.include_router(gamification.router)
 
 if __name__ == "__main__":
     import uvicorn

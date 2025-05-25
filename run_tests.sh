@@ -62,6 +62,11 @@ show_usage() {
     echo "Commands:"
     echo "  setup           Set up test environment"
     echo "  unit            Run unit tests"
+    echo "  auth            Run authentication tests only"
+    echo "  auth-security   Run authentication security tests only"
+    echo "  auth-tokens     Run JWT token tests only"
+    echo "  auth-endpoints  Run authentication endpoint tests only"
+    echo "  auth-roles      Run role-based access tests only"
     echo "  integration     Run integration tests"
     echo "  api             Run API tests"
     echo "  frontend        Run frontend tests"
@@ -77,6 +82,7 @@ show_usage() {
     echo "Examples:"
     echo "  $0 setup           # Set up test environment"
     echo "  $0 unit            # Run unit tests"
+    echo "  $0 auth            # Run authentication tests"
     echo "  $0 api             # Run API tests"
     echo "  $0 performance     # Run performance tests"
     echo "  $0 clean           # Clean up test environment"
@@ -90,13 +96,13 @@ setup_test_env() {
     check_docker_compose
     create_test_dirs
     
-    # Copy environment file if it doesn't exist
-    if [ ! -f backend/.env.test ]; then
+    # Check if environment file exists
+    if [ ! -f backend/.env ]; then
         if [ -f backend/.env.example ]; then
-            cp backend/.env.example backend/.env.test
-            print_status "Created backend/.env.test from example"
+            cp backend/.env.example backend/.env
+            print_status "Created backend/.env from example"
         else
-            print_warning "No .env.example found. You may need to create backend/.env.test manually"
+            print_warning "No .env.example found. You may need to create backend/.env manually"
         fi
     fi
     
@@ -126,6 +132,106 @@ run_unit_tests() {
         --cov-report=xml:test-results/coverage/unit.xml
     
     print_success "Unit tests completed!"
+}
+
+# Function to run authentication tests only
+run_auth_tests() {
+    print_status "Running authentication tests..."
+    
+    # Start test database
+    docker-compose -f docker-compose.test.yml up -d postgres-test
+    
+    # Wait for database to be ready
+    print_status "Waiting for database to be ready..."
+    sleep 10
+    
+    docker-compose -f docker-compose.test.yml run --rm test-runner \
+        pytest tests/test_auth.py -v --tb=short \
+        --junitxml=test-results/auth-tests.xml \
+        --cov=auth --cov=routers.auth --cov-report=html:test-results/coverage/auth \
+        --cov-report=xml:test-results/coverage/auth.xml
+    
+    print_success "Authentication tests completed!"
+}
+
+# Function to run authentication security tests only
+run_auth_security_tests() {
+    print_status "Running authentication security tests..."
+    
+    # Start test database
+    docker-compose -f docker-compose.test.yml up -d postgres-test
+    
+    # Wait for database to be ready
+    print_status "Waiting for database to be ready..."
+    sleep 10
+    
+    docker-compose -f docker-compose.test.yml run --rm test-runner \
+        pytest tests/test_auth.py::TestPasswordHashing tests/test_auth.py::TestSecurityFeatures -v --tb=short \
+        --junitxml=test-results/auth-security-tests.xml \
+        --cov=auth --cov-report=html:test-results/coverage/auth-security \
+        --cov-report=xml:test-results/coverage/auth-security.xml
+    
+    print_success "Authentication security tests completed!"
+}
+
+# Function to run JWT token tests only
+run_auth_token_tests() {
+    print_status "Running JWT token tests..."
+    
+    # Start test database
+    docker-compose -f docker-compose.test.yml up -d postgres-test
+    
+    # Wait for database to be ready
+    print_status "Waiting for database to be ready..."
+    sleep 10
+    
+    docker-compose -f docker-compose.test.yml run --rm test-runner \
+        pytest tests/test_auth.py::TestJWTTokens -v --tb=short \
+        --junitxml=test-results/auth-token-tests.xml \
+        --cov=auth.auth_handler --cov-report=html:test-results/coverage/auth-tokens \
+        --cov-report=xml:test-results/coverage/auth-tokens.xml
+    
+    print_success "JWT token tests completed!"
+}
+
+# Function to run authentication endpoint tests only
+run_auth_endpoint_tests() {
+    print_status "Running authentication endpoint tests..."
+    
+    # Start test database
+    docker-compose -f docker-compose.test.yml up -d postgres-test
+    
+    # Wait for database to be ready
+    print_status "Waiting for database to be ready..."
+    sleep 10
+    
+    docker-compose -f docker-compose.test.yml run --rm test-runner \
+        pytest tests/test_auth.py::TestAuthEndpoints -v --tb=short \
+        --junitxml=test-results/auth-endpoint-tests.xml \
+        --cov=routers.auth --cov-report=html:test-results/coverage/auth-endpoints \
+        --cov-report=xml:test-results/coverage/auth-endpoints.xml
+    
+    print_success "Authentication endpoint tests completed!"
+}
+
+# Function to run role-based access tests only
+run_auth_role_tests() {
+    print_status "Running role-based access tests..."
+    
+    # Start test database
+    docker-compose -f docker-compose.test.yml up -d postgres-test
+    
+    # Wait for database to be ready
+    print_status "Waiting for database to be ready..."
+    sleep 10
+    
+    docker-compose -f docker-compose.test.yml run --rm test-runner \
+        pytest tests/test_auth.py::TestRolePermissions tests/test_auth.py::TestRoleBasedAccess -v --tb=short \
+        --junitxml=test-results/auth-role-tests.xml \
+        --cov=auth.auth_handler --cov=routers.auth --cov-report=html:test-results/coverage/auth-roles \
+        --cov-report=xml:test-results/coverage/auth-roles.xml
+    
+    print_success "Role-based access tests completed!"
 }
 
 # Function to run integration tests
@@ -386,6 +492,21 @@ case "${1:-help}" in
         ;;
     unit)
         run_unit_tests
+        ;;
+    auth)
+        run_auth_tests
+        ;;
+    auth-security)
+        run_auth_security_tests
+        ;;
+    auth-tokens)
+        run_auth_token_tests
+        ;;
+    auth-endpoints)
+        run_auth_endpoint_tests
+        ;;
+    auth-roles)
+        run_auth_role_tests
         ;;
     integration)
         run_integration_tests

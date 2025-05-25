@@ -25,6 +25,7 @@ ROLE_PERMISSIONS = {
     "admin": ["full_access", "user_management", "aqtf_sync", "content_creation", "team_management"],
     "mentor": ["content_creation", "team_management", "content_access", "assessments"],
     "player": ["content_access", "assessments"],
+    "user": ["limited_browsing"],  # Added user role
     "guest": ["limited_browsing"]
 }
 
@@ -181,7 +182,7 @@ def get_user_role_by_experience(experience_points: int) -> str:
     elif experience_points >= 101:
         return "player"
     else:
-        return "guest"
+        return "user"  # Changed from "guest" to "user" to match test expectations
 
 def check_permission(required_permission: str, user_permissions: List[str]) -> bool:
     """Check if user has required permission"""

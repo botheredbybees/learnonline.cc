@@ -1,3 +1,6 @@
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- Roles and Permissions
 CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
@@ -24,7 +27,7 @@ CREATE TABLE role_permissions (
 
 -- Users and Authentication
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     first_name VARCHAR(100),
@@ -38,8 +41,8 @@ CREATE TABLE users (
 
 -- User Profiles
 CREATE TABLE user_profiles (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id),
     avatar_url VARCHAR(255),
     bio TEXT,
     experience_points INTEGER DEFAULT 0,
@@ -218,7 +221,7 @@ CREATE INDEX idx_skillsets_fts ON skillsets USING gin(to_tsvector('english', tit
 -- User Progress
 CREATE TABLE user_progress (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
+    user_id UUID REFERENCES users(id),
     unit_id INTEGER REFERENCES units(id),
     status VARCHAR(50) DEFAULT 'not_started',
     progress_percentage INTEGER DEFAULT 0,
@@ -258,7 +261,7 @@ CREATE TABLE assessment_questions (
 CREATE TABLE user_submissions (
     id SERIAL PRIMARY KEY,
     assessment_id INTEGER REFERENCES assessments(id),
-    user_id INTEGER REFERENCES users(id),
+    user_id UUID REFERENCES users(id),
     status VARCHAR(50) DEFAULT 'pending',
     score INTEGER,
     feedback TEXT,
@@ -282,7 +285,7 @@ CREATE TABLE achievements (
 -- User Achievements
 CREATE TABLE user_achievements (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
+    user_id UUID REFERENCES users(id),
     achievement_id INTEGER REFERENCES achievements(id),
     awarded_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -303,7 +306,7 @@ CREATE TABLE badges (
 -- User Badges
 CREATE TABLE user_badges (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
+    user_id UUID REFERENCES users(id),
     badge_id INTEGER REFERENCES badges(id),
     awarded_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,

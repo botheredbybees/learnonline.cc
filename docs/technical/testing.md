@@ -116,7 +116,7 @@ The project includes a comprehensive test runner script `run_tests.sh` that prov
 
 The test runner uses Docker Compose to create an isolated test environment with:
 
-- **PostgreSQL test database** (port 5433)
+- **PostgreSQL test database** (port 5334)
 - **Backend test service** (port 8001)
 - **Frontend test service** (port 8081)
 - **Redis test cache** (port 6380)
@@ -973,7 +973,7 @@ def cleanup_test_data():
 2. **Database Connection Errors**
    ```bash
    # Check database is running
-   pg_isready -h localhost -p 5433
+   pg_isready -h localhost -p 5334
    
    # Check test database exists
    docker-compose -f docker-compose.test.yml exec postgres-test psql -U test_user -d learnonline_test -c "\l"
