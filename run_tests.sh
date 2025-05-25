@@ -62,11 +62,13 @@ show_usage() {
     echo "Commands:"
     echo "  setup           Set up test environment"
     echo "  unit            Run unit tests"
+    echo "  auth            Run authentication tests"
     echo "  integration     Run integration tests"
     echo "  api             Run API tests"
     echo "  frontend        Run frontend tests"
     echo "  tga             Run TGA integration tests"
     echo "  performance     Run performance tests"
+    echo "  security        Run security-focused tests"
     echo "  load            Run load tests with Locust"
     echo "  all             Run all tests"
     echo "  clean           Clean up test environment"
@@ -257,6 +259,50 @@ run_performance_tests() {
     print_success "Performance tests completed!"
 }
 
+# Function to run authentication tests
+run_auth_tests() {
+    print_status "Running authentication tests..."
+    
+    # Start backend service
+    docker-compose -f docker-compose.test.yml up -d postgres-test backend-test
+    
+    # Wait for services to be ready
+    sleep 15
+    
+    docker-compose -f docker-compose.test.yml run --rm test-runner \
+        pytest tests/test_auth.py -v --tb=short \
+        --junitxml=test-results/auth-tests.xml \
+        --cov=auth --cov=routers.auth --cov-report=html:test-results/coverage/auth \
+        --cov-report=xml:test-results/coverage/auth.xml
+    
+    print_success "Authentication tests completed!"
+}
+
+# Function to run security tests
+run_security_tests() {
+    print_status "Running security-focused tests..."
+    
+    # Start backend service
+    docker-compose -f docker-compose.test.yml up -d postgres-test backend-test
+    
+    # Wait for services to be ready
+    sleep 15
+    
+    # Run authentication security tests
+    docker-compose -f docker-compose.test.yml run --rm test-runner \
+        pytest tests/test_auth.py::TestSecurityFeatures -v --tb=short \
+        --junitxml=test-results/security-tests.xml
+    
+    # Run additional security tests if they exist
+    if docker-compose -f docker-compose.test.yml run --rm test-runner test -f tests/test_security.py; then
+        docker-compose -f docker-compose.test.yml run --rm test-runner \
+            pytest tests/test_security.py -v --tb=short \
+            --junitxml=test-results/security-additional-tests.xml
+    fi
+    
+    print_success "Security tests completed!"
+}
+
 # Function to run load tests
 run_load_tests() {
     print_status "Running load tests with Locust..."
@@ -387,6 +433,9 @@ case "${1:-help}" in
     unit)
         run_unit_tests
         ;;
+    auth)
+        run_auth_tests
+        ;;
     integration)
         run_integration_tests
         ;;
@@ -401,6 +450,9 @@ case "${1:-help}" in
         ;;
     performance)
         run_performance_tests
+        ;;
+    security)
+        run_security_tests
         ;;
     load)
         run_load_tests

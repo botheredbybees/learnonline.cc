@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Storage - LearnOnline.cc</title>
+</head>
+<body>
+    <h1>Clear Browser Storage</h1>
+    <button onclick="clearStorage()">Clear All Storage</button>
+    <div id="result"></div>
+    
+    <script>
+        function clearStorage() {
+            // Clear localStorage
+            localStorage.clear();
+            
+            // Clear sessionStorage
+            sessionStorage.clear();
+            
+            // Clear cookies (if any)
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            
+            document.getElementById('result').innerHTML = '<p style="color: green;">✅ All storage cleared! You can now go back to the main site and try logging in.</p>';
+            
+            // Redirect to main site after 2 seconds
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 2000);
+        }
+        
+        // Auto-clear on page load
+        window.onload = function() {
+            clearStorage();
+        };
+    </script>
+</body>
+</html>

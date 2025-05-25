@@ -1,6 +1,6 @@
 # Testing Guide for LearnOnline.cc
 
-This document provides comprehensive instructions for testing the LearnOnline.cc application, including backend API testing, frontend testing, integration testing, and TGA API testing.
+This document provides comprehensive instructions for testing the LearnOnline.cc application, including backend API testing, frontend testing, integration testing, authentication testing, and TGA API testing.
 
 ## Table of Contents
 
@@ -8,23 +8,26 @@ This document provides comprehensive instructions for testing the LearnOnline.cc
 2. [Test Runner Script (run_tests.sh)](#test-runner-script-run_testssh)
 3. [Test Environment Setup](#test-environment-setup)
 4. [Backend Testing](#backend-testing)
-5. [Frontend Testing](#frontend-testing)
-6. [Integration Testing](#integration-testing)
-7. [TGA API Testing](#tga-api-testing)
-8. [Database Testing](#database-testing)
-9. [Performance Testing](#performance-testing)
-10. [Security Testing](#security-testing)
-11. [Continuous Integration](#continuous-integration)
+5. [Authentication Testing](#authentication-testing)
+6. [Frontend Testing](#frontend-testing)
+7. [Integration Testing](#integration-testing)
+8. [TGA API Testing](#tga-api-testing)
+9. [Database Testing](#database-testing)
+10. [Performance Testing](#performance-testing)
+11. [Security Testing](#security-testing)
+12. [Continuous Integration](#continuous-integration)
 
 ## Overview
 
 The LearnOnline.cc application uses multiple testing approaches:
 
 - **Backend**: Pytest for API and service testing
+- **Authentication**: Comprehensive JWT and role-based access control testing
 - **Frontend**: Manual testing and browser automation with Selenium
 - **Integration**: End-to-end testing of complete workflows
 - **TGA API**: Testing external API integration
 - **Database**: Testing data persistence and integrity
+- **Security**: Authentication bypass, token manipulation, and authorization testing
 
 ## Test Runner Script (run_tests.sh)
 
@@ -47,6 +50,9 @@ The project includes a comprehensive test runner script `run_tests.sh` that prov
 # Run unit tests
 ./run_tests.sh unit
 
+# Run authentication tests
+./run_tests.sh auth
+
 # Run integration tests
 ./run_tests.sh integration
 
@@ -61,6 +67,9 @@ The project includes a comprehensive test runner script `run_tests.sh` that prov
 
 # Run performance tests
 ./run_tests.sh performance
+
+# Run security-focused tests
+./run_tests.sh security
 
 # Run load tests with Locust
 ./run_tests.sh load
@@ -90,10 +99,16 @@ The project includes a comprehensive test runner script `run_tests.sh` that prov
 # 2. Run unit tests
 ./run_tests.sh unit
 
-# 3. Run all tests
+# 3. Run authentication tests
+./run_tests.sh auth
+
+# 4. Run security tests
+./run_tests.sh security
+
+# 5. Run all tests
 ./run_tests.sh all
 
-# 4. Clean up when done
+# 6. Clean up when done
 ./run_tests.sh clean
 ```
 
@@ -122,9 +137,12 @@ export TGA_PASSWORD=your_tga_password
 Test results are saved to the `test-results/` directory:
 
 - `test-results/unit-tests.xml` - Unit test results (JUnit format)
+- `test-results/auth-tests.xml` - Authentication test results
+- `test-results/security-tests.xml` - Security test results
 - `test-results/integration-tests.xml` - Integration test results
 - `test-results/api-tests.xml` - API test results
 - `test-results/coverage/` - Coverage reports (HTML and XML)
+- `test-results/coverage/auth/` - Authentication coverage reports
 - `test-results/performance/` - Performance test results
 - `test-results/screenshots/` - Frontend test screenshots
 
@@ -300,6 +318,129 @@ async def test_async_function():
     assert result is not None
 ```
 
+## Authentication Testing
+
+### Running Authentication Tests
+
+**Using Test Runner (Recommended):**
+```bash
+# Run authentication tests
+./run_tests.sh auth
+
+# Run security-focused tests
+./run_tests.sh security
+```
+
+**Manual Testing:**
+```bash
+# Navigate to backend directory
+cd backend
+
+# Run authentication tests
+pytest tests/test_auth.py -v
+
+# Run with coverage
+pytest tests/test_auth.py --cov=auth --cov=routers.auth --cov-report=html
+
+# Run specific test classes
+pytest tests/test_auth.py::TestJWTTokens -v
+pytest tests/test_auth.py::TestUserRegistration -v
+pytest tests/test_auth.py::TestRoleBasedAccess -v
+```
+
+### Authentication Test Categories
+
+#### 1. JWT Token Tests
+Test JWT token generation, validation, and refresh mechanisms.
+
+```bash
+# Test JWT functionality
+pytest tests/test_auth.py::TestJWTTokens -v
+
+# Test token security
+pytest tests/test_auth.py::TestTokenSecurity -v
+```
+
+#### 2. User Registration and Login Tests
+Test user registration, login, and profile management.
+
+```bash
+# Test user registration
+pytest tests/test_auth.py::TestUserRegistration -v
+
+# Test login functionality
+pytest tests/test_auth.py::TestUserLogin -v
+
+# Test password management
+pytest tests/test_auth.py::TestPasswordManagement -v
+```
+
+#### 3. Role-Based Access Control Tests
+Test role-based permissions and access controls.
+
+```bash
+# Test role permissions
+pytest tests/test_auth.py::TestRoleBasedAccess -v
+
+# Test role upgrades
+pytest tests/test_auth.py::TestRoleUpgrades -v
+```
+
+#### 4. Security Feature Tests
+Test security features and attack prevention.
+
+```bash
+# Test security features
+pytest tests/test_auth.py::TestSecurityFeatures -v
+
+# Run security-focused tests
+./run_tests.sh security
+```
+
+### Authentication Test Examples
+
+```python
+# tests/test_auth.py examples
+
+def test_user_registration():
+    """Test user registration with valid data"""
+    response = client.post("/api/auth/register", json={
+        "email": "test@example.com",
+        "password": "SecurePass123!",
+        "first_name": "Test",
+        "last_name": "User"
+    })
+    assert response.status_code == 201
+    assert "access_token" in response.json()
+
+def test_jwt_token_validation():
+    """Test JWT token validation"""
+    # Create user and get token
+    token = create_test_user_and_get_token()
+    
+    # Test protected endpoint
+    response = client.get("/api/auth/me", headers={
+        "Authorization": f"Bearer {token}"
+    })
+    assert response.status_code == 200
+
+def test_role_based_access():
+    """Test role-based access control"""
+    # Test admin access
+    admin_token = create_admin_user_and_get_token()
+    response = client.get("/api/admin/users", headers={
+        "Authorization": f"Bearer {admin_token}"
+    })
+    assert response.status_code == 200
+    
+    # Test guest access (should be denied)
+    guest_token = create_guest_user_and_get_token()
+    response = client.get("/api/admin/users", headers={
+        "Authorization": f"Bearer {guest_token}"
+    })
+    assert response.status_code == 403
+```
+
 ## Frontend Testing
 
 ### Automated Frontend Testing
@@ -324,6 +465,53 @@ pytest tests/frontend/ --browser=firefox -v
 
 # Run headless
 pytest tests/frontend/ --headless -v
+```
+
+### Authentication Frontend Testing
+
+```python
+# tests/frontend/test_auth_pages.py
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import pytest
+
+@pytest.fixture
+def driver():
+    driver = webdriver.Chrome()
+    yield driver
+    driver.quit()
+
+def test_login_page_loads(driver):
+    driver.get("http://localhost:8080/login")
+    assert "Login" in driver.title
+    
+def test_user_login_flow(driver):
+    driver.get("http://localhost:8080/login")
+    
+    # Fill login form
+    email_field = driver.find_element(By.ID, "email")
+    password_field = driver.find_element(By.ID, "password")
+    
+    email_field.send_keys("test@example.com")
+    password_field.send_keys("password123")
+    
+    # Submit form
+    submit_button = driver.find_element(By.ID, "login-btn")
+    submit_button.click()
+    
+    # Check redirect to dashboard
+    assert "dashboard" in driver.current_url
+
+def test_registration_form_validation(driver):
+    driver.get("http://localhost:8080/register")
+    
+    # Test password strength validation
+    password_field = driver.find_element(By.ID, "password")
+    password_field.send_keys("weak")
+    
+    # Check validation message appears
+    validation_msg = driver.find_element(By.CLASS_NAME, "password-strength")
+    assert "weak" in validation_msg.text.lower()
 ```
 
 ### Manual Testing Checklist
@@ -379,6 +567,55 @@ pytest tests/integration/test_user_workflows.py -v
 
 # Test TGA integration
 pytest tests/integration/test_tga_integration.py -v
+```
+
+### Authentication Integration Testing
+
+```python
+# tests/integration/test_auth_workflows.py
+
+def test_complete_user_registration_workflow():
+    """Test complete user registration and login workflow"""
+    # Register new user
+    registration_data = {
+        "email": "integration@example.com",
+        "password": "SecurePass123!",
+        "first_name": "Integration",
+        "last_name": "Test"
+    }
+    
+    response = client.post("/api/auth/register", json=registration_data)
+    assert response.status_code == 201
+    
+    # Login with new user
+    login_data = {
+        "email": "integration@example.com",
+        "password": "SecurePass123!"
+    }
+    
+    response = client.post("/api/auth/login", json=login_data)
+    assert response.status_code == 200
+    
+    token = response.json()["access_token"]
+    
+    # Access protected resource
+    response = client.get("/api/auth/me", headers={
+        "Authorization": f"Bearer {token}"
+    })
+    assert response.status_code == 200
+    assert response.json()["email"] == "integration@example.com"
+
+def test_role_upgrade_workflow():
+    """Test automatic role upgrade based on experience points"""
+    # Create guest user
+    user_data = create_test_user(role="guest", experience_points=50)
+    
+    # Simulate earning points to reach player level
+    add_experience_points(user_data["id"], 100)
+    
+    # Check role upgrade
+    user = get_user_by_id(user_data["id"])
+    assert user["role"] == "player"
 ```
 
 ### Docker Integration Testing
@@ -507,32 +744,114 @@ def test_api_response_time():
     
     assert response.status_code == 200
     assert (end_time - start_time) < 1.0  # Should respond within 1 second
+
+def test_authentication_performance():
+    """Test authentication endpoint performance"""
+    start_time = time.time()
+    response = client.post("/api/auth/login", json={
+        "email": "test@example.com",
+        "password": "password123"
+    })
+    end_time = time.time()
+    
+    assert response.status_code == 200
+    assert (end_time - start_time) < 0.5  # Should respond within 500ms
 ```
 
 ## Security Testing
 
-### Authentication Testing
+### Authentication Security Testing
 
+**Using Test Runner (Recommended):**
 ```bash
-# Test authentication endpoints
-pytest tests/security/test_auth.py -v
+# Run security-focused tests
+./run_tests.sh security
+```
 
-# Test authorization
+**Manual Testing:**
+```bash
+# Test authentication security
+pytest tests/test_auth.py::TestSecurityFeatures -v
+
+# Test authorization security
 pytest tests/security/test_authorization.py -v
 
-# Test JWT token handling
-pytest tests/security/test_jwt.py -v
+# Test JWT token security
+pytest tests/security/test_jwt_security.py -v
+```
+
+### Security Test Examples
+
+```python
+# tests/test_auth.py - Security Features
+
+def test_password_hashing_security():
+    """Test password hashing is secure"""
+    password = "testpassword123"
+    hashed = hash_password(password)
+    
+    # Password should be hashed
+    assert hashed != password
+    assert len(hashed) > 50  # Bcrypt hashes are long
+    assert hashed.startswith("$2b$")  # Bcrypt prefix
+
+def test_jwt_token_tampering():
+    """Test JWT token tampering detection"""
+    # Create valid token
+    token = create_access_token({"sub": "test@example.com"})
+    
+    # Tamper with token
+    tampered_token = token[:-5] + "XXXXX"
+    
+    # Should reject tampered token
+    response = client.get("/api/auth/me", headers={
+        "Authorization": f"Bearer {tampered_token}"
+    })
+    assert response.status_code == 401
+
+def test_brute_force_protection():
+    """Test brute force protection"""
+    # Attempt multiple failed logins
+    for i in range(6):  # Assuming 5 attempt limit
+        response = client.post("/api/auth/login", json={
+            "email": "test@example.com",
+            "password": "wrongpassword"
+        })
+    
+    # Should be rate limited
+    assert response.status_code == 429
+
+def test_role_escalation_prevention():
+    """Test prevention of role escalation attacks"""
+    # Create guest user
+    guest_token = create_guest_user_and_get_token()
+    
+    # Attempt to access admin endpoint
+    response = client.get("/api/admin/users", headers={
+        "Authorization": f"Bearer {guest_token}"
+    })
+    assert response.status_code == 403
+    
+    # Attempt to modify own role
+    response = client.put("/api/auth/profile", 
+        headers={"Authorization": f"Bearer {guest_token}"},
+        json={"role": "admin"}
+    )
+    assert response.status_code == 403
 ```
 
 ### Security Checklist
 
+- [x] Password hashing with bcrypt and salt
+- [x] JWT token security and validation
+- [x] Role-based access control
+- [x] Authentication bypass prevention
+- [x] Authorization escalation prevention
+- [x] Input validation and sanitization
+- [x] Rate limiting for login attempts
 - [ ] SQL injection protection
 - [ ] XSS protection
 - [ ] CSRF protection
-- [ ] Authentication bypass attempts
-- [ ] Authorization escalation attempts
-- [ ] Input validation
-- [ ] Rate limiting
 
 ## Continuous Integration
 
@@ -563,6 +882,9 @@ jobs:
       env:
         TGA_USERNAME: ${{ secrets.TGA_USERNAME }}
         TGA_PASSWORD: ${{ secrets.TGA_PASSWORD }}
+    
+    - name: Run security tests
+      run: ./run_tests.sh security
     
     - name: Upload test results
       uses: actions/upload-artifact@v2
@@ -600,6 +922,23 @@ def sample_unit():
         code="ICTICT214",
         title="Operate application software packages",
         description="Test unit description"
+    )
+
+@pytest.fixture
+def admin_user():
+    return User(
+        email="admin@example.com",
+        role="admin",
+        is_active=True
+    )
+
+@pytest.fixture
+def guest_user():
+    return User(
+        email="guest@example.com",
+        role="guest",
+        experience_points=50,
+        is_active=True
     )
 ```
 
@@ -640,13 +979,24 @@ def cleanup_test_data():
    docker-compose -f docker-compose.test.yml exec postgres-test psql -U test_user -d learnonline_test -c "\l"
    ```
 
-3. **TGA API Connection Issues**
+3. **Authentication Test Failures**
+   ```bash
+   # Check JWT secret is set
+   echo $JWT_SECRET
+   
+   # Check authentication endpoints
+   curl -X POST http://localhost:8001/api/auth/login \
+     -H "Content-Type: application/json" \
+     -d '{"email":"test@example.com","password":"password123"}'
+   ```
+
+4. **TGA API Connection Issues**
    ```bash
    # Test TGA connectivity
    curl -u username:password https://ws.sandbox.training.gov.au/Deewr.Tga.Webservices/TrainingComponentServiceV12.svc?wsdl
    ```
 
-4. **Frontend Test Failures**
+5. **Frontend Test Failures**
    ```bash
    # Check if frontend server is running
    curl http://localhost:8081/
@@ -667,6 +1017,9 @@ pytest tests/test_specific.py::test_function -s -vv
 # View test runner logs
 ./run_tests.sh logs backend-test
 ./run_tests.sh logs test-runner
+
+# Debug authentication tests
+pytest tests/test_auth.py -s -v --tb=long
 ```
 
 ## Test Reports
@@ -680,6 +1033,9 @@ pytest tests/test_specific.py::test_function -s -vv
 
 # View coverage report
 open test-results/coverage/unit/index.html
+
+# View authentication coverage
+open test-results/coverage/auth/index.html
 ```
 
 **Manual:**
@@ -690,6 +1046,9 @@ open htmlcov/index.html
 
 # Generate XML coverage report for CI
 pytest --cov=. --cov-report=xml
+
+# Generate authentication-specific coverage
+pytest tests/test_auth.py --cov=auth --cov=routers.auth --cov-report=html:auth_coverage
 ```
 
 ### Test Results
@@ -700,6 +1059,9 @@ pytest --junitxml=test-results.xml
 
 # Generate detailed test report
 pytest --html=report.html --self-contained-html
+
+# Generate authentication test report
+pytest tests/test_auth.py --junitxml=auth-tests.xml --html=auth-report.html
 ```
 
 ## Related Documentation

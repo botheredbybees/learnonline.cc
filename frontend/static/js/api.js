@@ -1,5 +1,5 @@
 const api = {
-    baseUrl: '/api',
+    baseUrl: 'http://localhost:8000',
     
     init() {
         const token = localStorage.getItem('token');
@@ -54,6 +54,21 @@ const api = {
             return response;
         } catch (error) {
             console.error('Login failed:', error);
+            throw error;
+        }
+    },
+
+    async register(userData) {
+        try {
+            const response = await $.ajax({
+                url: `${this.baseUrl}/auth/register`,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(userData)
+            });
+            return response;
+        } catch (error) {
+            console.error('Registration failed:', error);
             throw error;
         }
     }

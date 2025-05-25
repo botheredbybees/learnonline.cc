@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - LearnOnline.cc</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .role-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.875rem;
+        }
+        
+        .role-admin { background: #dc3545; color: white; }
+        .role-mentor { background: #28a745; color: white; }
+        .role-player { background: #007bff; color: white; }
+        .role-guest { background: #6c757d; color: white; }
+        
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-item {
+            margin-bottom: 1rem;
+        }
+        
+        .progress-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .quick-action {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 1rem;
+            text-decoration: none;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        
+        .quick-action:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .notification-card {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            border-radius: 0 10px 10px 0;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-graduation-cap me-2"></i>LearnOnline.cc
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/units">Training Units</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/achievements">Achievements</a>
+                    </li>
+                    <li class="nav-item admin-only hidden">
+                        <a class="nav-link" href="/admin">Admin Panel</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">
+                            <i class="fas fa-user me-1"></i><span id="navUserName">Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-2">Welcome back, <span id="userName">User</span>!</h1>
+                    <p class="mb-3">Ready to continue your learning journey?</p>
+                    <span class="role-badge" id="userRole">Loading...</span>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <div class="me-3">
+                            <div class="text-center">
+                                <div class="h4 mb-0" id="userXP">0</div>
+                                <small>Experience Points</small>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-center">
+                                <div class="h4 mb-0">Level <span id="userLevel">1</span></div>
+                                <small>Current Level</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Alert for messages -->
+        <div id="alert-container"></div>
+
+        <!-- Quick Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number text-primary" id="completedUnits">0</div>
+                    <div class="text-muted">Units Completed</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number text-warning" id="achievementsCount">0</div>
+                    <div class="text-muted">Achievements</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number text-success" id="badgesCount">0</div>
+                    <div class="text-muted">Badges Earned</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number text-info" id="progressPercentage">0%</div>
+                    <div class="text-muted">Overall Progress</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Main Content Area -->
+            <div class="col-lg-8">
+                <!-- Role-Specific Features -->
+                <div class="welcome-card">
+                    <h3 class="mb-3"><i class="fas fa-rocket me-2"></i>Your Learning Hub</h3>
+                    <div class="row" id="roleFeatures">
+                        <!-- Features will be populated based on user role -->
+                    </div>
+                </div>
+
+                <!-- Recent Progress -->
+                <div class="progress-card">
+                    <h4 class="mb-3"><i class="fas fa-chart-line me-2"></i>Recent Progress</h4>
+                    <div id="recentProgress">
+                        <div class="progress-item">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>Introduction to Business</span>
+                                <span class="text-muted">85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>Customer Service Skills</span>
+                                <span class="text-muted">60%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>Digital Literacy</span>
+                                <span class="text-muted">30%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-info" style="width: 30%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Quick Actions -->
+                <div class="mb-4">
+                    <h5 class="mb-3"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                    <div class="d-grid gap-2">
+                        <a href="/units" class="quick-action">
+                            <i class="fas fa-book me-2"></i>Browse Training Units
+                        </a>
+                        <a href="/assessments" class="quick-action player-only mentor-only admin-only">
+                            <i class="fas fa-clipboard-check me-2"></i>Take Assessment
+                        </a>
+                        <a href="/create-content" class="quick-action mentor-only admin-only hidden">
+                            <i class="fas fa-plus-circle me-2"></i>Create Content
+                        </a>
+                        <a href="/admin" class="quick-action admin-only hidden">
+                            <i class="fas fa-cog me-2"></i>Admin Panel
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="mb-4">
+                    <h5 class="mb-3"><i class="fas fa-bell me-2"></i>Notifications</h5>
+                    <div id="notifications">
+                        <div class="notification-card">
+                            <div class="fw-bold">Welcome to LearnOnline.cc!</div>
+                            <div class="text-muted small">Complete your profile to get started</div>
+                        </div>
+                        <div class="notification-card">
+                            <div class="fw-bold">New Achievement Available</div>
+                            <div class="text-muted small">Complete 5 units to earn "Learning Enthusiast" badge</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Role Information -->
+                <div class="progress-card">
+                    <h5 class="mb-3"><i class="fas fa-shield-alt me-2"></i>Role Information</h5>
+                    <div class="mb-3">
+                        <strong>Current Role:</strong>
+                        <div class="mt-2">
+                            <span class="role-badge" id="currentRoleDisplay">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Next Role:</strong>
+                        <div class="mt-2" id="nextRoleInfo">
+                            <small class="text-muted">Complete more units to unlock new features!</small>
+                        </div>
+                    </div>
+                    <div id="roleUpgradeProgress" class="hidden">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>Progress to next role</span>
+                            <span class="text-muted" id="roleProgressText">0/100 XP</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" id="roleProgressBar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/auth.js"></script>
+    
+    <script>
+        let currentUser = null;
+
+        $(document).ready(async function() {
+            api.init();
+            
+            // Check authentication
+            if (!api.getToken()) {
+                window.location.href = '/login';
+                return;
+            }
+            
+            try {
+                await loadUserData();
+                await loadDashboardData();
+                setupRoleBasedUI();
+            } catch (error) {
+                console.error('Failed to load dashboard:', error);
+                showAlert('danger', 'Failed to load dashboard data.');
+            }
+        });
+        
+        async function loadUserData() {
+            try {
+                const response = await $.ajax({
+                    url: `${api.baseUrl}/auth/me`,
+                    method: 'GET',
+                    headers: api.getAuthHeaders()
+                });
+                
+                currentUser = response;
+                
+                // Update user info in header
+                const fullName = `${response.first_name} ${response.last_name}`.trim() || 'User';
+                $('#userName, #navUserName').text(fullName);
+                $('#userXP').text(response.profile?.experience_points || 0);
+                $('#userLevel').text(response.profile?.level || 1);
+                
+                // Update role badge
+                const role = response.role || 'guest';
+                $('#userRole, #currentRoleDisplay').removeClass().addClass(`role-badge role-${role}`).text(role.toUpperCase());
+                
+                // Update role upgrade progress
+                updateRoleProgress(response.profile?.experience_points || 0, role);
+                
+            } catch (error) {
+                console.error('Failed to load user data:', error);
+                throw error;
+            }
+        }
+        
+        async function loadDashboardData() {
+            try {
+                // Mock data for now - in real implementation, these would come from API
+                $('#completedUnits').text('12');
+                $('#achievementsCount').text('8');
+                $('#badgesCount').text('5');
+                $('#progressPercentage').text('65%');
+                
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+            }
+        }
+        
+        function setupRoleBasedUI() {
+            if (!currentUser) return;
+            
+            const role = currentUser.role || 'guest';
+            const permissions = currentUser.permissions || [];
+            
+            // Show/hide elements based on role
+            $(`.${role}-only`).removeClass('hidden');
+            
+            // Hide elements for roles user doesn't have
+            const allRoles = ['admin', 'mentor', 'player', 'guest'];
+            allRoles.forEach(r => {
+                if (r !== role) {
+                    $(`.${r}-only`).addClass('hidden');
+                }
+            });
+            
+            // Setup role-specific features
+            setupRoleFeatures(role, permissions);
+        }
+        
+        function setupRoleFeatures(role, permissions) {
+            const featuresContainer = $('#roleFeatures');
+            let features = [];
+            
+            switch (role) {
+                case 'admin':
+                    features = [
+                        {
+                            icon: 'fas fa-users',
+                            title: 'User Management',
+                            description: 'Manage users, roles, and permissions',
+                            link: '/admin/users',
+                            color: 'text-danger'
+                        },
+                        {
+                            icon: 'fas fa-sync',
+                            title: 'AQTF Sync',
+                            description: 'Synchronize training data',
+                            link: '/admin/aqtf-sync',
+                            color: 'text-primary'
+                        },
+                        {
+                            icon: 'fas fa-chart-bar',
+                            title: 'Analytics',
+                            description: 'View system analytics and reports',
+                            link: '/admin/analytics',
+                            color: 'text-success'
+                        },
+                        {
+                            icon: 'fas fa-cog',
+                            title: 'System Settings',
+                            description: 'Configure system settings',
+                            link: '/admin/settings',
+                            color: 'text-warning'
+                        }
+                    ];
+                    break;
+                    
+                case 'mentor':
+                    features = [
+                        {
+                            icon: 'fas fa-plus-circle',
+                            title: 'Create Content',
+                            description: 'Create new training materials',
+                            link: '/mentor/create',
+                            color: 'text-success'
+                        },
+                        {
+                            icon: 'fas fa-users-cog',
+                            title: 'Manage Teams',
+                            description: 'Manage your learning teams',
+                            link: '/mentor/teams',
+                            color: 'text-primary'
+                        },
+                        {
+                            icon: 'fas fa-clipboard-list',
+                            title: 'Review Assessments',
+                            description: 'Review and grade assessments',
+                            link: '/mentor/assessments',
+                            color: 'text-warning'
+                        },
+                        {
+                            icon: 'fas fa-chart-line',
+                            title: 'Progress Reports',
+                            description: 'View learner progress reports',
+                            link: '/mentor/reports',
+                            color: 'text-info'
+                        }
+                    ];
+                    break;
+                    
+                case 'player':
+                    features = [
+                        {
+                            icon: 'fas fa-book-open',
+                            title: 'Continue Learning',
+                            description: 'Resume your current units',
+                            link: '/units/current',
+                            color: 'text-primary'
+                        },
+                        {
+                            icon: 'fas fa-clipboard-check',
+                            title: 'Take Assessment',
+                            description: 'Test your knowledge',
+                            link: '/assessments',
+                            color: 'text-success'
+                        },
+                        {
+                            icon: 'fas fa-trophy',
+                            title: 'View Achievements',
+                            description: 'See your accomplishments',
+                            link: '/achievements',
+                            color: 'text-warning'
+                        },
+                        {
+                            icon: 'fas fa-search',
+                            title: 'Explore Units',
+                            description: 'Discover new training units',
+                            link: '/units/explore',
+                            color: 'text-info'
+                        }
+                    ];
+                    break;
+                    
+                case 'guest':
+                default:
+                    features = [
+                        {
+                            icon: 'fas fa-eye',
+                            title: 'Browse Content',
+                            description: 'Explore available training units',
+                            link: '/units/browse',
+                            color: 'text-primary'
+                        },
+                        {
+                            icon: 'fas fa-info-circle',
+                            title: 'Learn More',
+                            description: 'Discover what LearnOnline.cc offers',
+                            link: '/about',
+                            color: 'text-info'
+                        },
+                        {
+                            icon: 'fas fa-user-plus',
+                            title: 'Upgrade Account',
+                            description: 'Unlock more features by earning XP',
+                            link: '/profile',
+                            color: 'text-success'
+                        }
+                    ];
+                    break;
+            }
+            
+            // Render features
+            const featuresHtml = features.map(feature => `
+                <div class="col-md-6 mb-3">
+                    <div class="feature-card" onclick="window.location.href='${feature.link}'">
+                        <div class="text-center">
+                            <i class="${feature.icon} feature-icon ${feature.color}"></i>
+                            <h5>${feature.title}</h5>
+                            <p class="text-muted mb-0">${feature.description}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            featuresContainer.html(featuresHtml);
+        }
+        
+        function updateRoleProgress(currentXP, currentRole) {
+            const roleThresholds = {
+                'guest': { next: 'player', threshold: 101 },
+                'player': { next: 'mentor', threshold: 1001 },
+                'mentor': { next: 'admin', threshold: null },
+                'admin': { next: null, threshold: null }
+            };
+            
+            const roleInfo = roleThresholds[currentRole];
+            
+            if (roleInfo && roleInfo.next && roleInfo.threshold) {
+                const progress = (currentXP / roleInfo.threshold) * 100;
+                const progressCapped = Math.min(progress, 100);
+                
+                $('#nextRoleInfo').html(`
+                    <span class="role-badge role-${roleInfo.next}">${roleInfo.next.toUpperCase()}</span>
+                    <small class="d-block text-muted mt-1">Unlock at ${roleInfo.threshold} XP</small>
+                `);
+                
+                $('#roleProgressText').text(`${currentXP}/${roleInfo.threshold} XP`);
+                $('#roleProgressBar').css('width', `${progressCapped}%`);
+                $('#roleUpgradeProgress').removeClass('hidden');
+            } else if (currentRole === 'admin') {
+                $('#nextRoleInfo').html('<small class="text-muted">You have the highest role!</small>');
+            }
+        }
+        
+        function logout() {
+            api.clearToken();
+            localStorage.removeItem('user_info');
+            window.location.href = '/login';
+        }
+        
+        function showAlert(type, message) {
+            const alertHtml = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'times-circle'} me-2"></i>
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            $('#alert-container').html(alertHtml);
+            
+            // Auto-dismiss success alerts
+            if (type === 'success') {
+                setTimeout(() => {
+                    $('.alert').alert('close');
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>

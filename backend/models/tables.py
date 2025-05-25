@@ -1,8 +1,42 @@
 from typing import Optional
 from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, DateTime, func
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
+from sqlalchemy.dialects.sqlite import CHAR
+from sqlalchemy import TypeDecorator, String as SQLString
 from sqlalchemy.orm import relationship
+import uuid
 from .base import Base, TimestampMixin
+
+class UUID(TypeDecorator):
+    """Platform-independent UUID type.
+    Uses PostgreSQL's UUID type when available, otherwise uses CHAR(36).
+    """
+    impl = SQLString
+    cache_ok = True
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == 'postgresql':
+            return dialect.type_descriptor(PGUUID())
+        else:
+            return dialect.type_descriptor(CHAR(36))
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return value
+        elif dialect.name == 'postgresql':
+            return str(value)
+        else:
+            if not isinstance(value, uuid.UUID):
+                return str(uuid.UUID(value))
+            return str(value)
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return value
+        else:
+            if not isinstance(value, uuid.UUID):
+                return uuid.UUID(value)
+            return value
 
 class Role(Base, TimestampMixin):
     __tablename__ = 'roles'
@@ -30,7 +64,7 @@ class RolePermission(Base):
 class User(Base, TimestampMixin):
     __tablename__ = 'users'
     
-    id = Column(PGUUID, primary_key=True)
+    id = Column(UUID, primary_key=True, default=uuid.uuid4)
     email = Column(String(255), unique=True, nullable=False)
     password_hash = Column(String(255), nullable=False)
     first_name = Column(String(100))
@@ -49,8 +83,8 @@ class User(Base, TimestampMixin):
 class UserProfile(Base, TimestampMixin):
     __tablename__ = 'user_profiles'
     
-    id = Column(PGUUID, primary_key=True)
-    user_id = Column(PGUUID, ForeignKey('users.id'))
+    id = Column(UUID, primary_key=True, default=uuid.uuid4)
+    user_id = Column(UUID, ForeignKey('users.id'))
     avatar_url = Column(String(255))
     bio = Column(Text)
     experience_points = Column(Integer, default=0)
@@ -209,7 +243,7 @@ class UserProgress(Base, TimestampMixin):
     __tablename__ = 'user_progress'
     
     id = Column(Integer, primary_key=True)
-    user_id = Column(PGUUID, ForeignKey('users.id'))
+    user_id = Column(UUID, ForeignKey('users.id'))
     unit_id = Column(Integer, ForeignKey('units.id'))
     status = Column(String(50), default='not_started')
     progress_percentage = Column(Integer, default=0)
@@ -251,7 +285,7 @@ class UserSubmission(Base, TimestampMixin):
     
     id = Column(Integer, primary_key=True)
     assessment_id = Column(Integer, ForeignKey('assessments.id'))
-    user_id = Column(PGUUID, ForeignKey('users.id'))
+    user_id = Column(UUID, ForeignKey('users.id'))
     status = Column(String(50), default='pending')
     score = Column(Integer)
     feedback = Column(Text)
@@ -276,7 +310,7 @@ class UserAchievement(Base, TimestampMixin):
     __tablename__ = 'user_achievements'
     
     id = Column(Integer, primary_key=True)
-    user_id = Column(PGUUID, ForeignKey('users.id'))
+    user_id = Column(UUID, ForeignKey('users.id'))
     achievement_id = Column(Integer, ForeignKey('achievements.id'))
     awarded_at = Column(DateTime(timezone=True), default=func.now())
     
@@ -297,7 +331,7 @@ class UserBadge(Base, TimestampMixin):
     __tablename__ = 'user_badges'
     
     id = Column(Integer, primary_key=True)
-    user_id = Column(PGUUID, ForeignKey('users.id'))
+    user_id = Column(UUID, ForeignKey('users.id'))
     badge_id = Column(Integer, ForeignKey('badges.id'))
     awarded_at = Column(DateTime(timezone=True), default=func.now())
     

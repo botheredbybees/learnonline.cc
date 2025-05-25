@@ -2,31 +2,8 @@ const auth = {
     currentUser: null,
 
     init() {
-        this.setupLoginForm();
         this.loadCurrentUser();
         return this;
-    },
-
-    setupLoginForm() {
-        $('#loginForm').on('submit', async (e) => {
-            e.preventDefault();
-            const email = $('#email').val();
-            const password = $('#password').val();
-            
-            try {
-                const response = await api.login(email, password);
-                if (response.access_token) {
-                    await this.loadCurrentUser();
-                    if (response.is_admin) {
-                        window.location.href = '/admin';
-                    } else {
-                        window.location.href = '/';
-                    }
-                }
-            } catch (error) {
-                alert('Login failed. Please check your credentials.');
-            }
-        });
     },
 
     async loadCurrentUser() {
@@ -51,6 +28,13 @@ const auth = {
             }
         } catch (error) {
             console.error('Failed to load current user:', error);
+            
+            // If token is invalid (401), clear it
+            if (error.status === 401) {
+                console.log('Token invalid, clearing storage');
+                api.clearToken();
+            }
+            
             this.currentUser = null;
             if (typeof app !== 'undefined') {
                 app.updateNavigation();
@@ -62,7 +46,7 @@ const auth = {
         if (!this.currentUser || !this.currentUser.role) {
             return false;
         }
-        return this.currentUser.role.name === roleName;
+        return this.currentUser.role === roleName;
     },
 
     isAuthenticated() {
@@ -72,6 +56,9 @@ const auth = {
     logout() {
         api.clearToken();
         this.currentUser = null;
-        window.location.href = '/login';
+        if (typeof app !== 'undefined') {
+            app.updateNavigation();
+            app.loadPage('/');
+        }
     }
 };
