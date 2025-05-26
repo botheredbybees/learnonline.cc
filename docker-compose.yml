@@ -1,0 +1,85 @@
+name: learnonline
+
+services:
+  # Database
+  db:
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=${DB_NAME:-learnonline}
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./schema_updates/00_init_schema.sql:/docker-entrypoint-initdb.d/00-init-schema.sql
+      - ./db-init:/docker-entrypoint-initdb.d
+    ports:
+      - "5332:5432" # Map host 5332 to container 5432
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-learnonline}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API with hot-reload
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    environment:
+      - DB_NAME=${DB_NAME:-learnonline}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_HOST=db
+      - DB_PORT=5432  # Keep as 5432 since this is internal to docker network
+      - SECRET_KEY=${SECRET_KEY:-devsecrethardtoguess}
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./backend:/app
+      # Don't override the virtual environment
+      - backend_venv:/app/.venv
+    ports:
+      - "8000:8000"
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    # Add health check for backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Frontend static server
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend/static:/usr/share/nginx/html/static
+      - ./frontend/js:/usr/share/nginx/html/js
+      - ./frontend/index.html:/usr/share/nginx/html/index.html
+      - ./frontend/public/favicon.ico:/usr/share/nginx/html/favicon.ico
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  backend_venv:
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="2" failures="1" skipped="0" tests="8" time="8.766" timestamp="2025-05-25T10:54:30.729649" hostname="b824e55d838e"><testcase classname="tests.test_auth.TestPasswordHashing" name="test_password_hashing" time="0.982" /><testcase classname="tests.test_auth.TestPasswordHashing" name="test_different_passwords_different_hashes" time="0.510" /><testcase classname="tests.test_auth.TestPasswordHashing" name="test_same_password_different_hashes" time="1.006" /><testcase classname="tests.test_auth.TestSecurityFeatures" name="test_inactive_user_login" time="0.271"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(testuser@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'testuser@example.com', 'password_hash': '$2b$12$5uLvLkh38gxcye/EgqG3p.1fx5B/BFhEvhumFjv9ZbWvI3SHjvS3K', 'first_name': 'Test', 'last_name': 'User', 'role_id': 1, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(testuser@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:150: in test_user
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(testuser@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'testuser@example.com', 'password_hash': '$2b$12$5uLvLkh38gxcye/EgqG3p.1fx5B/BFhEvhumFjv9ZbWvI3SHjvS3K', 'first_name': 'Test', 'last_name': 'User', 'role_id': 1, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_auth.TestSecurityFeatures" name="test_password_reset_request" time="0.276"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(testuser@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'testuser@example.com', 'password_hash': '$2b$12$/ySiX8sUk4K615XnJIdspOkSgf4Jw.UPkvgfdrG25GEtiaFYP/9B6', 'first_name': 'Test', 'last_name': 'User', 'role_id': 1, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(testuser@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:150: in test_user
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(testuser@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'testuser@example.com', 'password_hash': '$2b$12$/ySiX8sUk4K615XnJIdspOkSgf4Jw.UPkvgfdrG25GEtiaFYP/9B6', 'first_name': 'Test', 'last_name': 'User', 'role_id': 1, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_auth.TestSecurityFeatures" name="test_password_reset_nonexistent_email" time="0.083"><failure message="sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at &quot;localhost&quot; (::1), port 5433 failed: Connection refused&#10;&#09;Is the server running on that host and accepting TCP/IP connections?&#10;connection to server at &quot;localhost&quot; (127.0.0.1), port 5433 failed: Connection refused&#10;&#09;Is the server running on that host and accepting TCP/IP connections?&#10;&#10;(Background on this error at: https://sqlalche.me/e/20/e3q8)">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:145: in __init__
+    self._dbapi_connection = engine.raw_connection()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:3292: in raw_connection
+    return self.pool.connect()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/base.py:452: in connect
+    return _ConnectionFairy._checkout(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/base.py:1269: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/base.py:716: in checkout
+    rec = pool._do_get()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/impl.py:169: in _do_get
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/impl.py:167: in _do_get
+    return self._create_connection()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/base.py:393: in _create_connection
+    return _ConnectionRecord(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/base.py:678: in __init__
+    self.__connect()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/base.py:902: in __connect
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/base.py:898: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/create.py:637: in connect
+    return dialect.connect(*cargs, **cparams)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:616: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+/usr/local/lib/python3.11/site-packages/psycopg2/__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: Connection refused
+E   	Is the server running on that host and accepting TCP/IP connections?
+E   connection to server at "localhost" (127.0.0.1), port 5433 failed: Connection refused
+E   	Is the server running on that host and accepting TCP/IP connections?
+
+The above exception was the direct cause of the following exception:
+tests/test_auth.py:358: in test_password_reset_nonexistent_email
+    response = test_client.post("/auth/reset-password-request", json=reset_data)
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:590: in post
+    return super().post(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:1132: in post
+    return self.request(
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:465: in request
+    return super().request(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:814: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:901: in send
+    response = self._send_handling_auth(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:929: in _send_handling_auth
+    response = self._send_handling_redirects(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:966: in _send_handling_redirects
+    response = self._send_single_request(request)
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:1002: in _send_single_request
+    response = transport.handle_request(request)
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:342: in handle_request
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:339: in handle_request
+    portal.call(self.app, scope, receive, send)
+/usr/local/lib/python3.11/site-packages/anyio/from_thread.py:277: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+/usr/local/lib/python3.11/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/usr/local/lib/python3.11/site-packages/anyio/from_thread.py:217: in _call_func
+    retval = await retval
+/usr/local/lib/python3.11/site-packages/fastapi/applications.py:1106: in __call__
+    await super().__call__(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/applications.py:122: in __call__
+    await self.middleware_stack(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/errors.py:184: in __call__
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/middleware/errors.py:162: in __call__
+    await self.app(scope, receive, _send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/cors.py:83: in __call__
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/exceptions.py:79: in __call__
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/middleware/exceptions.py:68: in __call__
+    await self.app(scope, receive, sender)
+/usr/local/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py:20: in __call__
+    raise e
+/usr/local/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py:17: in __call__
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/routing.py:718: in __call__
+    await route.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/routing.py:276: in handle
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/routing.py:66: in app
+    response = await func(request)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:274: in app
+    raw_response = await run_endpoint_function(
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:191: in run_endpoint_function
+    return await dependant.call(**values)
+routers/auth.py:372: in request_password_reset
+    user = get_user_by_email(db, reset_data.email)
+routers/auth.py:68: in get_user_by_email
+    return db.query(User).filter(User.email == email).first()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2748: in first
+    return self.limit(1)._iter().first()  # type: ignore
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2847: in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2308: in execute
+    return self._execute_internal(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2180: in _execute_internal
+    conn = self._connection_for_bind(bind)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2047: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+&lt;string&gt;:2: in _connection_for_bind
+    ???
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1143: in _connection_for_bind
+    conn = bind.connect()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:3268: in connect
+    return self._connection_cls(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:147: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2430: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:145: in __init__
+    self._dbapi_connection = engine.raw_connection()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:3292: in raw_connection
+    return self.pool.connect()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/base.py:452: in connect
+    return _ConnectionFairy._checkout(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/base.py:1269: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/base.py:716: in checkout
+    rec = pool._do_get()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/impl.py:169: in _do_get
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/impl.py:167: in _do_get
+    return self._create_connection()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/base.py:393: in _create_connection
+    return _ConnectionRecord(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/base.py:678: in __init__
+    self.__connect()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/base.py:902: in __connect
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/pool/base.py:898: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/create.py:637: in connect
+    return dialect.connect(*cargs, **cparams)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:616: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+/usr/local/lib/python3.11/site-packages/psycopg2/__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: Connection refused
+E   	Is the server running on that host and accepting TCP/IP connections?
+E   connection to server at "localhost" (127.0.0.1), port 5433 failed: Connection refused
+E   	Is the server running on that host and accepting TCP/IP connections?
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)</failure></testcase><testcase classname="tests.test_auth.TestSecurityFeatures" name="test_token_expiration_handling" time="0.014" /><testcase classname="tests.test_auth.TestSecurityFeatures" name="test_malformed_token_handling" time="0.040" /></testsuite></testsuites>
