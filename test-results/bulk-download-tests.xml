@@ -1,0 +1,1099 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="42" failures="3" skipped="0" tests="59" time="20.492" timestamp="2025-05-25T21:56:13.036631" hostname="99d3f49127db"><testcase classname="tests.test_download_manager.TestDownloadManager" name="test_create_job" time="0.188" /><testcase classname="tests.test_download_manager.TestDownloadManager" name="test_get_job_status_existing" time="0.001" /><testcase classname="tests.test_download_manager.TestDownloadManager" name="test_get_job_status_nonexistent" time="0.001" /><testcase classname="tests.test_download_manager.TestDownloadManager" name="test_update_job_status" time="0.001" /><testcase classname="tests.test_download_manager.TestDownloadManager" name="test_update_job_status_nonexistent" time="0.001" /><testcase classname="tests.test_download_manager.TestDownloadManagerIntegration" name="test_process_training_package_download_success" time="0.012" /><testcase classname="tests.test_download_manager.TestDownloadManagerIntegration" name="test_process_training_package_download_no_credentials" time="1.184"><failure message="AssertionError: assert 'completed' == 'failed'&#10;  - failed&#10;  + completed">tests/test_download_manager.py:193: in test_process_training_package_download_no_credentials
+    assert job["status"] == "failed"
+E   AssertionError: assert 'completed' == 'failed'
+E     - failed
+E     + completed</failure></testcase><testcase classname="tests.test_download_manager.TestDownloadManagerIntegration" name="test_process_training_package_download_tga_error" time="0.007" /><testcase classname="tests.test_download_manager.TestDownloadManagerIntegration" name="test_process_units_download_success" time="0.012" /><testcase classname="tests.test_download_manager.TestDownloadManagerIntegration" name="test_store_training_package_new" time="0.008" /><testcase classname="tests.test_download_manager.TestDownloadManagerIntegration" name="test_store_training_package_existing" time="0.006" /><testcase classname="tests.test_download_manager.TestDownloadManagerErrorHandling" name="test_process_training_package_download_database_error" time="0.004"><failure message="Exception: Database connection error">tests/test_download_manager.py:315: in test_process_training_package_download_database_error
+    download_manager.process_training_package_download(job_id, ["ICT40120"], 1)
+services/download_manager.py:72: in process_training_package_download
+    db = SessionLocal()
+/usr/local/lib/python3.11/unittest/mock.py:1124: in __call__
+    return self._mock_call(*args, **kwargs)
+/usr/local/lib/python3.11/unittest/mock.py:1128: in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+/usr/local/lib/python3.11/unittest/mock.py:1183: in _execute_mock_call
+    raise effect
+E   Exception: Database connection error</failure></testcase><testcase classname="tests.test_download_manager.TestDownloadManagerErrorHandling" name="test_process_units_download_xml_parsing_error" time="0.007" /><testcase classname="tests.test_download_manager.TestDownloadManagerRealDatabase" name="test_full_training_package_workflow" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_download_manager.py, line 355&#10;      def test_full_training_package_workflow(self, db_session):&#10;E       fixture 'db_session' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_download_manager.py:355&quot;">file /app/tests/test_download_manager.py, line 355
+      def test_full_training_package_workflow(self, db_session):
+E       fixture 'db_session' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_download_manager.py:355</error></testcase><testcase classname="tests.test_download_manager.TestDownloadManagerRealDatabase" name="test_full_unit_workflow" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_download_manager.py, line 382&#10;      def test_full_unit_workflow(self, db_session):&#10;E       fixture 'db_session' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_download_manager.py:382&quot;">file /app/tests/test_download_manager.py, line 382
+      def test_full_unit_workflow(self, db_session):
+E       fixture 'db_session' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_download_manager.py:382</error></testcase><testcase classname="tests.test_training_packages_bulk.TestAvailableTrainingPackages" name="test_get_available_training_packages_success" time="0.272"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(admin@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$TD.rwtr6NVGvltxosbWrtupgCb6fJvVY/df81BaxxZeDUyP/0xExu', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:204: in test_admin
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$TD.rwtr6NVGvltxosbWrtupgCb6fJvVY/df81BaxxZeDUyP/0xExu', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestAvailableTrainingPackages" name="test_get_available_training_packages_unauthorized" time="0.059" /><testcase classname="tests.test_training_packages_bulk.TestAvailableTrainingPackages" name="test_get_available_training_packages_non_admin" time="0.226"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(testuser@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'testuser@example.com', 'password_hash': '$2b$12$Cvn7BMBaQNGCxIwaEJBpiO2W157kQgXUebY3.OBQ7MrIoaMsT0DcC', 'first_name': 'Test', 'last_name': 'User', 'role_id': 1, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(testuser@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:150: in test_user
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(testuser@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'testuser@example.com', 'password_hash': '$2b$12$Cvn7BMBaQNGCxIwaEJBpiO2W157kQgXUebY3.OBQ7MrIoaMsT0DcC', 'first_name': 'Test', 'last_name': 'User', 'role_id': 1, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestAvailableTrainingPackages" name="test_get_available_training_packages_no_credentials" time="0.225"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(admin@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$/Q0xdhKqUXhJby9h466Rde9dwLYgeeO8LHy5XOPq3jjR0V1DkCg1W', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:204: in test_admin
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$/Q0xdhKqUXhJby9h466Rde9dwLYgeeO8LHy5XOPq3jjR0V1DkCg1W', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestAvailableTrainingPackages" name="test_get_available_training_packages_tga_error" time="0.223"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(admin@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$MXXAvdMeoQl47cignoLEBOPoYvOLoz9FFFB08XCqAADWynUOfcXJm', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:204: in test_admin
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$MXXAvdMeoQl47cignoLEBOPoYvOLoz9FFFB08XCqAADWynUOfcXJm', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestBulkDownloadTrainingPackages" name="test_bulk_download_training_packages_success" time="0.219"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(admin@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$Qh5fdnaFK/UgmbVmaDlCmu9A1y/dhXCtvKj64EW7POsBHDXd5Xm.e', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:204: in test_admin
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$Qh5fdnaFK/UgmbVmaDlCmu9A1y/dhXCtvKj64EW7POsBHDXd5Xm.e', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestBulkDownloadTrainingPackages" name="test_bulk_download_training_packages_unauthorized" time="0.005" /><testcase classname="tests.test_training_packages_bulk.TestBulkDownloadTrainingPackages" name="test_bulk_download_training_packages_non_admin" time="0.234"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(testuser@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'testuser@example.com', 'password_hash': '$2b$12$KCk0qtDRMTiJ5U5545O5Qub7xHcY9ub.xoEwn9qzmE9kucKJDUK/C', 'first_name': 'Test', 'last_name': 'User', 'role_id': 1, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(testuser@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:150: in test_user
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(testuser@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'testuser@example.com', 'password_hash': '$2b$12$KCk0qtDRMTiJ5U5545O5Qub7xHcY9ub.xoEwn9qzmE9kucKJDUK/C', 'first_name': 'Test', 'last_name': 'User', 'role_id': 1, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestBulkDownloadTrainingPackages" name="test_bulk_download_training_packages_empty_list" time="0.222"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(admin@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$oU3pLj3OAbAkWcJY/nT3d.oJjs6JNs8ae/iWUmGb5.Qp3OTd0vhDS', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:204: in test_admin
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$oU3pLj3OAbAkWcJY/nT3d.oJjs6JNs8ae/iWUmGb5.Qp3OTd0vhDS', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestBulkDownloadTrainingPackages" name="test_bulk_download_training_packages_large_list" time="0.241"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(admin@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$3GK6FMuZOE9eEoS.27uQL.wt59OmrxSxIcoL.t/Kl2zd3ccZHFvam', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:204: in test_admin
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$3GK6FMuZOE9eEoS.27uQL.wt59OmrxSxIcoL.t/Kl2zd3ccZHFvam', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestDownloadStatus" name="test_get_download_status_success" time="0.221"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(admin@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$EjkiZvG0.jkD9qA3ejAyi.g70h0hECwkM9Cw96luowiiWSFnS9ZHy', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:204: in test_admin
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$EjkiZvG0.jkD9qA3ejAyi.g70h0hECwkM9Cw96luowiiWSFnS9ZHy', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestDownloadStatus" name="test_get_download_status_not_found" time="0.224"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(admin@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$oPc39UEyvz6QOcxfZk07selpBIFxvRi7/FXZLr7yhe89gJq0gKiwq', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:204: in test_admin
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$oPc39UEyvz6QOcxfZk07selpBIFxvRi7/FXZLr7yhe89gJq0gKiwq', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestDownloadStatus" name="test_get_download_status_unauthorized" time="0.005" /><testcase classname="tests.test_training_packages_bulk.TestDownloadStatus" name="test_get_download_status_non_admin" time="0.225"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(testuser@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'testuser@example.com', 'password_hash': '$2b$12$/AQw1VSnArmNVTRsk1hvlugSeRnZJ7ShxG4RmNioBh8qyS/60LOdO', 'first_name': 'Test', 'last_name': 'User', 'role_id': 1, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(testuser@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:150: in test_user
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(testuser@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'testuser@example.com', 'password_hash': '$2b$12$/AQw1VSnArmNVTRsk1hvlugSeRnZJ7ShxG4RmNioBh8qyS/60LOdO', 'first_name': 'Test', 'last_name': 'User', 'role_id': 1, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestTrainingPackagesSearch" name="test_search_training_packages_with_tga_fallback" time="0.033"><failure message="assert 422 == 200&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code&#10; +  and   200 = status.HTTP_200_OK">tests/test_training_packages_bulk.py:304: in test_search_training_packages_with_tga_fallback
+    assert response.status_code == status.HTTP_200_OK
+E   assert 422 == 200
+E    +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+E    +  and   200 = status.HTTP_200_OK</failure></testcase><testcase classname="tests.test_training_packages_bulk.TestTrainingPackagesBulkIntegration" name="test_full_bulk_download_workflow" time="0.223"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(admin@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$dVtuBTmTCxhrq1ActGwqvu52Fxu1lv.ySMS/KiFGpUDIZrGC2tw2W', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:204: in test_admin
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$dVtuBTmTCxhrq1ActGwqvu52Fxu1lv.ySMS/KiFGpUDIZrGC2tw2W', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestTrainingPackagesBulkIntegration" name="test_available_packages_with_database_check" time="0.221"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(admin@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$Af9bjW5riocb5ji8pCtcsOvNzXTN2N9vbOLVVmi9Y9aFigSr.alJa', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:204: in test_admin
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$Af9bjW5riocb5ji8pCtcsOvNzXTN2N9vbOLVVmi9Y9aFigSr.alJa', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestTrainingPackagesErrorHandling" name="test_bulk_download_with_download_manager_error" time="0.240"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(admin@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$77itXHtJYBuERVFZo49ukO0C8HvaGhm0gm4q5KYkW8Y9Bg3QZckwi', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:204: in test_admin
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$77itXHtJYBuERVFZo49ukO0C8HvaGhm0gm4q5KYkW8Y9Bg3QZckwi', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestTrainingPackagesErrorHandling" name="test_invalid_job_id_format" time="0.224"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(admin@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$RVIwJmoHt2XgfbuZz3YbwujokeXOV3kkKP.gPbFql15F1/OAwtjWK', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:204: in test_admin
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$RVIwJmoHt2XgfbuZz3YbwujokeXOV3kkKP.gPbFql15F1/OAwtjWK', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_training_packages_bulk.TestTrainingPackagesErrorHandling" name="test_available_packages_partial_tga_failure" time="0.225"><error message="failed on setup with &quot;sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(admin@example.com) already exists.&#10;&#10;[SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]&#10;[parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$CpEDXqVuymPSU5Bgun0ByuDbyVP7IdvpGziziT15TY/UmzYsn4JiS', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)&quot;">/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+
+The above exception was the direct cause of the following exception:
+conftest.py:204: in test_admin
+    test_db.commit()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1969: in commit
+    trans.commit(_to_root=True)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1256: in commit
+    self._prepare_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1231: in _prepare_impl
+    self.session.flush()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4312: in flush
+    self._flush(objects)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4447: in _flush
+    with util.safe_reraise():
+/usr/local/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:4408: in _flush
+    flush_context.execute()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/persistence.py:1226: in _emit_insert_statements
+    result = connection.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1416: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:516: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1639: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2343: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:922: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(admin@example.com) already exists.
+E   
+E   [SQL: INSERT INTO users (email, password_hash, first_name, last_name, role_id, is_active, last_login) VALUES (%(email)s, %(password_hash)s, %(first_name)s, %(last_name)s, %(role_id)s, %(is_active)s, %(last_login)s) RETURNING users.id, users.created_at, users.updated_at]
+E   [parameters: {'email': 'admin@example.com', 'password_hash': '$2b$12$CpEDXqVuymPSU5Bgun0ByuDbyVP7IdvpGziziT15TY/UmzYsn4JiS', 'first_name': 'Admin', 'last_name': 'User', 'role_id': 3, 'is_active': True, 'last_login': None}]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</error></testcase><testcase classname="tests.test_units_bulk.TestAvailableUnits" name="test_get_available_units_success" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 132&#10;      @patch.dict('os.environ', {'TGA_USERNAME': 'test', 'TGA_PASSWORD': 'test'})&#10;      @patch('routers.units.TrainingGovClient')&#10;      def test_get_available_units_success(self, mock_client_class, client, admin_token, db_session):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:132&quot;">file /app/tests/test_units_bulk.py, line 132
+      @patch.dict('os.environ', {'TGA_USERNAME': 'test', 'TGA_PASSWORD': 'test'})
+      @patch('routers.units.TrainingGovClient')
+      def test_get_available_units_success(self, mock_client_class, client, admin_token, db_session):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:132</error></testcase><testcase classname="tests.test_units_bulk.TestAvailableUnits" name="test_get_available_units_with_training_package_filter" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 172&#10;      @patch.dict('os.environ', {'TGA_USERNAME': 'test', 'TGA_PASSWORD': 'test'})&#10;      @patch('routers.units.TrainingGovClient')&#10;      def test_get_available_units_with_training_package_filter(self, mock_client_class, client, admin_token):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:172&quot;">file /app/tests/test_units_bulk.py, line 172
+      @patch.dict('os.environ', {'TGA_USERNAME': 'test', 'TGA_PASSWORD': 'test'})
+      @patch('routers.units.TrainingGovClient')
+      def test_get_available_units_with_training_package_filter(self, mock_client_class, client, admin_token):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:172</error></testcase><testcase classname="tests.test_units_bulk.TestAvailableUnits" name="test_get_available_units_unauthorized" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 206&#10;      def test_get_available_units_unauthorized(self, client):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:206&quot;">file /app/tests/test_units_bulk.py, line 206
+      def test_get_available_units_unauthorized(self, client):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:206</error></testcase><testcase classname="tests.test_units_bulk.TestAvailableUnits" name="test_get_available_units_non_admin" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 211&#10;      def test_get_available_units_non_admin(self, client, user_token):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:211&quot;">file /app/tests/test_units_bulk.py, line 211
+      def test_get_available_units_non_admin(self, client, user_token):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:211</error></testcase><testcase classname="tests.test_units_bulk.TestBulkDownloadUnits" name="test_bulk_download_units_success" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 223&#10;      @patch('routers.units.download_manager')&#10;      def test_bulk_download_units_success(self, mock_download_manager, client, admin_token):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:223&quot;">file /app/tests/test_units_bulk.py, line 223
+      @patch('routers.units.download_manager')
+      def test_bulk_download_units_success(self, mock_download_manager, client, admin_token):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:223</error></testcase><testcase classname="tests.test_units_bulk.TestBulkDownloadUnits" name="test_bulk_download_units_unauthorized" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 252&#10;      def test_bulk_download_units_unauthorized(self, client):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:252&quot;">file /app/tests/test_units_bulk.py, line 252
+      def test_bulk_download_units_unauthorized(self, client):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:252</error></testcase><testcase classname="tests.test_units_bulk.TestBulkDownloadUnits" name="test_bulk_download_units_non_admin" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 260&#10;      def test_bulk_download_units_non_admin(self, client, user_token):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:260&quot;">file /app/tests/test_units_bulk.py, line 260
+      def test_bulk_download_units_non_admin(self, client, user_token):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:260</error></testcase><testcase classname="tests.test_units_bulk.TestBulkDownloadUnits" name="test_bulk_download_units_empty_list" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 269&#10;      def test_bulk_download_units_empty_list(self, client, admin_token):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:269&quot;">file /app/tests/test_units_bulk.py, line 269
+      def test_bulk_download_units_empty_list(self, client, admin_token):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:269</error></testcase><testcase classname="tests.test_units_bulk.TestUnitElements" name="test_get_unit_elements_success" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 283&#10;      def test_get_unit_elements_success(self, client, sample_unit, db_session):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:283&quot;">file /app/tests/test_units_bulk.py, line 283
+      def test_get_unit_elements_success(self, client, sample_unit, db_session):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:283</error></testcase><testcase classname="tests.test_units_bulk.TestUnitElements" name="test_get_unit_elements_not_found" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 297&#10;      def test_get_unit_elements_not_found(self, client):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:297&quot;">file /app/tests/test_units_bulk.py, line 297
+      def test_get_unit_elements_not_found(self, client):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:297</error></testcase><testcase classname="tests.test_units_bulk.TestUnitPerformanceCriteria" name="test_get_unit_performance_criteria_success" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 307&#10;      def test_get_unit_performance_criteria_success(self, client, sample_unit, db_session):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:307&quot;">file /app/tests/test_units_bulk.py, line 307
+      def test_get_unit_performance_criteria_success(self, client, sample_unit, db_session):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:307</error></testcase><testcase classname="tests.test_units_bulk.TestUnitPerformanceCriteria" name="test_get_unit_performance_criteria_not_found" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 326&#10;      def test_get_unit_performance_criteria_not_found(self, client):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:326&quot;">file /app/tests/test_units_bulk.py, line 326
+      def test_get_unit_performance_criteria_not_found(self, client):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:326</error></testcase><testcase classname="tests.test_units_bulk.TestUnitComprehensive" name="test_get_unit_comprehensive_success" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 336&#10;      def test_get_unit_comprehensive_success(self, client, sample_unit, db_session):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:336&quot;">file /app/tests/test_units_bulk.py, line 336
+      def test_get_unit_comprehensive_success(self, client, sample_unit, db_session):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:336</error></testcase><testcase classname="tests.test_units_bulk.TestUnitComprehensive" name="test_get_unit_comprehensive_not_found" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 370&#10;      def test_get_unit_comprehensive_not_found(self, client):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:370&quot;">file /app/tests/test_units_bulk.py, line 370
+      def test_get_unit_comprehensive_not_found(self, client):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:370</error></testcase><testcase classname="tests.test_units_bulk.TestUnitsSearch" name="test_search_units_with_tga_fallback" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 380&#10;      @patch.dict('os.environ', {'TGA_USERNAME': 'test', 'TGA_PASSWORD': 'test'})&#10;      @patch('routers.units.TrainingGovClient')&#10;      def test_search_units_with_tga_fallback(self, mock_client_class, client, db_session):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:380&quot;">file /app/tests/test_units_bulk.py, line 380
+      @patch.dict('os.environ', {'TGA_USERNAME': 'test', 'TGA_PASSWORD': 'test'})
+      @patch('routers.units.TrainingGovClient')
+      def test_search_units_with_tga_fallback(self, mock_client_class, client, db_session):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:380</error></testcase><testcase classname="tests.test_units_bulk.TestUnitsSearch" name="test_search_units_with_training_package_filter" time="0.002"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 426&#10;      @patch.dict('os.environ', {'TGA_USERNAME': 'test', 'TGA_PASSWORD': 'test'})&#10;      @patch('routers.units.TrainingGovClient')&#10;      def test_search_units_with_training_package_filter(self, mock_client_class, client, db_session):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:426&quot;">file /app/tests/test_units_bulk.py, line 426
+      @patch.dict('os.environ', {'TGA_USERNAME': 'test', 'TGA_PASSWORD': 'test'})
+      @patch('routers.units.TrainingGovClient')
+      def test_search_units_with_training_package_filter(self, mock_client_class, client, db_session):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:426</error></testcase><testcase classname="tests.test_units_bulk.TestUnitVisibility" name="test_set_unit_visibility_success" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 467&#10;      def test_set_unit_visibility_success(self, client, admin_token, sample_unit, db_session):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:467&quot;">file /app/tests/test_units_bulk.py, line 467
+      def test_set_unit_visibility_success(self, client, admin_token, sample_unit, db_session):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:467</error></testcase><testcase classname="tests.test_units_bulk.TestUnitVisibility" name="test_set_unit_visibility_unauthorized" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 483&#10;      def test_set_unit_visibility_unauthorized(self, client, sample_unit):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:483&quot;">file /app/tests/test_units_bulk.py, line 483
+      def test_set_unit_visibility_unauthorized(self, client, sample_unit):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:483</error></testcase><testcase classname="tests.test_units_bulk.TestUnitVisibility" name="test_set_unit_visibility_non_admin" time="0.002"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 491&#10;      def test_set_unit_visibility_non_admin(self, client, user_token, sample_unit):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:491&quot;">file /app/tests/test_units_bulk.py, line 491
+      def test_set_unit_visibility_non_admin(self, client, user_token, sample_unit):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:491</error></testcase><testcase classname="tests.test_units_bulk.TestUnitVisibility" name="test_set_unit_visibility_not_found" time="0.002"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 500&#10;      def test_set_unit_visibility_not_found(self, client, admin_token):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:500&quot;">file /app/tests/test_units_bulk.py, line 500
+      def test_set_unit_visibility_not_found(self, client, admin_token):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:500</error></testcase><testcase classname="tests.test_units_bulk.TestUnitsBulkIntegration" name="test_full_bulk_download_workflow" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 515&#10;      def test_full_bulk_download_workflow(self, client, admin_token, db_session):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:515&quot;">file /app/tests/test_units_bulk.py, line 515
+      def test_full_bulk_download_workflow(self, client, admin_token, db_session):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:515</error></testcase><testcase classname="tests.test_units_bulk.TestUnitsBulkIntegration" name="test_comprehensive_unit_data_workflow" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 546&#10;      def test_comprehensive_unit_data_workflow(self, client, db_session):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:546&quot;">file /app/tests/test_units_bulk.py, line 546
+      def test_comprehensive_unit_data_workflow(self, client, db_session):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:546</error></testcase><testcase classname="tests.test_units_bulk.TestUnitsErrorHandling" name="test_bulk_download_with_download_manager_error" time="0.001"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 592&#10;      @patch('routers.units.download_manager')&#10;      def test_bulk_download_with_download_manager_error(self, mock_download_manager, client, admin_token):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:592&quot;">file /app/tests/test_units_bulk.py, line 592
+      @patch('routers.units.download_manager')
+      def test_bulk_download_with_download_manager_error(self, mock_download_manager, client, admin_token):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:592</error></testcase><testcase classname="tests.test_units_bulk.TestUnitsErrorHandling" name="test_available_units_partial_tga_failure" time="0.005"><error message="failed on setup with &quot;file /app/tests/test_units_bulk.py, line 607&#10;      @patch.dict('os.environ', {'TGA_USERNAME': 'test', 'TGA_PASSWORD': 'test'})&#10;      @patch('routers.units.TrainingGovClient')&#10;      def test_available_units_partial_tga_failure(self, mock_client_class, client, admin_token):&#10;E       fixture 'client' not found&#10;&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory&#10;&gt;       use 'pytest --fixtures [testpath]' for help on them.&#10;&#10;/app/tests/test_units_bulk.py:607&quot;">file /app/tests/test_units_bulk.py, line 607
+      @patch.dict('os.environ', {'TGA_USERNAME': 'test', 'TGA_PASSWORD': 'test'})
+      @patch('routers.units.TrainingGovClient')
+      def test_available_units_partial_tga_failure(self, mock_client_class, client, admin_token):
+E       fixture 'client' not found
+&gt;       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, authenticated_admin, authenticated_user, authenticated_user_token, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, cov, doctest_namespace, event_loop, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, setup_test_database, test_achievements_data, test_admin, test_client, test_db, test_db_session, test_user, test_user_data, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+&gt;       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/tests/test_units_bulk.py:607</error></testcase></testsuite></testsuites>

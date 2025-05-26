@@ -6,6 +6,7 @@ This module provides endpoints for:
 - Syncing training packages with TGA (Training.gov.au)
 - Managing visibility and metadata for training packages
 - Supporting the training qualification structure
+- Bulk download and import functionality for admin users
 """
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status, BackgroundTasks
@@ -17,7 +18,11 @@ from models.schemas import TrainingPackageSchema
 from auth.auth_bearer import JWTBearer
 from auth.auth_handler import get_current_user
 import os
+import uuid
+import json
+from datetime import datetime
 from services.tga.client import TrainingGovClient
+from services.download_manager import download_manager
 
 router = APIRouter(
     prefix="/api/training-packages",
@@ -39,6 +44,134 @@ async def list_training_packages(
         query = query.filter(models.TrainingPackage.status == status)
     
     return query.order_by(models.TrainingPackage.code).offset(skip).limit(limit).all()
+
+@router.get("/available", dependencies=[Depends(JWTBearer())])
+async def get_available_training_packages(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(50, le=200),
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Get all available training packages from TGA (admin only)"""
+    # Check if user has admin permissions
+    if not hasattr(current_user, "role") or current_user.role.name != "admin":
+        raise HTTPException(
+            status_code=403, 
+            detail="Only admin users can access available training packages"
+        )
+    
+    # Get TGA credentials
+    username = os.getenv("TGA_USERNAME")
+    password = os.getenv("TGA_PASSWORD")
+    if not username or not password:
+        raise HTTPException(
+            status_code=500,
+            detail="TGA API credentials not configured"
+        )
+    
+    try:
+        client = TrainingGovClient(username=username, password=password)
+        
+        # Search for all training packages
+        component_types = {
+            'IncludeAccreditedCourse': False,
+            'IncludeAccreditedCourseModule': False,
+            'IncludeQualification': False,
+            'IncludeSkillSet': False,
+            'IncludeTrainingPackage': True,
+            'IncludeUnit': False,
+            'IncludeUnitContextualisation': False
+        }
+        
+        result = client.search_components(
+            filter_text="",  # Empty filter to get all
+            component_types=component_types,
+            page=page,
+            page_size=page_size
+        )
+        
+        tga_packages = result.get('components', [])
+        
+        # Check which packages are already in our database
+        for package in tga_packages:
+            existing_package = db.query(models.TrainingPackage).filter(
+                models.TrainingPackage.code == package["code"]
+            ).first()
+            package["in_database"] = existing_package is not None
+            package["processed"] = existing_package.processed if existing_package else "N"
+        
+        return {
+            "packages": tga_packages,
+            "page": page,
+            "page_size": page_size,
+            "total": len(tga_packages)
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to retrieve available training packages: {str(e)}"
+        )
+
+@router.post("/bulk-download", dependencies=[Depends(JWTBearer())])
+async def bulk_download_training_packages(
+    package_codes: List[str],
+    background_tasks: BackgroundTasks,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Queue multiple training packages for bulk download (admin only)"""
+    # Check if user has admin permissions
+    if not hasattr(current_user, "role") or current_user.role.name != "admin":
+        raise HTTPException(
+            status_code=403, 
+            detail="Only admin users can perform bulk downloads"
+        )
+    
+    if not package_codes:
+        raise HTTPException(
+            status_code=400,
+            detail="No training package codes provided"
+        )
+    
+    # Create download job using download manager
+    job_id = download_manager.create_job("training_packages", package_codes, current_user.id)
+    
+    # Start background processing
+    background_tasks.add_task(
+        download_manager.process_training_package_download, 
+        job_id, 
+        package_codes, 
+        current_user.id
+    )
+    
+    return {
+        "job_id": job_id,
+        "message": f"Bulk download started for {len(package_codes)} training packages",
+        "status": "queued"
+    }
+
+@router.get("/download-status/{job_id}", dependencies=[Depends(JWTBearer())])
+async def get_download_status(
+    job_id: str,
+    current_user: models.User = Depends(get_current_user)
+):
+    """Get the status of a bulk download job (admin only)"""
+    # Check if user has admin permissions
+    if not hasattr(current_user, "role") or current_user.role.name != "admin":
+        raise HTTPException(
+            status_code=403, 
+            detail="Only admin users can check download status"
+        )
+    
+    job_status = download_manager.get_job_status(job_id)
+    if not job_status:
+        raise HTTPException(
+            status_code=404,
+            detail="Download job not found"
+        )
+    
+    return job_status
 
 @router.get("/{training_package_id}", response_model=TrainingPackageSchema)
 async def get_training_package(

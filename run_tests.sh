@@ -67,9 +67,14 @@ show_usage() {
     echo "  auth-tokens     Run JWT token tests only"
     echo "  auth-endpoints  Run authentication endpoint tests only"
     echo "  auth-roles      Run role-based access tests only"
+    echo "  bulk-download   Run bulk download functionality tests"
+    echo "  download-mgr    Run download manager tests only"
+    echo "  training-pkg    Run training packages bulk tests only"
+    echo "  units-bulk      Run units bulk download tests only"
     echo "  integration     Run integration tests"
     echo "  api             Run API tests"
     echo "  frontend        Run frontend tests"
+    echo "  admin-frontend  Run admin panel frontend tests"
     echo "  tga             Run TGA integration tests"
     echo "  performance     Run performance tests"
     echo "  load            Run load tests with Locust"
@@ -232,6 +237,87 @@ run_auth_role_tests() {
         --cov-report=xml:test-results/coverage/auth-roles.xml
     
     print_success "Role-based access tests completed!"
+}
+
+# Function to run all bulk download tests
+run_bulk_download_tests() {
+    print_status "Running bulk download functionality tests..."
+    
+    # Start test database
+    docker-compose -f docker-compose.test.yml up -d postgres-test
+    
+    # Wait for database to be ready
+    print_status "Waiting for database to be ready..."
+    sleep 10
+    
+    docker-compose -f docker-compose.test.yml run --rm test-runner \
+        pytest tests/test_download_manager.py tests/test_training_packages_bulk.py tests/test_units_bulk.py -v --tb=short \
+        --junitxml=test-results/bulk-download-tests.xml \
+        --cov=services.download_manager --cov=routers.training_packages --cov=routers.units \
+        --cov-report=html:test-results/coverage/bulk-download \
+        --cov-report=xml:test-results/coverage/bulk-download.xml
+    
+    print_success "Bulk download tests completed!"
+}
+
+# Function to run download manager tests only
+run_download_manager_tests() {
+    print_status "Running download manager tests..."
+    
+    # Start test database
+    docker-compose -f docker-compose.test.yml up -d postgres-test
+    
+    # Wait for database to be ready
+    print_status "Waiting for database to be ready..."
+    sleep 10
+    
+    docker-compose -f docker-compose.test.yml run --rm test-runner \
+        pytest tests/test_download_manager.py -v --tb=short \
+        --junitxml=test-results/download-manager-tests.xml \
+        --cov=services.download_manager --cov-report=html:test-results/coverage/download-manager \
+        --cov-report=xml:test-results/coverage/download-manager.xml
+    
+    print_success "Download manager tests completed!"
+}
+
+# Function to run training packages bulk tests only
+run_training_packages_bulk_tests() {
+    print_status "Running training packages bulk download tests..."
+    
+    # Start test database
+    docker-compose -f docker-compose.test.yml up -d postgres-test
+    
+    # Wait for database to be ready
+    print_status "Waiting for database to be ready..."
+    sleep 10
+    
+    docker-compose -f docker-compose.test.yml run --rm test-runner \
+        pytest tests/test_training_packages_bulk.py -v --tb=short \
+        --junitxml=test-results/training-packages-bulk-tests.xml \
+        --cov=routers.training_packages --cov-report=html:test-results/coverage/training-packages-bulk \
+        --cov-report=xml:test-results/coverage/training-packages-bulk.xml
+    
+    print_success "Training packages bulk tests completed!"
+}
+
+# Function to run units bulk tests only
+run_units_bulk_tests() {
+    print_status "Running units bulk download tests..."
+    
+    # Start test database
+    docker-compose -f docker-compose.test.yml up -d postgres-test
+    
+    # Wait for database to be ready
+    print_status "Waiting for database to be ready..."
+    sleep 10
+    
+    docker-compose -f docker-compose.test.yml run --rm test-runner \
+        pytest tests/test_units_bulk.py -v --tb=short \
+        --junitxml=test-results/units-bulk-tests.xml \
+        --cov=routers.units --cov-report=html:test-results/coverage/units-bulk \
+        --cov-report=xml:test-results/coverage/units-bulk.xml
+    
+    print_success "Units bulk tests completed!"
 }
 
 # Function to run integration tests
@@ -508,6 +594,18 @@ case "${1:-help}" in
     auth-roles)
         run_auth_role_tests
         ;;
+    bulk-download)
+        run_bulk_download_tests
+        ;;
+    download-mgr)
+        run_download_manager_tests
+        ;;
+    training-pkg)
+        run_training_packages_bulk_tests
+        ;;
+    units-bulk)
+        run_units_bulk_tests
+        ;;
     integration)
         run_integration_tests
         ;;
@@ -516,6 +614,10 @@ case "${1:-help}" in
         ;;
     frontend)
         run_frontend_tests
+        ;;
+    admin-frontend)
+        echo "Running admin frontend tests..."
+        cd backend && python -m pytest tests/test_admin_frontend.py -v
         ;;
     tga)
         run_tga_tests

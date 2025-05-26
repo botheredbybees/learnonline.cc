@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - LearnOnline.cc</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    
+    <style>
+        .admin-header {
+            background: linear-gradient(135deg, #dc3545 0%, #6f42c1 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .download-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .package-item {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .package-item:hover {
+            background-color: #f8f9fa;
+            border-color: #007bff;
+        }
+        
+        .package-item.selected {
+            background-color: #e3f2fd;
+            border-color: #2196f3;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .status-queued { background: #fff3cd; color: #856404; }
+        .status-processing { background: #cce5ff; color: #004085; }
+        .status-completed { background: #d4edda; color: #155724; }
+        .status-failed { background: #f8d7da; color: #721c24; }
+        
+        .progress-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .job-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .tab-content {
+            padding-top: 1rem;
+        }
+        
+        .nav-tabs .nav-link {
+            color: #6c757d;
+            border: none;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: #007bff;
+            border-bottom-color: #007bff;
+            background: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-graduation-cap me-2"></i>LearnOnline.cc
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/units">Training Units</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin">Admin Panel</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">
+                            <i class="fas fa-user me-1"></i><span id="navUserName">Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-2"><i class="fas fa-shield-alt me-2"></i>Admin Panel</h1>
+                    <p class="mb-0">Manage training content and system settings</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <div class="text-center">
+                            <div class="h5 mb-0">Administrator</div>
+                            <small>Full System Access</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Alert for messages -->
+        <div id="alert-container"></div>
+
+        <!-- Admin Tabs -->
+        <div class="admin-card">
+            <ul class="nav nav-tabs" id="adminTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="bulk-download-tab" data-bs-toggle="tab" data-bs-target="#bulk-download" type="button" role="tab">
+                        <i class="fas fa-download me-2"></i>Bulk Downloads
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="content-management-tab" data-bs-toggle="tab" data-bs-target="#content-management" type="button" role="tab">
+                        <i class="fas fa-folder me-2"></i>Content Management
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="system-settings-tab" data-bs-toggle="tab" data-bs-target="#system-settings" type="button" role="tab">
+                        <i class="fas fa-cog me-2"></i>System Settings
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="adminTabContent">
+                <!-- Bulk Downloads Tab -->
+                <div class="tab-pane fade show active" id="bulk-download" role="tabpanel">
+                    <div class="row">
+                        <!-- Training Packages Section -->
+                        <div class="col-lg-6">
+                            <div class="download-card">
+                                <h4 class="mb-3">
+                                    <i class="fas fa-box me-2 text-primary"></i>Training Packages
+                                </h4>
+                                
+                                <div class="mb-3">
+                                    <button class="btn btn-outline-primary" onclick="loadAvailablePackages()">
+                                        <i class="fas fa-sync me-2"></i>Load Available Packages
+                                    </button>
+                                    <button class="btn btn-success ms-2" onclick="downloadSelectedPackages()" disabled id="downloadPackagesBtn">
+                                        <i class="fas fa-download me-2"></i>Download Selected
+                                    </button>
+                                </div>
+                                
+                                <div id="packagesLoading" class="text-center py-3 hidden">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <div class="mt-2">Loading available packages...</div>
+                                </div>
+                                
+                                <div id="packagesContainer" class="hidden">
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="selectAllPackages">
+                                            <label class="form-check-label fw-bold" for="selectAllPackages">
+                                                Select All Packages
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" id="packageSearch" placeholder="Search packages...">
+                                    </div>
+                                    
+                                    <div id="packagesList" style="max-height: 400px; overflow-y: auto;">
+                                        <!-- Packages will be loaded here -->
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <small class="text-muted">
+                                            <span id="selectedPackagesCount">0</span> packages selected
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Units Section -->
+                        <div class="col-lg-6">
+                            <div class="download-card">
+                                <h4 class="mb-3">
+                                    <i class="fas fa-book me-2 text-success"></i>Training Units
+                                </h4>
+                                
+                                <div class="mb-3">
+                                    <button class="btn btn-outline-success" onclick="loadAvailableUnits()">
+                                        <i class="fas fa-sync me-2"></i>Load Available Units
+                                    </button>
+                                    <button class="btn btn-success ms-2" onclick="downloadSelectedUnits()" disabled id="downloadUnitsBtn">
+                                        <i class="fas fa-download me-2"></i>Download Selected
+                                    </button>
+                                </div>
+                                
+                                <div id="unitsLoading" class="text-center py-3 hidden">
+                                    <div class="spinner-border text-success" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <div class="mt-2">Loading available units...</div>
+                                </div>
+                                
+                                <div id="unitsContainer" class="hidden">
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="selectAllUnits">
+                                            <label class="form-check-label fw-bold" for="selectAllUnits">
+                                                Select All Units
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" id="unitSearch" placeholder="Search units...">
+                                        <select class="form-select mt-2" id="packageFilter">
+                                            <option value="">All Training Packages</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div id="unitsList" style="max-height: 400px; overflow-y: auto;">
+                                        <!-- Units will be loaded here -->
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <small class="text-muted">
+                                            <span id="selectedUnitsCount">0</span> units selected
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Download Jobs Section -->
+                    <div class="download-card">
+                        <h4 class="mb-3">
+                            <i class="fas fa-tasks me-2 text-warning"></i>Download Jobs
+                            <button class="btn btn-sm btn-outline-secondary ms-2" onclick="refreshJobs()">
+                                <i class="fas fa-sync"></i>
+                            </button>
+                        </h4>
+                        
+                        <div id="jobsContainer">
+                            <div class="text-center py-3 text-muted">
+                                No active download jobs
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Management Tab -->
+                <div class="tab-pane fade" id="content-management" role="tabpanel">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="feature-card">
+                                <div class="text-center">
+                                    <i class="fas fa-eye feature-icon text-primary"></i>
+                                    <h5>Manage Visibility</h5>
+                                    <p class="text-muted mb-3">Control which training units are visible to users</p>
+                                    <button class="btn btn-primary" onclick="manageVisibility()">
+                                        Manage Content
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-card">
+                                <div class="text-center">
+                                    <i class="fas fa-database feature-icon text-success"></i>
+                                    <h5>Database Status</h5>
+                                    <p class="text-muted mb-3">View database statistics and health</p>
+                                    <button class="btn btn-success" onclick="viewDatabaseStatus()">
+                                        View Status
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Settings Tab -->
+                <div class="tab-pane fade" id="system-settings" role="tabpanel">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="feature-card">
+                                <div class="text-center">
+                                    <i class="fas fa-key feature-icon text-warning"></i>
+                                    <h5>TGA API Settings</h5>
+                                    <p class="text-muted mb-3">Configure Training.gov.au API credentials</p>
+                                    <button class="btn btn-warning" onclick="configureTGA()">
+                                        Configure API
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-card">
+                                <div class="text-center">
+                                    <i class="fas fa-users feature-icon text-info"></i>
+                                    <h5>User Management</h5>
+                                    <p class="text-muted mb-3">Manage users, roles, and permissions</p>
+                                    <button class="btn btn-info" onclick="manageUsers()">
+                                        Manage Users
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/auth.js"></script>
+    
+    <script>
+        let currentUser = null;
+        let availablePackages = [];
+        let availableUnits = [];
+        let activeJobs = [];
+        let jobRefreshInterval = null;
+
+        $(document).ready(async function() {
+            api.init();
+            
+            // Check authentication and admin role
+            if (!api.getToken()) {
+                window.location.href = '/login';
+                return;
+            }
+            
+            try {
+                await loadUserData();
+                if (!isAdmin()) {
+                    showAlert('danger', 'Access denied. Administrator privileges required.');
+                    setTimeout(() => window.location.href = '/dashboard', 2000);
+                    return;
+                }
+                
+                setupEventHandlers();
+                startJobRefresh();
+                
+            } catch (error) {
+                console.error('Failed to load admin panel:', error);
+                showAlert('danger', 'Failed to load admin panel.');
+            }
+        });
+        
+        async function loadUserData() {
+            try {
+                const response = await $.ajax({
+                    url: `${api.baseUrl}/auth/me`,
+                    method: 'GET',
+                    headers: api.getAuthHeaders()
+                });
+                
+                currentUser = response;
+                
+                // Update user info in header
+                const fullName = `${response.first_name} ${response.last_name}`.trim() || 'Admin';
+                $('#navUserName').text(fullName);
+                
+            } catch (error) {
+                console.error('Failed to load user data:', error);
+                throw error;
+            }
+        }
+        
+        function isAdmin() {
+            return currentUser && currentUser.role === 'admin';
+        }
+        
+        function setupEventHandlers() {
+            // Package selection handlers
+            $('#selectAllPackages').change(function() {
+                const isChecked = $(this).is(':checked');
+                $('.package-checkbox').prop('checked', isChecked);
+                updatePackageSelection();
+            });
+            
+            $('#packageSearch').on('input', function() {
+                filterPackages($(this).val());
+            });
+            
+            // Unit selection handlers
+            $('#selectAllUnits').change(function() {
+                const isChecked = $(this).is(':checked');
+                $('.unit-checkbox').prop('checked', isChecked);
+                updateUnitSelection();
+            });
+            
+            $('#unitSearch').on('input', function() {
+                filterUnits($(this).val());
+            });
+            
+            $('#packageFilter').change(function() {
+                filterUnits($('#unitSearch').val());
+            });
+        }
+        
+        async function loadAvailablePackages() {
+            $('#packagesLoading').removeClass('hidden');
+            $('#packagesContainer').addClass('hidden');
+            
+            try {
+                const response = await $.ajax({
+                    url: `${api.baseUrl}/training-packages/available`,
+                    method: 'GET',
+                    headers: api.getAuthHeaders()
+                });
+                
+                availablePackages = response.packages || [];
+                renderPackages(availablePackages);
+                
+                $('#packagesLoading').addClass('hidden');
+                $('#packagesContainer').removeClass('hidden');
+                
+                showAlert('success', `Loaded ${availablePackages.length} available training packages.`);
+                
+            } catch (error) {
+                console.error('Failed to load packages:', error);
+                $('#packagesLoading').addClass('hidden');
+                showAlert('danger', 'Failed to load available training packages. Please check your TGA API configuration.');
+            }
+        }
+        
+        function renderPackages(packages) {
+            const container = $('#packagesList');
+            container.empty();
+            
+            if (packages.length === 0) {
+                container.html('<div class="text-center py-3 text-muted">No packages available</div>');
+                return;
+            }
+            
+            packages.forEach(pkg => {
+                const statusBadge = pkg.in_database ? 
+                    `<span class="status-badge status-completed">In Database</span>` :
+                    `<span class="status-badge status-queued">Available</span>`;
+                
+                const packageHtml = `
+                    <div class="package-item" data-code="${pkg.code}">
+                        <div class="form-check">
+                            <input class="form-check-input package-checkbox" type="checkbox" value="${pkg.code}" id="pkg-${pkg.code}">
+                            <label class="form-check-label w-100" for="pkg-${pkg.code}">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="fw-bold">${pkg.code}</div>
+                                        <div class="text-muted small">${pkg.title || 'No title available'}</div>
+                                        ${pkg.description ? `<div class="text-muted small mt-1">${pkg.description.substring(0, 100)}...</div>` : ''}
+                                    </div>
+                                    <div class="text-end">
+                                        ${statusBadge}
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                `;
+                container.append(packageHtml);
+            });
+            
+            // Add event handlers for checkboxes
+            $('.package-checkbox').change(updatePackageSelection);
+        }
+        
+        function filterPackages(searchTerm) {
+            const filtered = availablePackages.filter(pkg => 
+                pkg.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (pkg.title && pkg.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                (pkg.description && pkg.description.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
+            renderPackages(filtered);
+        }
+        
+        function updatePackageSelection() {
+            const selectedCount = $('.package-checkbox:checked').length;
+            $('#selectedPackagesCount').text(selectedCount);
+            $('#downloadPackagesBtn').prop('disabled', selectedCount === 0);
+        }
+        
+        async function downloadSelectedPackages() {
+            const selectedCodes = $('.package-checkbox:checked').map(function() {
+                return $(this).val();
+            }).get();
+            
+            if (selectedCodes.length === 0) {
+                showAlert('warning', 'Please select at least one training package to download.');
+                return;
+            }
+            
+            try {
+                $('#downloadPackagesBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Starting Download...');
+                
+                const response = await $.ajax({
+                    url: `${api.baseUrl}/training-packages/bulk-download`,
+                    method: 'POST',
+                    headers: api.getAuthHeaders(),
+                    data: JSON.stringify(selectedCodes),
+                    contentType: 'application/json'
+                });
+                
+                showAlert('success', `Download job started for ${selectedCodes.length} training packages. Job ID: ${response.job_id}`);
+                refreshJobs();
+                
+            } catch (error) {
+                console.error('Failed to start download:', error);
+                showAlert('danger', 'Failed to start bulk download. Please try again.');
+            } finally {
+                $('#downloadPackagesBtn').prop('disabled', false).html('<i class="fas fa-download me-2"></i>Download Selected');
+            }
+        }
+        
+        async function loadAvailableUnits() {
+            $('#unitsLoading').removeClass('hidden');
+            $('#unitsContainer').addClass('hidden');
+            
+            try {
+                const response = await $.ajax({
+                    url: `${api.baseUrl}/units/available`,
+                    method: 'GET',
+                    headers: api.getAuthHeaders()
+                });
+                
+                availableUnits = response.units || [];
+                renderUnits(availableUnits);
+                populatePackageFilter();
+                
+                $('#unitsLoading').addClass('hidden');
+                $('#unitsContainer').removeClass('hidden');
+                
+                showAlert('success', `Loaded ${availableUnits.length} available training units.`);
+                
+            } catch (error) {
+                console.error('Failed to load units:', error);
+                $('#unitsLoading').addClass('hidden');
+                showAlert('danger', 'Failed to load available training units. Please check your TGA API configuration.');
+            }
+        }
+        
+        function renderUnits(units) {
+            const container = $('#unitsList');
+            container.empty();
+            
+            if (units.length === 0) {
+                container.html('<div class="text-center py-3 text-muted">No units available</div>');
+                return;
+            }
+            
+            units.forEach(unit => {
+                const statusBadge = unit.in_database ? 
+                    `<span class="status-badge status-completed">In Database</span>` :
+                    `<span class="status-badge status-queued">Available</span>`;
+                
+                const unitHtml = `
+                    <div class="package-item" data-code="${unit.code}" data-package="${unit.training_package || ''}">
+                        <div class="form-check">
+                            <input class="form-check-input unit-checkbox" type="checkbox" value="${unit.code}" id="unit-${unit.code}">
+                            <label class="form-check-label w-100" for="unit-${unit.code}">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="fw-bold">${unit.code}</div>
+                                        <div class="text-muted small">${unit.title || 'No title available'}</div>
+                                        ${unit.training_package ? `<div class="text-muted small mt-1">Package: ${unit.training_package}</div>` : ''}
+                                    </div>
+                                    <div class="text-end">
+                                        ${statusBadge}
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                `;
+                container.append(unitHtml);
+            });
+            
+            // Add event handlers for checkboxes
+            $('.unit-checkbox').change(updateUnitSelection);
+        }
+        
+        function populatePackageFilter() {
+            const packages = [...new Set(availableUnits.map(unit => unit.training_package).filter(Boolean))].sort();
+            const filter = $('#packageFilter');
+            
+            // Clear existing options except "All"
+            filter.find('option:not(:first)').remove();
+            
+            packages.forEach(pkg => {
+                filter.append(`<option value="${pkg}">${pkg}</option>`);
+            });
+        }
+        
+        function filterUnits(searchTerm) {
+            const packageFilter = $('#packageFilter').val();
+            
+            let filtered = availableUnits.filter(unit => {
+                const matchesSearch = !searchTerm || 
+                    unit.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (unit.title && unit.title.toLowerCase().includes(searchTerm.toLowerCase()));
+                
+                const matchesPackage = !packageFilter || unit.training_package === packageFilter;
+                
+                return matchesSearch && matchesPackage;
+            });
+            
+            renderUnits(filtered);
+        }
+        
+        function updateUnitSelection() {
+            const selectedCount = $('.unit-checkbox:checked').length;
+            $('#selectedUnitsCount').text(selectedCount);
+            $('#downloadUnitsBtn').prop('disabled', selectedCount === 0);
+        }
+        
+        async function downloadSelectedUnits() {
+            const selectedCodes = $('.unit-checkbox:checked').map(function() {
+                return $(this).val();
+            }).get();
+            
+            if (selectedCodes.length === 0) {
+                showAlert('warning', 'Please select at least one training unit to download.');
+                return;
+            }
+            
+            try {
+                $('#downloadUnitsBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Starting Download...');
+                
+                const response = await $.ajax({
+                    url: `${api.baseUrl}/units/bulk-download`,
+                    method: 'POST',
+                    headers: api.getAuthHeaders(),
+                    data: JSON.stringify(selectedCodes),
+                    contentType: 'application/json'
+                });
+                
+                showAlert('success', `Download job started for ${selectedCodes.length} training units. Job ID: ${response.job_id}`);
+                refreshJobs();
+                
+            } catch (error) {
+                console.error('Failed to start download:', error);
+                showAlert('danger', 'Failed to start bulk download. Please try again.');
+            } finally {
+                $('#downloadUnitsBtn').prop('disabled', false).html('<i class="fas fa-download me-2"></i>Download Selected');
+            }
+        }
+        
+        async function refreshJobs() {
+            try {
+                // Get training package jobs
+                const packageJobs = await getJobsByType('training_packages');
+                const unitJobs = await getJobsByType('units');
+                
+                activeJobs = [...packageJobs, ...unitJobs];
+                renderJobs(activeJobs);
+                
+            } catch (error) {
+                console.error('Failed to refresh jobs:', error);
+            }
+        }
+        
+        async function getJobsByType(type) {
+            // This would need to be implemented based on your job tracking system
+            // For now, return empty array
+            return [];
+        }
+        
+        function renderJobs(jobs) {
+            const container = $('#jobsContainer');
+            
+            if (jobs.length === 0) {
+                container.html('<div class="text-center py-3 text-muted">No active download jobs</div>');
+                return;
+            }
+            
+            container.empty();
+            
+            jobs.forEach(job => {
+                const progress = job.total_items > 0 ? (job.completed_items / job.total_items) * 100 : 0;
+                const statusClass = `status-${job.status}`;
+                
+                const jobHtml = `
+                    <div class="job-item">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <div class="fw-bold">${job.type === 'training_packages' ? 'Training Packages' : 'Training Units'}</div>
+                                <div class="text-muted small">Job ID: ${job.id}</div>
+                            </div>
+                            <span class="status-badge ${statusClass}">${job.status.toUpperCase()}</span>
+                        </div>
+                        
+                        ${job.status === 'processing' ? `
+                            <div class="progress-container">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>Progress: ${job.completed_items}/${job.total_items}</span>
+                                    <span>${Math.round(progress)}%</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: ${progress}%"></div>
+                                </div>
+                                ${job.current_item ? `<div class="text-muted small mt-1">Current: ${job.current_item}</div>` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        ${job.errors && job.errors.length > 0 ? `
+                            <div class="mt-2">
+                                <div class="text-danger small">Errors:</div>
+                                ${job.errors.map(error => `<div class="text-danger small">• ${error}</div>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                container.append(jobHtml);
+            });
+        }
+        
+        function startJobRefresh() {
+            // Refresh jobs every 5 seconds
+            jobRefreshInterval = setInterval(refreshJobs, 5000);
+        }
+        
+        function stopJobRefresh() {
+            if (jobRefreshInterval) {
+                clearInterval(jobRefreshInterval);
+                jobRefreshInterval = null;
+            }
+        }
+        
+        // Placeholder functions for other admin features
+        function manageVisibility() {
+            showAlert('info', 'Content visibility management feature coming soon.');
+        }
+        
+        function viewDatabaseStatus() {
+            showAlert('info', 'Database status viewer coming soon.');
+        }
+        
+        function configureTGA() {
+            showAlert('info', 'TGA API configuration feature coming soon.');
+        }
+        
+        function manageUsers() {
+            showAlert('info', 'User management feature coming soon.');
+        }
+        
+        function logout() {
+            stopJobRefresh();
+            api.clearToken();
+            localStorage.removeItem('user_info');
+            window.location.href = '/login';
+        }
+        
+        function showAlert(type, message) {
+            const alertHtml = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : type === 'info' ? 'info-circle' : 'times-circle'} me-2"></i>
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            $('#alert-container').html(alertHtml);
+            
+            // Auto-dismiss success and info alerts
+            if (type === 'success' || type === 'info') {
+                setTimeout(() => {
+                    $('.alert').alert('close');
+                }, 5000);
+            }
+        }
+        
+        // Cleanup on page unload
+        $(window).on('beforeunload', function() {
+            stopJobRefresh();
+        });
+    </script>
+</body>
+</html>
