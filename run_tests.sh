@@ -70,9 +70,10 @@ show_usage() {
     echo "  integration     Run integration tests"
     echo "  api             Run API tests"
     echo "  frontend        Run frontend tests"
-    echo "  tga             Run TGA integration tests"
+    echo "  tga              Run TGA integration tests"
     echo "  performance     Run performance tests"
     echo "  load            Run load tests with Locust"
+    echo "  quiz            Run quiz tests"
     echo "  all             Run all tests"
     echo "  clean           Clean up test environment"
     echo "  logs            Show test logs"
@@ -363,6 +364,19 @@ run_performance_tests() {
     print_success "Performance tests completed!"
 }
 
+# Function to run quiz tests
+run_quiz_tests() {
+    print_status "Running quiz tests..."
+    
+    docker-compose -f docker-compose.test.yml run --rm test-runner \
+        pytest backend/tests/test_quiz.py -v --tb=short \
+        --junitxml=test-results/quiz-tests.xml \
+        --cov=quiz --cov-report=html:test-results/coverage/quiz \
+        --cov-report=xml:test-results/coverage/quiz.xml
+    
+    print_success "Quiz tests completed!"
+}
+
 # Function to run load tests
 run_load_tests() {
     print_status "Running load tests with Locust..."
@@ -394,6 +408,7 @@ run_all_tests() {
     run_integration_tests || true
     run_tga_tests || true
     run_performance_tests || true
+    run_quiz_tests || true
     
     print_success "All available tests completed!"
     
@@ -525,6 +540,9 @@ case "${1:-help}" in
         ;;
     load)
         run_load_tests
+        ;;
+    quiz)
+        run_quiz_tests
         ;;
     all)
         run_all_tests
