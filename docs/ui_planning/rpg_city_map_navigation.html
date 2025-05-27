@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG-Style City Map Navigation</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .guild {
+            cursor: pointer;
+        }
+        .glow-effect {
+            filter: drop-shadow(0 0 10px gold);
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">RPG-Style City Map Navigation</h1>
+        <div id="cityMap" class="text-center">
+            <svg width="600" height="400" viewBox="0 0 600 400">
+                <rect id="merchantGuild" class="guild" x="50" y="50" width="100" height="100" fill="lightblue" />
+                <rect id="healerGuild" class="guild" x="200" y="50" width="100" height="100" fill="lightgreen" />
+                <rect id="forgeGuild" class="guild" x="350" y="50" width="100" height="100" fill="lightcoral" />
+                <rect id="scholarGuild" class="guild" x="500" y="50" width="100" height="100" fill="lightgoldenrodyellow" />
+                <rect id="techGuild" class="guild" x="50" y="200" width="100" height="100" fill="lightpink" />
+                <rect id="artisanGuild" class="guild" x="200" y="200" width="100" height="100" fill="lightsalmon" />
+                <rect id="wayfarerGuild" class="guild" x="350" y="200" width="100" height="100" fill="lightseagreen" />
+                <rect id="codecasterGuild" class="guild" x="500" y="200" width="100" height="100" fill="lightsteelblue" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="guildModal" tabindex="-1" role="dialog" aria-labelledby="guildModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="guildModalLabel">Guild Introduction</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="guildDescription"></p>
+                    <h5>Available Quests:</h5>
+                    <ul id="questList"></ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".guild").hover(function() {
+                $(this).addClass("glow-effect");
+            }, function() {
+                $(this).removeClass("glow-effect");
+            });
+
+            $(".guild").click(function() {
+                let selectedGuild = $(this).attr("id");
+                let guilds = {
+                    "merchantGuild": {
+                        "description": "Welcome to the Merchant Guild! Here you will learn about finance, trade, and business strategy.",
+                        "quests": ["Finance Mastery", "Trade Negotiation", "Business Strategy"]
+                    },
+                    "healerGuild": {
+                        "description": "Welcome to the Healer's Guild! Here you will learn about herbal medicine, wellness coaching, and therapy techniques.",
+                        "quests": ["Herbal Medicine", "Wellness Coaching", "Therapy Techniques"]
+                    },
+                    "forgeGuild": {
+                        "description": "Welcome to the Forge Guild! Here you will learn about carpentry, plumbing, and advanced trades.",
+                        "quests": ["Carpentry Basics", "Plumbing Skills", "Advanced Trades"]
+                    },
+                    "scholarGuild": {
+                        "description": "Welcome to the Scholar's Guild! Here you will learn about teaching techniques, curriculum creation, and leadership in training.",
+                        "quests": ["Teaching Techniques", "Curriculum Creation", "Leadership in Training"]
+                    },
+                    "techGuild": {
+                        "description": "Welcome to the Tech Guild! Here you will learn about programming, web development, and data science.",
+                        "quests": ["Programming Basics", "Web Development", "Data Science"]
+                    },
+                    "artisanGuild": {
+                        "description": "Welcome to the Artisan Guild! Here you will learn about creative arts, design, and craftsmanship.",
+                        "quests": ["Creative Arts", "Design Skills", "Craftsmanship"]
+                    },
+                    "wayfarerGuild": {
+                        "description": "Welcome to the Wayfarer's Guild! Here you will learn about hospitality, tourism, and customer service.",
+                        "quests": ["Hospitality Basics", "Tourism Management", "Customer Service"]
+                    },
+                    "codecasterGuild": {
+                        "description": "Welcome to the Codecaster Guild! Here you will learn about advanced programming, cybersecurity, and AI development.",
+                        "quests": ["Advanced Programming", "Cybersecurity", "AI Development"]
+                    }
+                };
+
+                let guild = guilds[selectedGuild];
+                $("#guildDescription").text(guild.description);
+                $("#questList").html(guild.quests.map(q => `<li>${q}</li>`).join(""));
+                $("#guildModal").modal("show");
+            });
+        });
+    </script>
+</body>
+</html>

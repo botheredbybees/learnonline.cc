@@ -1,0 +1,31 @@
+prompts:
+  - prompt: "Fantasy-style illustrated lore panel for the Merchant Guild, featuring a golden scale and ink quill, bustling trade district background, Studio Ghibli-inspired, clean white background --v 5.2 --ar 3:1"
+    filename: merchant_lore_panel.png
+  - prompt: "Stylized portrait of a seasoned merchant-scholar, with scrolls and ledgers, Studio Ghibli-inspired, clean white background --v 5.2 --ar 1:1"
+    filename: merchant_npc_portrait.png
+  # - prompt: "RPG-style dialogue box for the Merchant Guild, with golden scale and ink quill motifs, Studio Ghibli-inspired, clean white background --v 5.2 --ar 3:1"
+  #   filename: merchant_dialogue_box.png
+  # - prompt: "Fantasy-style illustrated lore panel for the Healer's Order, featuring a lotus flower and glowing hands, tranquil meditation garden background, Studio Ghibli-inspired, clean white background --v 5.2 --ar 3:1"
+  #   filename: healer_lore_panel.png
+  # - prompt: "Stylized portrait of a sage-like healer, with nature and wellness elements, Studio Ghibli-inspired, clean white background --v 5.2 --ar 1:1"
+  #   filename: healer_npc_portrait.png
+  # - prompt: "RPG-style dialogue box for the Healer's Order, with lotus flower and glowing hands motifs, Studio Ghibli-inspired, clean white background --v 5.2 --ar 3:1"
+  #   filename: healer_dialogue_box.png
+  # - prompt: "Fantasy-style illustrated lore panel for the Forge Keepers, featuring a blacksmith's hammer and anvil, massive guild hall background, Studio Ghibli-inspired, clean white background --v 5.2 --ar 3:1"
+  #   filename: forge_lore_panel.png
+  # - prompt: "Stylized portrait of a gruff but wise master builder, with glowing furnaces and metalworks, Studio Ghibli-inspired, clean white background --v 5.2 --ar 1:1"
+  #   filename: forge_npc_portrait.png
+  # - prompt: "RPG-style dialogue box for the Forge Keepers, with blacksmith's hammer and anvil motifs, Studio Ghibli-inspired, clean white background --v 5.2 --ar 3:1"
+  #   filename: forge_dialogue_box.png
+  # - prompt: "Fantasy-style illustrated lore panel for the Scholar's Assembly, featuring a parchment scroll and ink quill, grand library temple background, Studio Ghibli-inspired, clean white background --v 5.2 --ar 3:1"
+  #   filename: scholar_lore_panel.png
+  # - prompt: "Stylized portrait of a mysterious historian, with ancient tomes and mystical study rooms, Studio Ghibli-inspired, clean white background --v 5.2 --ar 1:1"
+  #   filename: scholar_npc_portrait.png
+  # - prompt: "RPG-style dialogue box for the Scholar's Assembly, with parchment scroll and ink quill motifs, Studio Ghibli-inspired, clean white background --v 5.2 --ar 3:1"
+  #   filename: scholar_dialogue_box.png
+  # - prompt: "Fantasy-style illustrated lore panel for the Arcane Engineers, featuring a charged lightning rune and metal circuit, high-tech workshop background, Studio Ghibli-inspired, clean white background --v 5.2 --ar 3:1"
+  #   filename: arcane_lore_panel.png
+  # - prompt: "Stylized portrait of a visionary tinkerer, with futuristic and ancient designs, Studio Ghibli-inspired, clean white background --v 5.2 --ar 1:1"
+  #   filename: arcane_npc_portrait.png
+  # - prompt: "RPG-style dialogue box for the Arcane Engineers, with charged lightning rune and metal circuit motifs, Studio Ghibli-inspired, clean white background --v 5.2 --ar 3:1"
+  #   filename: arcane_dialogue_box.png
