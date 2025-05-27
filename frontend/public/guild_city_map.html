@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guild City Map</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&family=Cinzel:wght@400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, 
+                #8fbc8f 0%, 
+                #98d982 25%, 
+                #87ceeb 50%, 
+                #dda0dd 75%, 
+                #f0e68c 100%);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        
+        .map-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,248,220,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(173,216,230,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(144,238,144,0.2) 0%, transparent 50%);
+            cursor: grab;
+            overflow: hidden;
+        }
+        
+        .map-container:active {
+            cursor: grabbing;
+        }
+        
+        .city-map {
+            position: relative;
+            width: 150%;
+            height: 150%;
+            transform-origin: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .guild-district {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.1),
+                inset 0 2px 8px rgba(255,255,255,0.3);
+            border: 3px solid rgba(255,255,255,0.4);
+            backdrop-filter: blur(10px);
+        }
+        
+        .guild-district:hover {
+            transform: scale(1.1);
+            box-shadow: 
+                0 12px 48px rgba(0,0,0,0.2),
+                inset 0 2px 8px rgba(255,255,255,0.5);
+            z-index: 10;
+        }
+        
+        .guild-symbol {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        .guild-name {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #2c3e50;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+            margin-bottom: 4px;
+        }
+        
+        .guild-subtitle {
+            font-size: 0.7rem;
+            color: #5d6d7e;
+            font-style: italic;
+        }
+        
+        /* Guild-specific styling */
+        .business-guild {
+            background: linear-gradient(135deg, #f4d03f 0%, #f7dc6f 100%);
+            top: 25%;
+            left: 15%;
+        }
+        
+        .health-guild {
+            background: linear-gradient(135deg, #abebc6 0%, #82e0aa 100%);
+            top: 15%;
+            left: 40%;
+        }
+        
+        .construction-guild {
+            background: linear-gradient(135deg, #cd6155 0%, #e74c3c 100%);
+            top: 45%;
+            left: 10%;
+        }
+        
+        .education-guild {
+            background: linear-gradient(135deg, #bb8fce 0%, #a569bd 100%);
+            top: 10%;
+            left: 65%;
+        }
+        
+        .electro-guild {
+            background: linear-gradient(135deg, #5dade2 0%, #3498db 100%);
+            top: 35%;
+            left: 35%;
+        }
+        
+        .beauty-guild {
+            background: linear-gradient(135deg, #f8c471 0%, #f39c12 100%);
+            top: 60%;
+            left: 25%;
+        }
+        
+        .hospitality-guild {
+            background: linear-gradient(135deg, #85c1e9 0%, #5499c7 100%);
+            top: 20%;
+            left: 85%;
+        }
+        
+        .it-guild {
+            background: linear-gradient(135deg, #7fb3d3 0%, #5882a0 100%);
+            top: 50%;
+            left: 60%;
+        }
+        
+        .manufacturing-guild {
+            background: linear-gradient(135deg, #a6acaf 0%, #85929e 100%);
+            top: 70%;
+            left: 45%;
+        }
+        
+        .retail-guild {
+            background: linear-gradient(135deg, #f1948a 0%, #ec7063 100%);
+            top: 80%;
+            left: 20%;
+        }
+        
+        .transport-guild {
+            background: linear-gradient(135deg, #73c6b6 0%, #48c9b0 100%);
+            top: 85%;
+            left: 70%;
+        }
+        
+        .agriculture-guild {
+            background: linear-gradient(135deg, #a9dfbf 0%, #82e0aa 100%);
+            top: 65%;
+            left: 80%;
+        }
+        
+        .safety-guild {
+            background: linear-gradient(135deg, #85929e 0%, #566573 100%);
+            top: 40%;
+            left: 85%;
+        }
+        
+        .arts-guild {
+            background: linear-gradient(135deg, #d7bde2 0%, #c39bd3 100%);
+            top: 75%;
+            left: 55%;
+        }
+        
+        .map-title {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+            z-index: 20;
+        }
+        
+        .navigation-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            color: #5d6d7e;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 20;
+        }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .cloud {
+            position: absolute;
+            background: rgba(255,255,255,0.6);
+            border-radius: 50px;
+            opacity: 0.7;
+            animation: float 20s infinite linear;
+        }
+        
+        .cloud1 {
+            width: 100px;
+            height: 40px;
+            top: 10%;
+            left: -100px;
+            animation-duration: 25s;
+        }
+        
+        .cloud2 {
+            width: 150px;
+            height: 60px;
+            top: 30%;
+            left: -150px;
+            animation-duration: 30s;
+        }
+        
+        .cloud3 {
+            width: 80px;
+            height: 30px;
+            top: 70%;
+            left: -80px;
+            animation-duration: 22s;
+        }
+        
+        @keyframes float {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw + 200px)); }
+        }
+        
+        .guild-info-panel {
+            position: absolute;
+            top: 50%;
+            right: -400px;
+            transform: translateY(-50%);
+            width: 350px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+            transition: right 0.4s ease;
+            z-index: 30;
+            backdrop-filter: blur(10px);
+        }
+        
+        .guild-info-panel.active {
+            right: 30px;
+        }
+        
+        .close-panel {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        
+        .guild-info-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .guild-info-description {
+            color: #5d6d7e;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .guild-progress {
+            background: #ecf0f1;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .start-journey-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .start-journey-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52,152,219,0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="map-container" id="mapContainer">
+        <h1 class="map-title">The Guild City</h1>
+        
+        <div class="floating-elements">
+            <div class="cloud cloud1"></div>
+            <div class="cloud cloud2"></div>
+            <div class="cloud cloud3"></div>
+        </div>
+        
+        <div class="city-map" id="cityMap">
+            <div class="guild-district business-guild" data-guild="business">
+                <div class="guild-symbol">💰</div>
+                <div class="guild-name">Merchant Guild</div>
+                <div class="guild-subtitle">Trade & Finance</div>
+            </div>
+            
+            <div class="guild-district health-guild" data-guild="health">
+                <div class="guild-symbol">🌿</div>
+                <div class="guild-name">Healer's Order</div>
+                <div class="guild-subtitle">Care & Wellness</div>
+            </div>
+            
+            <div class="guild-district construction-guild" data-guild="construction">
+                <div class="guild-symbol">🔨</div>
+                <div class="guild-name">Forge Keepers</div>
+                <div class="guild-subtitle">Craft & Build</div>
+            </div>
+            
+            <div class="guild-district education-guild" data-guild="education">
+                <div class="guild-symbol">📜</div>
+                <div class="guild-name">Scholar's Assembly</div>
+                <div class="guild-subtitle">Knowledge & Wisdom</div>
+            </div>
+            
+            <div class="guild-district electro-guild" data-guild="electro">
+                <div class="guild-symbol">⚡</div>
+                <div class="guild-name">Arcane Engineers</div>
+                <div class="guild-subtitle">Power & Innovation</div>
+            </div>
+            
+            <div class="guild-district beauty-guild" data-guild="beauty">
+                <div class="guild-symbol">🌸</div>
+                <div class="guild-name">Artisan Collective</div>
+                <div class="guild-subtitle">Beauty & Style</div>
+            </div>
+            
+            <div class="guild-district hospitality-guild" data-guild="hospitality">
+                <div class="guild-symbol">🌍</div>
+                <div class="guild-name">Wayfarer's Lodge</div>
+                <div class="guild-subtitle">Service & Travel</div>
+            </div>
+            
+            <div class="guild-district it-guild" data-guild="it">
+                <div class="guild-symbol">💻</div>
+                <div class="guild-name">Codecasters</div>
+                <div class="guild-subtitle">Digital Mysteries</div>
+            </div>
+            
+            <div class="guild-district manufacturing-guild" data-guild="manufacturing">
+                <div class="guild-symbol">🔩</div>
+                <div class="guild-name">Mechanist Brotherhood</div>
+                <div class="guild-subtitle">Industry & Precision</div>
+            </div>
+            
+            <div class="guild-district retail-guild" data-guild="retail">
+                <div class="guild-symbol">🛒</div>
+                <div class="guild-name">Trade Pact</div>
+                <div class="guild-subtitle">Commerce & Sales</div>
+            </div>
+            
+            <div class="guild-district transport-guild" data-guild="transport">
+                <div class="guild-symbol">🚛</div>
+                <div class="guild-name">Pathfinder Union</div>
+                <div class="guild-subtitle">Logistics & Movement</div>
+            </div>
+            
+            <div class="guild-district agriculture-guild" data-guild="agriculture">
+                <div class="guild-symbol">🌾</div>
+                <div class="guild-name">Verdant Circle</div>
+                <div class="guild-subtitle">Growth & Harvest</div>
+            </div>
+            
+            <div class="guild-district safety-guild" data-guild="safety">
+                <div class="guild-symbol">🛡</div>
+                <div class="guild-name">Guardian Order</div>
+                <div class="guild-subtitle">Protection & Justice</div>
+            </div>
+            
+            <div class="guild-district arts-guild" data-guild="arts">
+                <div class="guild-symbol">🎭</div>
+                <div class="guild-name">Dreamweavers</div>
+                <div class="guild-subtitle">Art & Expression</div>
+            </div>
+        </div>
+        
+        <div class="navigation-hint">
+            🖱️ Click and drag to explore • Click guilds to learn more
+        </div>
+        
+        <div class="guild-info-panel" id="infoPanel">
+            <button class="close-panel" onclick="closePanel()">×</button>
+            <h2 class="guild-info-title" id="panelTitle">Guild Name</h2>
+            <div class="guild-info-description" id="panelDescription">
+                Guild description will appear here...
+            </div>
+            <div class="guild-progress">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div style="text-align: center; margin-bottom: 15px; color: #7f8c8d; font-size: 0.9rem;">
+                <span id="progressText">Begin your journey: 0% complete</span>
+            </div>
+            <button class="start-journey-btn" onclick="startJourney()">
+                🚀 Begin Guild Journey
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const guildData = {
+            business: {
+                title: "The Merchant Guild",
+                description: "Master the arts of trade, finance, and business strategy. Learn negotiation, accounting, and leadership skills in our bustling trade district filled with scrolls, ledgers, and market wisdom.",
+                progress: 15
+            },
+            health: {
+                title: "The Healer's Order",
+                description: "Join the sacred order of healers and caregivers. Train in our tranquil meditation gardens to master community health, aged care, and wellness practices with compassion and wisdom.",
+                progress: 8
+            },
+            construction: {
+                title: "The Forge Keepers",
+                description: "Become a master builder in our industrial quarter. Learn construction, plumbing, and engineering skills among glowing furnaces, metalworks, and the wisdom of ancient craftsmanship.",
+                progress: 32
+            },
+            education: {
+                title: "The Scholar's Assembly",
+                description: "Preserve and share knowledge in our grand library temple. Master the art of teaching and training while exploring ancient tomes and mystical study chambers.",
+                progress: 67
+            },
+            electro: {
+                title: "The Arcane Engineers",
+                description: "Unravel the mysteries of electricity and energy in our high-tech workshop. Combine futuristic innovation with traditional wisdom to master electrotechnology.",
+                progress: 23
+            },
+            beauty: {
+                title: "The Artisan Collective",
+                description: "Perfect your craft in our floating tea house pavilion. Learn hair, beauty, and wellness arts while surrounded by elegant banners and lantern-lit walkways.",
+                progress: 45
+            },
+            hospitality: {
+                title: "The Wayfarer's Lodge",
+                description: "Welcome travelers in our cozy inn where stories are exchanged. Master hospitality, tourism, and service skills with warmth and legendary innkeeper wisdom.",
+                progress: 56
+            },
+            it: {
+                title: "The Codecasters",
+                description: "Shape the future of technology in our digital sanctuary. Master programming, systems, and digital innovation among glowing screens and logic circuits.",
+                progress: 78
+            },
+            manufacturing: {
+                title: "The Mechanist Brotherhood",
+                description: "Join the legendary brotherhood of craftsmen in our sprawling industrial complex. Master manufacturing, engineering, and precision work with ancient secrets.",
+                progress: 34
+            },
+            retail: {
+                title: "The Trade Pact",
+                description: "Learn the fine art of commerce in our mercantile guild hall. Master retail skills, customer service, and trade negotiations among diverse goods and merchants.",
+                progress: 12
+            },
+            transport: {
+                title: "The Pathfinder Union",
+                description: "Navigate the complexities of logistics in our dockside guild. Master transportation, supply chain, and movement efficiency with seasoned navigator wisdom.",
+                progress: 89
+            },
+            agriculture: {
+                title: "The Verdant Circle",
+                description: "Cultivate wisdom in our secluded forest retreat. Learn sustainable farming, horticulture, and nature's balance while connecting with the earth's ancient rhythms.",
+                progress: 43
+            },
+            safety: {
+                title: "The Guardian Order",
+                description: "Uphold protection and justice in our fortress citadel. Train in public safety, defense, and security among tactical training grounds with respected commanders.",
+                progress: 71
+            },
+            arts: {
+                title: "The Dreamweavers",
+                description: "Bring stories to life in our floating theater pavilion. Master creative arts, culture, and artistic expression where imagination knows no bounds.",
+                progress: 28
+            }
+        };
+
+        let isDragging = false;
+        let startX, startY;
+        let currentX = 0, currentY = 0;
+
+        const mapContainer = document.getElementById('mapContainer');
+        const cityMap = document.getElementById('cityMap');
+        const infoPanel = document.getElementById('infoPanel');
+
+        // Pan functionality
+        mapContainer.addEventListener('mousedown', startDrag);
+        mapContainer.addEventListener('mousemove', drag);
+        mapContainer.addEventListener('mouseup', stopDrag);
+        mapContainer.addEventListener('mouseleave', stopDrag);
+
+        function startDrag(e) {
+            if (e.target.closest('.guild-district')) return;
+            isDragging = true;
+            startX = e.clientX - currentX;
+            startY = e.clientY - currentY;
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            currentX = e.clientX - startX;
+            currentY = e.clientY - startY;
+            
+            // Limit panning
+            currentX = Math.max(-500, Math.min(200, currentX));
+            currentY = Math.max(-400, Math.min(200, currentY));
+            
+            cityMap.style.transform = `translate(${currentX}px, ${currentY}px)`;
+        }
+
+        function stopDrag() {
+            isDragging = false;
+        }
+
+        // Guild click handlers
+        document.querySelectorAll('.guild-district').forEach(guild => {
+            guild.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const guildType = guild.getAttribute('data-guild');
+                showGuildInfo(guildType);
+            });
+        });
+
+        function showGuildInfo(guildType) {
+            const data = guildData[guildType];
+            if (!data) return;
+
+            document.getElementById('panelTitle').textContent = data.title;
+            document.getElementById('panelDescription').textContent = data.description;
+            document.getElementById('progressFill').style.width = data.progress + '%';
+            document.getElementById('progressText').textContent = `Journey progress: ${data.progress}% complete`;
+            
+            infoPanel.classList.add('active');
+        }
+
+        function closePanel() {
+            infoPanel.classList.remove('active');
+        }
+
+        function startJourney() {
+            alert('🎮 Journey begins! This would navigate to the guild\'s learning modules.');
+        }
+
+        // Close panel when clicking outside
+        mapContainer.addEventListener('click', (e) => {
+            if (!e.target.closest('.guild-district') && !e.target.closest('.guild-info-panel')) {
+                closePanel();
+            }
+        });
+    </script>
+</body>
+</html>

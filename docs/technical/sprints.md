@@ -231,11 +231,136 @@ Use pytest for backend testing and Selenium for frontend testing. Ensure minimum
 Ensure all new features integrate seamlessly with existing AQTF data display and maintain security best practices throughout the implementation.
 ```
 
+<<<<<<< HEAD
+=======
+### Sprint 2.5: Admin Training Data Download & Import System
+
+**Objective**: Enhance the training units explorer with comprehensive admin download functionality for bulk training package and unit management
+**Estimated Duration**: 2-3 weeks (optimized)
+**Dependencies**: Sprint 2 completion (authentication system)
+
+**Cline Prompt** (OPTIMIZED):
+```
+You are a senior full-stack developer working on LearnOnline.cc. Building on the completed authentication system from Sprint 2 and existing TGA integration from Sprint 1, implement comprehensive admin download functionality for bulk training data management.
+
+PRIORITY: Leverage existing code patterns from Sprints 1-2. Follow established FastAPI router patterns, SQLAlchemy models, TGA client methods, and jQuery/Bootstrap frontend components from the units explorer.
+
+Sprint 2.5 Objectives - Admin Training Data Download & Import:
+
+PHASE 1: Training Package Discovery & Selection (Week 1)
+1. Enhance backend/routers/training_packages.py with bulk discovery endpoints:
+   - GET /api/training-packages/available - List all available training packages from TGA
+   - POST /api/training-packages/bulk-download - Queue multiple training packages for download
+   - GET /api/training-packages/download-status/{job_id} - Track download progress
+   - Use existing TrainingGovClient patterns and admin authentication middleware
+
+2. Create admin training package discovery interface in frontend:
+   - Extend existing units explorer patterns from frontend/static/js/units.js
+   - Add admin-only "Training Package Manager" section to dashboard
+   - Multi-select interface for choosing training packages to download
+   - Progress tracking with real-time status updates using existing AJAX patterns
+
+PHASE 2: Bulk Download Queue System (Week 1-2)
+3. Implement background job system for bulk operations:
+   - Create backend/services/download_manager.py using existing background task patterns
+   - Queue-based processing for training package downloads
+   - Automatic unit discovery and download for selected training packages
+   - Use existing database session patterns and error handling
+
+4. Enhance TGA client for bulk operations:
+   - Extend backend/services/tga/client.py with batch processing methods
+   - Rate limiting and retry logic for TGA API calls
+   - Bulk XML parsing and data extraction using existing patterns
+   - Follow existing error handling and logging patterns
+
+PHASE 3: Comprehensive Data Population (Week 2)
+5. Implement complete data pipeline for all training components:
+   - Extend existing unit sync logic to populate ALL related tables:
+     * unit_elements (already working)
+     * unit_performance_criteria (already working)
+     * unit_critical_aspects (NEW)
+     * unit_required_skills (NEW)
+     * qualifications (NEW)
+     * skillsets (NEW)
+   - Use existing XML parsing patterns from TGA client
+   - Follow existing database model relationships and patterns
+
+6. Create comprehensive XML parsers:
+   - Extend backend/services/tga/client.py with parsers for:
+     * Qualification XML structure
+     * Skillset XML structure
+     * Critical aspects extraction
+     * Required skills extraction
+   - Use existing BeautifulSoup patterns and error handling
+   - Follow existing data normalization approaches
+
+PHASE 4: Enhanced Admin Interface (Week 2-3)
+7. Build comprehensive admin dashboard:
+   - Extend existing dashboard.html with admin-specific sections
+   - Training package management interface using existing card patterns
+   - Bulk operation controls and progress monitoring
+   - Download history and status tracking using existing table patterns
+
+8. Add admin controls to existing units explorer:
+   - Bulk unit selection and download capabilities
+   - Training package filtering and management
+   - Data validation and integrity checking tools
+   - Use existing modal patterns and form validation
+
+SUCCESS CRITERIA (Comprehensive Admin System):
+- Admin can browse and download available training packages from TGA
+- Bulk download system processes multiple training packages efficiently
+- All related tables populated automatically (elements, PC, critical aspects, skills, qualifications, skillsets)
+- Real-time progress tracking for bulk operations
+- Enhanced admin interface integrated with existing units explorer
+- Comprehensive error handling and recovery for failed downloads
+
+IMPLEMENTATION SHORTCUTS:
+- Reuse existing TGA client authentication and connection patterns
+- Copy existing background task patterns from unit sync functionality
+- Use existing admin authentication middleware from Sprint 2
+- Follow existing database model relationships and patterns
+- Leverage existing jQuery/Bootstrap components and styling
+- Use existing error handling and logging infrastructure
+
+TESTING (Streamlined):
+- Copy test patterns from existing TGA integration tests
+- Focus on bulk operation testing and data integrity validation
+- Use existing test fixtures and database setup
+- Test admin authentication and permission controls
+- Target 75% coverage for new admin functionality
+
+AVOID OVER-ENGINEERING:
+- No real-time WebSocket updates (use polling for progress)
+- No complex workflow management (simple queue-based processing)
+- No advanced scheduling features (manual admin-triggered downloads)
+- No complex data transformation (use existing normalization patterns)
+- No external job queue systems (use FastAPI BackgroundTasks)
+
+Build incrementally: Get training package discovery working first, then bulk download queue, then comprehensive data population, then enhanced admin interface. Each phase should be fully functional before proceeding.
+
+Reference existing code extensively - especially TGA client patterns for API integration, authentication patterns for admin controls, and units explorer patterns for frontend components.
+
+Key Integration Points:
+- Extend existing backend/routers/training_packages.py and backend/routers/units.py
+- Enhance existing frontend/static/js/units.js with admin functionality
+- Use existing backend/services/tga/client.py patterns for bulk operations
+- Follow existing backend/models/tables.py relationships for data population
+- Integrate with existing authentication system from Sprint 2
+
+This sprint transforms the basic individual sync functionality into a comprehensive admin system for managing training data at scale, while maintaining consistency with existing patterns and architecture.
+```
+
+>>>>>>> origin/main
 ### Sprint 3: Gamification System Implementation
 
 **Objective**: Implement points, levels, achievements, and leaderboards using proven patterns
 **Estimated Duration**: 1-2 weeks (optimized)
+<<<<<<< HEAD
 **Dependencies**: Sprint 2 completion
+=======
+**Dependencies**: Sprint 2.5 completion
+>>>>>>> origin/main
 
 **Cline Prompt** (OPTIMIZED):
 ```
