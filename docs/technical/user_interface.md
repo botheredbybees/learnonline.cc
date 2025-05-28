@@ -3,8 +3,8 @@
 ## Core UI Concepts
 - RPG-style gamified interface with guild-based learning districts
 - Studio Ghibli-inspired aesthetic with hand-painted textures and warm colors
-- Certification levels (Cert I-IV) represented as progressive paths through districts
-- Units of competency visualized as shops, rooms, or trees in each district
+- Certification levels (Cert I-IV etc.) represented as progressive paths through districts
+- Units of competency visualized as shops, rooms, trees or some other logical area in each district
 - Entry challenges allow experienced learners to skip ahead
 
 ## Required UI Elements
