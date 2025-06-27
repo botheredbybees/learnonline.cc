@@ -1,0 +1,2027 @@
+﻿I am building a website that offers gamified lessons to young adults using vocational hieducation units of competency from the AQTF
+
+
+the data hierarchy goes: training packages > qualifications and skillsets > units of competency.
+
+
+A unit of competency is a distinct element within a qualification or skillset which is part of a nationally recognized training package. A unit describes a specific work activity or skill that a person needs to demonstrate they can perform to a certain standard. Think of it as a building block of a qualification. 
+
+
+A qualification is a set of units that, taken together, give someone the skills necessary for a job, possibly paying. Skillsets are also groups of units. but these are usually smaller in number than a qualification,and address a skill rather than a vocation. Training packages are the collected descriptions of qualifications, skill sets, and units of competency. Each training packages is maintained by an industry group. 
+
+
+What are some metaphors I could apply to present these data in a gamified way?
+
+
+—
+
+
+
+
+Here are some compelling metaphors that could work well for gamifying vocational education data:
+
+
+**Building/Construction Theme**
+- Training packages = Construction sites or city districts
+- Qualifications = Complete buildings (houses, offices, factories)
+- Skillsets = Specialized structures (workshops, studios, labs)
+- Units of competency = Individual rooms or components (foundation, plumbing, electrical)
+
+
+This works because vocational education literally "builds" careers, and learners can see their progress as they complete each "room" toward finishing their "building."
+
+
+**Adventure/Quest Theme**
+- Training packages = Kingdoms or continents
+- Qualifications = Epic quests or hero's journeys
+- Skillsets = Side quests or specialized missions
+- Units of competency = Individual challenges or boss battles
+
+
+Each unit mastered unlocks new abilities, and completing qualifications grants new titles or ranks.
+
+
+**Learning Tree/Forest Theme**
+- Training packages = Forests or ecosystems
+- Qualifications = Mature trees with full canopies
+- Skillsets = Specialized plants (fruit trees, medicinal herbs)
+- Units of competency = Branches, leaves, or growth rings
+
+
+This emphasizes organic growth and interconnected learning, where each unit strengthens the whole.
+
+
+**Crafting/Workshop Theme**
+- Training packages = Guilds or craft traditions
+- Qualifications = Master craftsperson status
+- Skillsets = Specialized tools or techniques
+- Units of competency = Individual skills (measuring, cutting, joining)
+
+
+This resonates strongly with trades and hands-on vocations, emphasizing the artisan journey from apprentice to master.
+
+
+Which of these feels most aligned with your target audience and the types of vocational pathways you're covering?
+
+
+—----------------------------------------------
+
+
+The Adventure/Quest Theme. Ghibli style.
+
+
+Perfect choice! The Studio Ghibli aesthetic brings such warmth and wonder to the adventure theme. Here's how this could beautifully unfold:
+
+
+**Training Packages = Enchanted Realms**
+Each training package becomes a distinct magical world - think the forest spirits' domain from Princess Mononoke, or the floating islands of Laputa. Each realm has its own visual identity, guardian spirits, and unique landscapes that reflect the industry (lush green forests for agriculture, steampunk floating cities for engineering, cozy villages for hospitality).
+
+
+**Qualifications = Grand Adventures**
+These are the epic journeys like Chihiro's quest through the spirit world or Sophie's transformation story. Each qualification has a narrative arc with a clear beginning (choosing your path), middle (trials and growth), and triumphant end (becoming who you're meant to be). Visual progress could show your character's journey across beautiful hand-drawn landscapes.
+
+
+**Skillsets = Magical Expeditions**
+Shorter, focused adventures like Kiki finding her special delivery service or Jiro perfecting his aircraft designs. These have their own complete storylines but connect to larger journeys.
+
+
+**Units of Competency = Encounters & Lessons**
+Individual moments of growth - learning to communicate with forest spirits, mastering a new spell, or discovering hidden strengths. Each unit could feature memorable characters (wise mentors, helpful companions, challenging spirits) who guide learning through gentle trials.
+
+
+The progression could show your character growing more confident and capable, with a beautifully illustrated journal documenting each adventure. Would you like me to develop specific visual elements or narrative frameworks for any particular vocational areas?
+
+
+—---------------------------------------
+
+
+Talk me through a set of 2D HTML5 plus GSAP pages to illustrate this concept with minimal graphics -  share graphic elements if possible. As there are 54 training packages. Dozens of qualifications in each, and hundreds of units, I imagine I will be grouping training packages into 'lands', and think that from there each training packages would be a guild in that land
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghibli Learning Realms</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #2F4F4F;
+        }
+
+
+        /* Shared Elements */
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+            opacity: 0.7;
+        }
+
+
+        .cloud::before {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+        }
+
+
+        .cloud1 {
+            width: 80px;
+            height: 30px;
+            top: 20%;
+            left: 10%;
+            animation: float 20s infinite;
+        }
+
+
+        .cloud1::before {
+            width: 50px;
+            height: 20px;
+            top: -10px;
+            left: 10px;
+        }
+
+
+        .cloud2 {
+            width: 60px;
+            height: 25px;
+            top: 15%;
+            right: 20%;
+            animation: float 25s infinite reverse;
+        }
+
+
+        .cloud2::before {
+            width: 40px;
+            height: 15px;
+            top: -8px;
+            right: 8px;
+        }
+
+
+        @keyframes float {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(20px) translateY(-10px); }
+            50% { transform: translateX(-10px) translateY(5px); }
+            75% { transform: translateX(15px) translateY(-5px); }
+        }
+
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+
+        .nav-btn {
+            background: rgba(139, 69, 19, 0.9);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: Georgia, serif;
+            transition: all 0.3s ease;
+        }
+
+
+        .nav-btn:hover {
+            background: rgba(160, 82, 45, 0.9);
+            transform: translateY(-2px);
+        }
+
+
+        /* Pages */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 60px 20px 20px;
+        }
+
+
+        .page.active {
+            display: block;
+        }
+
+
+        /* World Map Page */
+        .world-map {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 80px;
+        }
+
+
+        .land {
+            width: 280px;
+            height: 200px;
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+
+        .land:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+
+        .creative-lands { background: linear-gradient(135deg, #FF6B6B, #4ECDC4); }
+        .technical-lands { background: linear-gradient(135deg, #4A90E2, #7B68EE); }
+        .care-lands { background: linear-gradient(135deg, #FFD93D, #6BCF7F); }
+        .business-lands { background: linear-gradient(135deg, #FF8A80, #FFD54F); }
+
+
+        /* Guild Page */
+        .guild-hall {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+
+        .guild-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #8B4513;
+        }
+
+
+        .guild-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+
+        .guild-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+
+        .guild-card:hover {
+            transform: translateY(-5px);
+            border-color: #8B4513;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+
+        .guild-emblem {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+
+        /* Quest Page */
+        .quest-overview {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+
+        .quest-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+
+        .quest-title {
+            font-size: 2.2em;
+            color: #8B4513;
+            margin-bottom: 10px;
+        }
+
+
+        .quest-path {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+
+        .quest-stage {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #4ECDC4;
+            position: relative;
+        }
+
+
+        /* Unit Page */
+        .unit-challenge {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+
+        .challenge-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+
+
+        .spirit-guide {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #FFB6C1, #87CEFA);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            animation: gentle-pulse 3s infinite;
+        }
+
+
+        @keyframes gentle-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ECDC4, #44A08D);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+
+        /* Buttons */
+        .action-btn {
+            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Shared floating elements -->
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+
+
+    <!-- Navigation -->
+    <nav>
+        <button class="nav-btn" onclick="showPage('world')">World Map</button>
+        <button class="nav-btn" onclick="showPage('guild')">Guild Hall</button>
+        <button class="nav-btn" onclick="showPage('quest')">Quest Path</button>
+        <button class="nav-btn" onclick="showPage('unit')">Challenge</button>
+    </nav>
+
+
+    <!-- World Map Page (Training Package Lands) -->
+    <div id="world" class="page active">
+        <div class="world-map">
+            <div class="land creative-lands" onclick="enterLand('creative')">
+                <div>
+                    <h3>🎨 Creative Realms</h3>
+                    <p>Arts, Design & Media</p>
+                </div>
+            </div>
+            <div class="land technical-lands" onclick="enterLand('technical')">
+                <div>
+                    <h3>⚙️ Technical Kingdoms</h3>
+                    <p>Engineering & Construction</p>
+                </div>
+            </div>
+            <div class="land care-lands" onclick="enterLand('care')">
+                <div>
+                    <h3>🌿 Caring Valleys</h3>
+                    <p>Health, Community & Education</p>
+                </div>
+            </div>
+            <div class="land business-lands" onclick="enterLand('business')">
+                <div>
+                    <h3>🏛️ Commerce Cities</h3>
+                    <p>Business & Finance</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Guild Hall Page (Training Packages) -->
+    <div id="guild" class="page">
+        <div class="guild-hall">
+            <h2 class="guild-title">🏰 Technical Kingdoms - Guild Hall</h2>
+            <p>Choose your guild to begin your adventure</p>
+            
+            <div class="guild-grid">
+                <div class="guild-card" onclick="enterGuild('construction')">
+                    <div class="guild-emblem" style="background: linear-gradient(135deg, #8B4513, #D2691E);">🔨</div>
+                    <h4>Construction Guild</h4>
+                    <p>Masters of building and structure</p>
+                </div>
+                <div class="guild-card" onclick="enterGuild('engineering')">
+                    <div class="guild-emblem" style="background: linear-gradient(135deg, #4682B4, #5F9EA0);">⚙️</div>
+                    <h4>Engineering Guild</h4>
+                    <p>Creators of machines and systems</p>
+                </div>
+                <div class="guild-card" onclick="enterGuild('electrical')">
+                    <div class="guild-emblem" style="background: linear-gradient(135deg, #FFD700, #FFA500);">⚡</div>
+                    <h4>Electrical Guild</h4>
+                    <p>Wielders of power and energy</p>
+                </div>
+                <div class="guild-card" onclick="enterGuild('automotive')">
+                    <div class="guild-emblem" style="background: linear-gradient(135deg, #DC143C, #B22222);">🚗</div>
+                    <h4>Automotive Guild</h4>
+                    <p>Masters of moving machines</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Quest Path Page (Qualifications) -->
+    <div id="quest" class="page">
+        <div class="quest-overview">
+            <div class="quest-header">
+                <h2 class="quest-title">🔨 Construction Guild - Quest Paths</h2>
+                <p>Choose your epic adventure</p>
+            </div>
+            
+            <div class="quest-path">
+                <div class="quest-stage" onclick="startQuest('builder')">
+                    <h4>🏗️ The Builder's Journey</h4>
+                    <p><strong>Certificate III in Construction</strong></p>
+                    <p>Learn the fundamental arts of construction, from foundation to finish. Master the tools, understand materials, and join the ranks of skilled builders.</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="quest-stage" onclick="startQuest('supervisor')">
+                    <h4>👑 The Supervisor's Path</h4>
+                    <p><strong>Certificate IV in Building & Construction</strong></p>
+                    <p>Rise to lead construction teams, manage projects, and guide others on their building journey.</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Unit Challenge Page (Units of Competency) -->
+    <div id="unit" class="page">
+        <div class="unit-challenge">
+            <div class="challenge-card">
+                <div class="spirit-guide">🔨</div>
+                <h3>The Foundation Challenge</h3>
+                <h4>CPCCCA2011A - Handle carpentry materials</h4>
+                
+                <p>Welcome, young apprentice! Master Takeshi, the wise carpenter spirit, has appeared to guide you through your first challenge.</p>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 30%"></div>
+                </div>
+                
+                <p><em>"To build great structures, one must first understand the materials. Wood speaks to those who listen, and metal sings its own song."</em></p>
+                
+                <button class="action-btn" onclick="nextChallenge()">Accept Challenge</button>
+                <button class="action-btn" onclick="viewProgress()">View Progress</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            // Add entrance animation
+            gsap.fromTo(`#${pageId}`, 
+                { opacity: 0, y: 20 }, 
+                { opacity: 1, y: 0, duration: 0.5 }
+            );
+        }
+
+
+        // Land interactions
+        function enterLand(landType) {
+            gsap.to(event.target, {
+                scale: 0.95,
+                duration: 0.1,
+                yoyo: true,
+                repeat: 1,
+                onComplete: () => {
+                    setTimeout(() => showPage('guild'), 200);
+                }
+            });
+        }
+
+
+        // Guild interactions
+        function enterGuild(guildType) {
+            gsap.to(event.target, {
+                rotationY: 10,
+                scale: 1.05,
+                duration: 0.3,
+                yoyo: true,
+                repeat: 1,
+                onComplete: () => {
+                    setTimeout(() => showPage('quest'), 300);
+                }
+            });
+        }
+
+
+        // Quest interactions
+        function startQuest(questType) {
+            const progressBar = event.target.querySelector('.progress-fill');
+            gsap.to(progressBar, {
+                width: '15%',
+                duration: 1,
+                ease: "power2.out"
+            });
+            
+            setTimeout(() => showPage('unit'), 1000);
+        }
+
+
+        // Unit interactions
+        function nextChallenge() {
+            const spiritGuide = document.querySelector('.spirit-guide');
+            gsap.to(spiritGuide, {
+                rotation: 360,
+                scale: 1.2,
+                duration: 1,
+                yoyo: true,
+                repeat: 1
+            });
+            
+            // Update progress
+            const progressBar = document.querySelector('#unit .progress-fill');
+            gsap.to(progressBar, {
+                width: '60%',
+                duration: 1.5,
+                ease: "power2.out"
+            });
+        }
+
+
+        function viewProgress() {
+            // Animate all elements on the page
+            gsap.to('.challenge-card', {
+                borderColor: '#4ECDC4',
+                borderWidth: '3px',
+                duration: 0.5,
+                yoyo: true,
+                repeat: 1
+            });
+        }
+
+
+        // Initialize animations
+        gsap.from('.land', {
+            scale: 0,
+            rotation: 180,
+            duration: 1,
+            stagger: 0.2,
+            ease: "back.out(1.7)"
+        });
+
+
+        // Continuous cloud animation
+        gsap.to('.cloud1', {
+            x: '100vw',
+            duration: 60,
+            repeat: -1,
+            ease: "none"
+        });
+
+
+        gsap.to('.cloud2', {
+            x: '-100vw',
+            duration: 80,
+            repeat: -1,
+            ease: "none"
+        });
+    </script>
+</body>
+</html>
+
+
+I've created a conceptual demonstration of your Ghibli-style vocational learning system. Here's the structure I've implemented:
+
+
+## **Page Hierarchy & Flow:**
+
+
+1. **World Map** (Lands) - Groups of related training packages
+   - Creative Realms (Arts, Design, Media)
+   - Technical Kingdoms (Engineering, Construction) 
+   - Caring Valleys (Health, Community, Education)
+   - Commerce Cities (Business, Finance)
+
+
+2. **Guild Hall** (Training Packages) - Individual training packages as guilds
+   - Construction Guild, Engineering Guild, etc.
+   - Each with distinctive emblems and color schemes
+
+
+3. **Quest Paths** (Qualifications) - Major learning journeys
+   - The Builder's Journey (Cert III)
+   - The Supervisor's Path (Cert IV)
+   - Progress bars to show advancement
+
+
+4. **Challenge Page** (Units of Competency) - Individual learning encounters
+   - Spirit guide mentors (inspired by Ghibli characters)
+   - Specific unit codes and descriptions
+   - Interactive progress tracking
+
+
+## **Shared Visual Elements:**
+- **Floating clouds** with CSS animations
+- **Gradient backgrounds** evoking magical landscapes  
+- **Gentle animations** using GSAP for transitions
+- **Warm color palettes** inspired by Ghibli films
+- **Organic shapes** and soft edges throughout
+
+
+## **Key Features:**
+- **Scalable structure** - Easy to add more lands/guilds/quests
+- **Minimal graphics** - Uses CSS gradients, emojis, and simple shapes
+- **Responsive design** - Works on different screen sizes
+- **Smooth transitions** - GSAP animations between pages
+- **Progress tracking** - Visual feedback for learner advancement
+
+
+The system uses a breadcrumb-style navigation where learners can move between levels, and each interaction has satisfying micro-animations that give it that Ghibli sense of wonder and progression.
+
+
+Would you like me to expand on any particular aspect or adjust the visual theme for specific vocational areas?
+
+
+_—---------------------++++++++++++++
+
+
+I'd like to plan the quest selection process after a student selects a guild
+
+
+Great! Let's design the quest selection process that bridges from guild selection to starting a specific qualification journey. Here's how I envision this critical decision point:
+
+
+## **Quest Selection Flow:**
+
+
+**1. Guild Entry Transition**
+- Student clicks a guild → Brief "entering the guild hall" animation
+- Camera-like zoom into the guild emblem
+- Fade to a dedicated quest selection environment
+
+
+**2. Quest Hall Layout**
+The quest selection page would have:
+
+
+**Header Section:**
+- Guild banner with emblem and motto
+- "Choose Your Path, Young Adventurer" messaging
+- Breadcrumb: World → Land → Guild → **Quest Selection**
+
+
+**Quest Categories (Visual Tiers):**
+- **Apprentice Quests** (Certificate I-II) - Ground level, simple wooden signs
+- **Journeyman Quests** (Certificate III-IV) - Elevated platforms, stone markers  
+- **Master Quests** (Diploma/Advanced Diploma) - Floating islands, golden pedestals
+- **Specialist Expeditions** (Skill Sets) - Side paths, smaller glowing portals
+
+
+**3. Quest Card Design:**
+Each qualification displayed as an illuminated scroll or quest board with:
+- **Quest Name** ("The Foundation Builder's Trial")
+- **Official Title** (Certificate III in Construction)
+- **Duration Estimate** ("6-12 month journey")
+- **Prerequisites** (Previous quests required, if any)
+- **Reward Preview** (Career outcomes, "Become a skilled tradesperson")
+- **Difficulty Crystals** (1-5 gems showing complexity)
+- **Spirit Guide** (Mentor character who'll guide this quest)
+
+
+**4. Selection Interaction:**
+- Hover reveals quest details in a floating tooltip
+- Click triggers "Quest Calling" - the scroll glows and unfurls
+- Confirmation modal: "Are you ready to begin [Quest Name]? This journey will test your skills in..."
+- "Accept Quest" button starts the unit pathway
+
+
+**5. Filtering/Sorting Options:**
+Presented as magical filters rather than dropdown menus:
+- **Crystal Ball** (Search by keywords)
+- **Time Hourglass** (Filter by duration)
+- **Difficulty Gems** (Filter by complexity)
+- **Pathway Compass** (Filter by career outcome)
+
+
+**6. Progress Integration:**
+- Previously started quests show progress orbs
+- Completed quests display as trophies or medallions
+- Locked quests (missing prerequisites) appear faded with chain symbols
+
+
+Would you like me to build this quest selection interface, or would you prefer to explore how students navigate from quest selection into the actual unit progression system?
+
+
+_—-----------------------------------------
+
+
+With hundreds of quests we will need some grouping and navigation to a subset of quests
+
+
+Absolutely! With hundreds of quests, we need smart hierarchical grouping. Here's a multi-layered approach:
+
+
+## **Quest Organization Hierarchy:**
+
+
+**Level 1: Guild Specializations (Training Package Clusters)**
+Within each guild, group related qualifications:
+- **Construction Guild** → Building Trades, Civil Works, Demolition, Scaffolding
+- **Engineering Guild** → Mechanical, Electrical Systems, Instrumentation, Manufacturing
+- **Automotive Guild** → Light Vehicle, Heavy Vehicle, Marine, Motorcycles
+
+
+**Level 2: Career Pathways (Qualification Families)**
+Group qualifications by career progression:
+- **Apprentice → Journeyman → Master** (Cert I → II → III → IV → Diploma)
+- **Specialist Branches** (Different career directions from same base)
+- **Cross-Guild Pathways** (Qualifications that bridge specializations)
+
+
+**Level 3: Quest Clusters (Related Qualifications)**
+Group similar qualifications together:
+- **Foundation Quests** (Entry-level, no prerequisites)
+- **Advancement Quests** (Building on existing skills)
+- **Mastery Quests** (Advanced leadership/management)
+- **Specialty Quests** (Niche or emerging skills)
+
+
+## **Navigation Design:**
+
+
+**Visual Flow:**
+1. **Guild Hall** → Shows specialization wings/districts
+2. **Specialization Wing** → Shows career pathway trees  
+3. **Pathway View** → Shows quest clusters as journey maps
+4. **Quest Selection** → Individual qualification choices
+
+
+**Interface Elements:**
+- **Wing Selection** - Different architectural areas of the guild hall
+- **Pathway Trees** - Branching visual trees showing progression routes
+- **Journey Maps** - Scrollable timelines with quest groupings
+- **Smart Filters** - Multiple filter combinations to narrow choices
+
+
+**Example User Journey:**
+Student clicks "Construction Guild" → 
+Sees specialization wings: "Building Trades", "Civil Construction", "Demolition" →
+Clicks "Building Trades" →
+Sees pathway tree: "Carpentry Path", "Bricklaying Path", "Painting Path" →
+Clicks "Carpentry Path" →
+Sees quest clusters: "Foundation Skills", "Advanced Techniques", "Business Skills" →
+Clicks "Foundation Skills" →
+Sees individual qualifications: "Cert II in Construction", "Cert III in Carpentry"
+
+
+This creates manageable chunks of 5-15 quests per final selection screen rather than overwhelming hundreds.
+
+
+Would you like me to prototype this multi-level navigation system, focusing on how students drill down from guild to specific quest selection?
+
+
+—-----------------------------------------------
+
+
+No. But it would be good if they could fast travel to that final quest selection view and how to navigate forward and back. What visual assets would be needed?
+
+
+Great point! Here's the **fast travel system** and **navigation flow**:
+
+
+## **Fast Travel System:**
+
+
+**1. Magical Map/Compass Interface**
+- **Quick Portal** - Direct search/filter to jump to any quest selection view
+- **Breadcrumb Portals** - Click any level in the breadcrumb to teleport back
+- **Recent Journeys** - Quick access to recently viewed quest areas
+- **Bookmarked Paths** - Save favorite specialization areas
+
+
+**2. Navigation Controls**
+- **Forward/Back Spirit Guides** - Floating companion characters for prev/next
+- **Pathway Breadcrumbs** - Interactive trail showing current location
+- **Quick Escape** - "Return to Guild Hall" floating button
+- **Progress Anchor** - Jump back to current active quest
+
+
+## **Visual Assets Needed:**
+
+
+**Navigation Elements:**
+- **Portal Rings** - Glowing circular frames for fast travel points
+- **Spirit Guide Icons** - Small floating mascots for navigation (owl, fox, butterfly)
+- **Breadcrumb Stones** - Enchanted stepping stones showing the path
+- **Compass Rose** - Magical navigation wheel
+- **Scroll Unfurling** - Transition animation between levels
+
+
+**Interactive Components:**
+- **Search Crystal Ball** - Mystical search interface
+- **Filter Gems** - Colored crystals for different filter types
+- **Back Arrow Winds** - Swirling air currents for back navigation
+- **Forward Path Lights** - Glowing orbs showing next steps
+
+
+**State Indicators:**
+- **Progress Orbs** - Partially filled spheres showing quest completion
+- **Lock Symbols** - Mystical chains/barriers for unavailable content
+- **New Quest Sparkles** - Twinkling effects for newly available quests
+- **Visited Path Glow** - Subtle luminescence on previously viewed areas
+
+
+**Transition Effects:**
+- **Page Curl** - Scroll/book page turning between quest lists
+- **Mist Fade** - Ethereal transitions between specialization areas
+- **Zoom Ripples** - Water-like effects when drilling down into categories
+
+
+All of these could be created with CSS animations, simple SVG shapes, and strategic gradient use - maintaining the minimal graphics approach while providing rich visual feedback for the complex navigation system.
+
+
+Would you like me to prototype the fast travel interface specifically?
+
+
+—-------------------------------------------_-
+
+
+Maybe later. I was thinking of using phaser.js as well as GSAP, but don't have experience with phaser. Is there a pre built branching scenario phaser game, preferably driven by json or an api
+
+
+# Introduction to Phaser.js
+
+
+Phaser is a powerful 2D HTML5 game framework that handles graphics rendering, input, physics, and audio. It's built around a **Scene-based architecture** where each scene represents a different state or screen of your game.
+
+
+## **Core Phaser Concepts:**
+
+
+**Scenes** - Self-contained game states (like your quest selection screens)
+**Game Objects** - Sprites, text, shapes that appear on screen
+**Input** - Mouse, touch, keyboard handling
+**Tweens** - Built-in animation system (similar to GSAP)
+**Loader** - Asset management for images, audio, JSON
+
+
+## **Basic Structure:**
+```javascript
+class MyScene extends Phaser.Scene {
+    preload() { /* Load assets */ }
+    create() { /* Set up the scene */ }
+    update() { /* Game loop */ }
+}
+```
+
+
+## **Branching Scenario Setup with JSON:**
+
+
+Here's how you could structure a JSON-driven branching system for your vocational education platform:
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phaser Branching Scenario Demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.80.1/phaser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        #game-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .info {
+            max-width: 800px;
+            margin: 0 auto 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        h1, h2 { color: #FFD700; }
+        pre {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h1>Phaser Branching Scenario Demo</h1>
+        <p>This demonstrates how to use JSON data to drive branching scenarios in Phaser.js for your vocational education platform.</p>
+        
+        <h2>JSON Structure:</h2>
+        <pre id="json-display"></pre>
+        
+        <h2>How it Works:</h2>
+        <ul>
+            <li><strong>Scenes</strong> represent different states (Guild Hall, Quest Selection, Unit Challenge)</li>
+            <li><strong>JSON data</strong> defines available choices and transitions</li>
+            <li><strong>Dynamic loading</strong> - scenes are built from JSON at runtime</li>
+            <li><strong>Progress tracking</strong> - JSON can include completion states</li>
+        </ul>
+    </div>
+
+
+    <div id="game-container"></div>
+
+
+    <script>
+        // JSON Data Structure for Branching Scenarios
+        const scenarioData = {
+            "currentScene": "guildHall",
+            "playerProgress": {
+                "completedQuests": [],
+                "currentLevel": 1,
+                "experience": 0
+            },
+            "scenes": {
+                "guildHall": {
+                    "id": "guildHall",
+                    "title": "🏰 Construction Guild Hall",
+                    "description": "Welcome to the Construction Guild! Choose your specialization.",
+                    "background": "#8B4513",
+                    "choices": [
+                        {
+                            "id": "building",
+                            "text": "🏗️ Building Trades",
+                            "description": "Learn carpentry, bricklaying, and general construction",
+                            "targetScene": "buildingQuests",
+                            "requirements": [],
+                            "position": { "x": 200, "y": 300 }
+                        },
+                        {
+                            "id": "civil",
+                            "text": "🛤️ Civil Construction", 
+                            "description": "Roads, bridges, and infrastructure",
+                            "targetScene": "civilQuests",
+                            "requirements": [],
+                            "position": { "x": 400, "y": 300 }
+                        },
+                        {
+                            "id": "electrical",
+                            "text": "⚡ Electrical Systems",
+                            "description": "Wiring, power systems, and automation",
+                            "targetScene": "electricalQuests",
+                            "requirements": ["level2"],
+                            "position": { "x": 600, "y": 300 }
+                        }
+                    ]
+                },
+                "buildingQuests": {
+                    "id": "buildingQuests",
+                    "title": "🏗️ Building Trades - Quest Selection",
+                    "description": "Choose your learning path in building construction.",
+                    "background": "#D2691E",
+                    "choices": [
+                        {
+                            "id": "cert2",
+                            "text": "Certificate II Construction",
+                            "description": "Foundation skills - 6 months",
+                            "targetScene": "cert2Units",
+                            "requirements": [],
+                            "position": { "x": 150, "y": 250 }
+                        },
+                        {
+                            "id": "cert3",
+                            "text": "Certificate III Carpentry",
+                            "description": "Skilled tradesperson - 12 months",
+                            "targetScene": "cert3Units",
+                            "requirements": ["cert2"],
+                            "position": { "x": 400, "y": 250 }
+                        },
+                        {
+                            "id": "cert4",
+                            "text": "Certificate IV Building",
+                            "description": "Supervision & management - 18 months",
+                            "targetScene": "cert4Units",
+                            "requirements": ["cert3"],
+                            "position": { "x": 650, "y": 250 }
+                        }
+                    ]
+                },
+                "cert2Units": {
+                    "id": "cert2Units",
+                    "title": "📚 Certificate II Construction - Units",
+                    "description": "Complete these challenges to earn your qualification.",
+                    "background": "#228B22",
+                    "choices": [
+                        {
+                            "id": "unit1",
+                            "text": "Handle Materials",
+                            "description": "CPCCCA2011A - Learn to select and handle construction materials",
+                            "targetScene": "unitChallenge",
+                            "unitData": {
+                                "code": "CPCCCA2011A",
+                                "title": "Handle carpentry materials",
+                                "challenges": ["safety_quiz", "material_sorting", "tool_identification"]
+                            },
+                            "position": { "x": 200, "y": 200 }
+                        },
+                        {
+                            "id": "unit2", 
+                            "text": "Use Tools",
+                            "description": "CPCCCM1012A - Work with hand and power tools safely",
+                            "targetScene": "unitChallenge",
+                            "unitData": {
+                                "code": "CPCCCM1012A", 
+                                "title": "Work effectively and sustainably",
+                                "challenges": ["tool_safety", "maintenance_quiz", "practical_demo"]
+                            },
+                            "position": { "x": 400, "y": 200 }
+                        },
+                        {
+                            "id": "unit3",
+                            "text": "Safety Procedures",
+                            "description": "CPCCOHS2001A - Apply OHS requirements and procedures",
+                            "targetScene": "unitChallenge", 
+                            "unitData": {
+                                "code": "CPCCOHS2001A",
+                                "title": "Apply OHS requirements, policies and procedures",
+                                "challenges": ["hazard_identification", "ppe_selection", "emergency_response"]
+                            },
+                            "position": { "x": 600, "y": 200 }
+                        }
+                    ]
+                }
+            }
+        };
+
+
+        // Display JSON structure
+        document.getElementById('json-display').textContent = JSON.stringify(scenarioData, null, 2);
+
+
+        // Phaser Scene Classes
+        class BaseScene extends Phaser.Scene {
+            constructor(key) {
+                super({ key: key });
+                this.sceneData = null;
+            }
+
+
+            preload() {
+                // In a real app, you'd load images, audio, etc.
+                // this.load.image('background', 'assets/backgrounds/guild-hall.jpg');
+            }
+
+
+            create() {
+                this.sceneData = scenarioData.scenes[this.scene.key];
+                
+                if (!this.sceneData) {
+                    console.error(`Scene data not found for: ${this.scene.key}`);
+                    return;
+                }
+
+
+                this.setupScene();
+            }
+
+
+            setupScene() {
+                const { width, height } = this.sys.game.config;
+                
+                // Background color
+                this.cameras.main.setBackgroundColor(this.sceneData.background || '#333333');
+                
+                // Title
+                this.add.text(width/2, 80, this.sceneData.title, {
+                    fontSize: '28px',
+                    fontFamily: 'Arial',
+                    color: '#FFFFFF',
+                    stroke: '#000000',
+                    strokeThickness: 2
+                }).setOrigin(0.5);
+
+
+                // Description
+                this.add.text(width/2, 130, this.sceneData.description, {
+                    fontSize: '16px',
+                    fontFamily: 'Arial',
+                    color: '#DDDDDD',
+                    wordWrap: { width: width - 100 }
+                }).setOrigin(0.5);
+
+
+                // Create choice buttons
+                this.createChoices();
+
+
+                // Back button (except for first scene)
+                if (this.scene.key !== 'guildHall') {
+                    this.createBackButton();
+                }
+            }
+
+
+            createChoices() {
+                this.sceneData.choices.forEach((choice, index) => {
+                    const isAvailable = this.checkRequirements(choice.requirements);
+                    
+                    // Choice container
+                    const container = this.add.container(choice.position.x, choice.position.y);
+                    
+                    // Choice background
+                    const bg = this.add.rectangle(0, 0, 180, 100, isAvailable ? 0x4ECDC4 : 0x666666)
+                        .setStrokeStyle(2, isAvailable ? 0x44A08D : 0x444444);
+                    
+                    // Choice text
+                    const text = this.add.text(0, -20, choice.text, {
+                        fontSize: '14px',
+                        fontFamily: 'Arial',
+                        color: isAvailable ? '#FFFFFF' : '#AAAAAA',
+                        align: 'center'
+                    }).setOrigin(0.5);
+
+
+                    // Description text
+                    const desc = this.add.text(0, 20, choice.description, {
+                        fontSize: '10px',
+                        fontFamily: 'Arial', 
+                        color: isAvailable ? '#DDDDDD' : '#888888',
+                        align: 'center',
+                        wordWrap: { width: 160 }
+                    }).setOrigin(0.5);
+
+
+                    container.add([bg, text, desc]);
+                    
+                    if (isAvailable) {
+                        container.setInteractive(bg, Phaser.Geom.Rectangle.Contains)
+                            .on('pointerdown', () => this.handleChoice(choice))
+                            .on('pointerover', () => {
+                                this.tweens.add({
+                                    targets: container,
+                                    scaleX: 1.05,
+                                    scaleY: 1.05,
+                                    duration: 200
+                                });
+                            })
+                            .on('pointerout', () => {
+                                this.tweens.add({
+                                    targets: container,
+                                    scaleX: 1,
+                                    scaleY: 1,
+                                    duration: 200
+                                });
+                            });
+                    }
+                });
+            }
+
+
+            createBackButton() {
+                const backBtn = this.add.text(50, 50, '← Back', {
+                    fontSize: '18px',
+                    fontFamily: 'Arial',
+                    color: '#FFD700'
+                })
+                .setInteractive()
+                .on('pointerdown', () => {
+                    this.goBack();
+                })
+                .on('pointerover', () => {
+                    backBtn.setColor('#FFFFFF');
+                })
+                .on('pointerout', () => {
+                    backBtn.setColor('#FFD700');
+                });
+            }
+
+
+            handleChoice(choice) {
+                console.log(`Choice selected: ${choice.text} -> ${choice.targetScene}`);
+                
+                // Store any unit data for the next scene
+                if (choice.unitData) {
+                    this.registry.set('currentUnit', choice.unitData);
+                }
+
+
+                // Transition to next scene
+                this.scene.start(choice.targetScene);
+            }
+
+
+            checkRequirements(requirements) {
+                if (!requirements || requirements.length === 0) return true;
+                
+                // Check against player progress
+                const progress = scenarioData.playerProgress;
+                return requirements.every(req => {
+                    if (req.startsWith('level')) {
+                        const requiredLevel = parseInt(req.replace('level', ''));
+                        return progress.currentLevel >= requiredLevel;
+                    }
+                    return progress.completedQuests.includes(req);
+                });
+            }
+
+
+            goBack() {
+                // Simple back navigation - in a real app you'd maintain a history stack
+                const currentKey = this.scene.key;
+                if (currentKey === 'buildingQuests' || currentKey === 'civilQuests' || currentKey === 'electricalQuests') {
+                    this.scene.start('guildHall');
+                } else if (currentKey === 'cert2Units' || currentKey === 'cert3Units' || currentKey === 'cert4Units') {
+                    this.scene.start('buildingQuests');
+                }
+            }
+        }
+
+
+        // Unit Challenge Scene
+        class UnitChallengeScene extends BaseScene {
+            constructor() {
+                super('unitChallenge');
+            }
+
+
+            create() {
+                const unitData = this.registry.get('currentUnit');
+                const { width, height } = this.sys.game.config;
+
+
+                this.cameras.main.setBackgroundColor('#2E8B57');
+
+
+                // Title
+                this.add.text(width/2, 80, `🎯 ${unitData.title}`, {
+                    fontSize: '24px',
+                    fontFamily: 'Arial',
+                    color: '#FFFFFF',
+                    stroke: '#000000',
+                    strokeThickness: 2
+                }).setOrigin(0.5);
+
+
+                // Unit code
+                this.add.text(width/2, 120, unitData.code, {
+                    fontSize: '16px',
+                    fontFamily: 'Arial',
+                    color: '#FFD700'
+                }).setOrigin(0.5);
+
+
+                // Challenge list
+                unitData.challenges.forEach((challenge, index) => {
+                    const y = 200 + (index * 60);
+                    
+                    const challengeBtn = this.add.rectangle(width/2, y, 300, 40, 0x4169E1)
+                        .setStrokeStyle(2, 0x1E90FF);
+                    
+                    this.add.text(width/2, y, `Challenge ${index + 1}: ${challenge.replace('_', ' ')}`, {
+                        fontSize: '14px',
+                        fontFamily: 'Arial',
+                        color: '#FFFFFF'
+                    }).setOrigin(0.5);
+
+
+                    challengeBtn.setInteractive()
+                        .on('pointerdown', () => {
+                            console.log(`Starting challenge: ${challenge}`);
+                            // Here you'd start the actual learning activity
+                        });
+                });
+
+
+                this.createBackButton();
+            }
+
+
+            goBack() {
+                this.scene.start('cert2Units');
+            }
+        }
+
+
+        // Game Configuration
+        const config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            parent: 'game-container',
+            backgroundColor: '#2c3e50',
+            scene: [
+                new BaseScene('guildHall'),
+                new BaseScene('buildingQuests'), 
+                new BaseScene('civilQuests'),
+                new BaseScene('electricalQuests'),
+                new BaseScene('cert2Units'),
+                new BaseScene('cert3Units'),
+                new BaseScene('cert4Units'),
+                UnitChallengeScene
+            ]
+        };
+
+
+        // Start the game
+        const game = new Phaser.Game(config);
+
+
+        // Start with the guild hall
+        game.scene.start('guildHall');
+    </script>
+</body>
+</html>
+
+
+This demo shows how Phaser can handle complex branching scenarios using JSON data. Here are the key concepts:
+
+
+## **JSON-Driven Architecture:**
+
+
+**1. Scene Definition**
+Each scene (guild hall, quest selection, unit challenges) is defined in JSON with:
+- Title, description, visual properties
+- Available choices with requirements
+- Target scenes for transitions
+
+
+**2. Dynamic Scene Building**
+Scenes are built at runtime from JSON data, making it easy to:
+- Add new quests without coding
+- Modify progression requirements
+- Update content via API calls
+
+
+**3. Requirements System**
+JSON defines prerequisites (completed quests, levels) that determine:
+- Which choices are available
+- Visual feedback (greyed out vs active)
+- Progression validation
+
+
+## **Key Advantages for Your Use Case:**
+
+
+**Scalability** - Add hundreds of quests by updating JSON
+**Flexibility** - Change branching logic without code changes  
+**Data-Driven** - Pull from your AQTF database via API
+**Progress Tracking** - JSON stores completion states
+**Easy Updates** - Content teams can modify scenarios
+
+
+## **Integration Possibilities:**
+
+
+You could combine this with your existing HTML5/GSAP system:
+- Use Phaser for interactive quest selection
+- Keep HTML5 for information-heavy pages
+- Share data between both systems
+- Use GSAP for additional animations within Phaser scenes
+
+
+The JSON structure can easily scale to your full 54 training packages × dozens of qualifications × hundreds of units by organizing the data hierarchically and loading sections as needed.
+
+
+Would you like me to show how to integrate this with an API or expand on specific aspects like progress tracking or visual enhancements?
+
+
+# Introduction to Phaser.js
+
+
+Phaser is a powerful 2D HTML5 game framework that handles graphics rendering, input, physics, and audio. It's built around a **Scene-based architecture** where each scene represents a different state or screen of your game.
+
+
+## **Core Phaser Concepts:**
+
+
+**Scenes** - Self-contained game states (like your quest selection screens)
+**Game Objects** - Sprites, text, shapes that appear on screen
+**Input** - Mouse, touch, keyboard handling
+**Tweens** - Built-in animation system (similar to GSAP)
+**Loader** - Asset management for images, audio, JSON
+
+
+## **Basic Structure:**
+```javascript
+class MyScene extends Phaser.Scene {
+    preload() { /* Load assets */ }
+    create() { /* Set up the scene */ }
+    update() { /* Game loop */ }
+}
+```
+
+
+## **Branching Scenario Setup with JSON:**
+
+
+Here's how you could structure a JSON-driven branching system for your vocational education platform:
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phaser Branching Scenario Demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.80.1/phaser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        #game-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .info {
+            max-width: 800px;
+            margin: 0 auto 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        h1, h2 { color: #FFD700; }
+        pre {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h1>Phaser Branching Scenario Demo</h1>
+        <p>This demonstrates how to use JSON data to drive branching scenarios in Phaser.js for your vocational education platform.</p>
+        
+        <h2>JSON Structure:</h2>
+        <pre id="json-display"></pre>
+        
+        <h2>How it Works:</h2>
+        <ul>
+            <li><strong>Scenes</strong> represent different states (Guild Hall, Quest Selection, Unit Challenge)</li>
+            <li><strong>JSON data</strong> defines available choices and transitions</li>
+            <li><strong>Dynamic loading</strong> - scenes are built from JSON at runtime</li>
+            <li><strong>Progress tracking</strong> - JSON can include completion states</li>
+        </ul>
+    </div>
+
+
+    <div id="game-container"></div>
+
+
+    <script>
+        // JSON Data Structure for Branching Scenarios
+        const scenarioData = {
+            "currentScene": "guildHall",
+            "playerProgress": {
+                "completedQuests": [],
+                "currentLevel": 1,
+                "experience": 0
+            },
+            "scenes": {
+                "guildHall": {
+                    "id": "guildHall",
+                    "title": "🏰 Construction Guild Hall",
+                    "description": "Welcome to the Construction Guild! Choose your specialization.",
+                    "background": "#8B4513",
+                    "choices": [
+                        {
+                            "id": "building",
+                            "text": "🏗️ Building Trades",
+                            "description": "Learn carpentry, bricklaying, and general construction",
+                            "targetScene": "buildingQuests",
+                            "requirements": [],
+                            "position": { "x": 200, "y": 300 }
+                        },
+                        {
+                            "id": "civil",
+                            "text": "🛤️ Civil Construction", 
+                            "description": "Roads, bridges, and infrastructure",
+                            "targetScene": "civilQuests",
+                            "requirements": [],
+                            "position": { "x": 400, "y": 300 }
+                        },
+                        {
+                            "id": "electrical",
+                            "text": "⚡ Electrical Systems",
+                            "description": "Wiring, power systems, and automation",
+                            "targetScene": "electricalQuests",
+                            "requirements": ["level2"],
+                            "position": { "x": 600, "y": 300 }
+                        }
+                    ]
+                },
+                "buildingQuests": {
+                    "id": "buildingQuests",
+                    "title": "🏗️ Building Trades - Quest Selection",
+                    "description": "Choose your learning path in building construction.",
+                    "background": "#D2691E",
+                    "choices": [
+                        {
+                            "id": "cert2",
+                            "text": "Certificate II Construction",
+                            "description": "Foundation skills - 6 months",
+                            "targetScene": "cert2Units",
+                            "requirements": [],
+                            "position": { "x": 150, "y": 250 }
+                        },
+                        {
+                            "id": "cert3",
+                            "text": "Certificate III Carpentry",
+                            "description": "Skilled tradesperson - 12 months",
+                            "targetScene": "cert3Units",
+                            "requirements": ["cert2"],
+                            "position": { "x": 400, "y": 250 }
+                        },
+                        {
+                            "id": "cert4",
+                            "text": "Certificate IV Building",
+                            "description": "Supervision & management - 18 months",
+                            "targetScene": "cert4Units",
+                            "requirements": ["cert3"],
+                            "position": { "x": 650, "y": 250 }
+                        }
+                    ]
+                },
+                "cert2Units": {
+                    "id": "cert2Units",
+                    "title": "📚 Certificate II Construction - Units",
+                    "description": "Complete these challenges to earn your qualification.",
+                    "background": "#228B22",
+                    "choices": [
+                        {
+                            "id": "unit1",
+                            "text": "Handle Materials",
+                            "description": "CPCCCA2011A - Learn to select and handle construction materials",
+                            "targetScene": "unitChallenge",
+                            "unitData": {
+                                "code": "CPCCCA2011A",
+                                "title": "Handle carpentry materials",
+                                "challenges": ["safety_quiz", "material_sorting", "tool_identification"]
+                            },
+                            "position": { "x": 200, "y": 200 }
+                        },
+                        {
+                            "id": "unit2", 
+                            "text": "Use Tools",
+                            "description": "CPCCCM1012A - Work with hand and power tools safely",
+                            "targetScene": "unitChallenge",
+                            "unitData": {
+                                "code": "CPCCCM1012A", 
+                                "title": "Work effectively and sustainably",
+                                "challenges": ["tool_safety", "maintenance_quiz", "practical_demo"]
+                            },
+                            "position": { "x": 400, "y": 200 }
+                        },
+                        {
+                            "id": "unit3",
+                            "text": "Safety Procedures",
+                            "description": "CPCCOHS2001A - Apply OHS requirements and procedures",
+                            "targetScene": "unitChallenge", 
+                            "unitData": {
+                                "code": "CPCCOHS2001A",
+                                "title": "Apply OHS requirements, policies and procedures",
+                                "challenges": ["hazard_identification", "ppe_selection", "emergency_response"]
+                            },
+                            "position": { "x": 600, "y": 200 }
+                        }
+                    ]
+                }
+            }
+        };
+
+
+        // Display JSON structure
+        document.getElementById('json-display').textContent = JSON.stringify(scenarioData, null, 2);
+
+
+        // Phaser Scene Classes
+        class BaseScene extends Phaser.Scene {
+            constructor(key) {
+                super({ key: key });
+                this.sceneData = null;
+            }
+
+
+            preload() {
+                // In a real app, you'd load images, audio, etc.
+                // this.load.image('background', 'assets/backgrounds/guild-hall.jpg');
+            }
+
+
+            create() {
+                this.sceneData = scenarioData.scenes[this.scene.key];
+                
+                if (!this.sceneData) {
+                    console.error(`Scene data not found for: ${this.scene.key}`);
+                    return;
+                }
+
+
+                this.setupScene();
+            }
+
+
+            setupScene() {
+                const { width, height } = this.sys.game.config;
+                
+                // Background color
+                this.cameras.main.setBackgroundColor(this.sceneData.background || '#333333');
+                
+                // Title
+                this.add.text(width/2, 80, this.sceneData.title, {
+                    fontSize: '28px',
+                    fontFamily: 'Arial',
+                    color: '#FFFFFF',
+                    stroke: '#000000',
+                    strokeThickness: 2
+                }).setOrigin(0.5);
+
+
+                // Description
+                this.add.text(width/2, 130, this.sceneData.description, {
+                    fontSize: '16px',
+                    fontFamily: 'Arial',
+                    color: '#DDDDDD',
+                    wordWrap: { width: width - 100 }
+                }).setOrigin(0.5);
+
+
+                // Create choice buttons
+                this.createChoices();
+
+
+                // Back button (except for first scene)
+                if (this.scene.key !== 'guildHall') {
+                    this.createBackButton();
+                }
+            }
+
+
+            createChoices() {
+                this.sceneData.choices.forEach((choice, index) => {
+                    const isAvailable = this.checkRequirements(choice.requirements);
+                    
+                    // Choice container
+                    const container = this.add.container(choice.position.x, choice.position.y);
+                    
+                    // Choice background
+                    const bg = this.add.rectangle(0, 0, 180, 100, isAvailable ? 0x4ECDC4 : 0x666666)
+                        .setStrokeStyle(2, isAvailable ? 0x44A08D : 0x444444);
+                    
+                    // Choice text
+                    const text = this.add.text(0, -20, choice.text, {
+                        fontSize: '14px',
+                        fontFamily: 'Arial',
+                        color: isAvailable ? '#FFFFFF' : '#AAAAAA',
+                        align: 'center'
+                    }).setOrigin(0.5);
+
+
+                    // Description text
+                    const desc = this.add.text(0, 20, choice.description, {
+                        fontSize: '10px',
+                        fontFamily: 'Arial', 
+                        color: isAvailable ? '#DDDDDD' : '#888888',
+                        align: 'center',
+                        wordWrap: { width: 160 }
+                    }).setOrigin(0.5);
+
+
+                    container.add([bg, text, desc]);
+                    
+                    if (isAvailable) {
+                        container.setInteractive(bg, Phaser.Geom.Rectangle.Contains)
+                            .on('pointerdown', () => this.handleChoice(choice))
+                            .on('pointerover', () => {
+                                this.tweens.add({
+                                    targets: container,
+                                    scaleX: 1.05,
+                                    scaleY: 1.05,
+                                    duration: 200
+                                });
+                            })
+                            .on('pointerout', () => {
+                                this.tweens.add({
+                                    targets: container,
+                                    scaleX: 1,
+                                    scaleY: 1,
+                                    duration: 200
+                                });
+                            });
+                    }
+                });
+            }
+
+
+            createBackButton() {
+                const backBtn = this.add.text(50, 50, '← Back', {
+                    fontSize: '18px',
+                    fontFamily: 'Arial',
+                    color: '#FFD700'
+                })
+                .setInteractive()
+                .on('pointerdown', () => {
+                    this.goBack();
+                })
+                .on('pointerover', () => {
+                    backBtn.setColor('#FFFFFF');
+                })
+                .on('pointerout', () => {
+                    backBtn.setColor('#FFD700');
+                });
+            }
+
+
+            handleChoice(choice) {
+                console.log(`Choice selected: ${choice.text} -> ${choice.targetScene}`);
+                
+                // Store any unit data for the next scene
+                if (choice.unitData) {
+                    this.registry.set('currentUnit', choice.unitData);
+                }
+
+
+                // Transition to next scene
+                this.scene.start(choice.targetScene);
+            }
+
+
+            checkRequirements(requirements) {
+                if (!requirements || requirements.length === 0) return true;
+                
+                // Check against player progress
+                const progress = scenarioData.playerProgress;
+                return requirements.every(req => {
+                    if (req.startsWith('level')) {
+                        const requiredLevel = parseInt(req.replace('level', ''));
+                        return progress.currentLevel >= requiredLevel;
+                    }
+                    return progress.completedQuests.includes(req);
+                });
+            }
+
+
+            goBack() {
+                // Simple back navigation - in a real app you'd maintain a history stack
+                const currentKey = this.scene.key;
+                if (currentKey === 'buildingQuests' || currentKey === 'civilQuests' || currentKey === 'electricalQuests') {
+                    this.scene.start('guildHall');
+                } else if (currentKey === 'cert2Units' || currentKey === 'cert3Units' || currentKey === 'cert4Units') {
+                    this.scene.start('buildingQuests');
+                }
+            }
+        }
+
+
+        // Unit Challenge Scene
+        class UnitChallengeScene extends BaseScene {
+            constructor() {
+                super('unitChallenge');
+            }
+
+
+            create() {
+                const unitData = this.registry.get('currentUnit');
+                const { width, height } = this.sys.game.config;
+
+
+                this.cameras.main.setBackgroundColor('#2E8B57');
+
+
+                // Title
+                this.add.text(width/2, 80, `🎯 ${unitData.title}`, {
+                    fontSize: '24px',
+                    fontFamily: 'Arial',
+                    color: '#FFFFFF',
+                    stroke: '#000000',
+                    strokeThickness: 2
+                }).setOrigin(0.5);
+
+
+                // Unit code
+                this.add.text(width/2, 120, unitData.code, {
+                    fontSize: '16px',
+                    fontFamily: 'Arial',
+                    color: '#FFD700'
+                }).setOrigin(0.5);
+
+
+                // Challenge list
+                unitData.challenges.forEach((challenge, index) => {
+                    const y = 200 + (index * 60);
+                    
+                    const challengeBtn = this.add.rectangle(width/2, y, 300, 40, 0x4169E1)
+                        .setStrokeStyle(2, 0x1E90FF);
+                    
+                    this.add.text(width/2, y, `Challenge ${index + 1}: ${challenge.replace('_', ' ')}`, {
+                        fontSize: '14px',
+                        fontFamily: 'Arial',
+                        color: '#FFFFFF'
+                    }).setOrigin(0.5);
+
+
+                    challengeBtn.setInteractive()
+                        .on('pointerdown', () => {
+                            console.log(`Starting challenge: ${challenge}`);
+                            // Here you'd start the actual learning activity
+                        });
+                });
+
+
+                this.createBackButton();
+            }
+
+
+            goBack() {
+                this.scene.start('cert2Units');
+            }
+        }
+
+
+        // Game Configuration
+        const config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            parent: 'game-container',
+            backgroundColor: '#2c3e50',
+            scene: [
+                new BaseScene('guildHall'),
+                new BaseScene('buildingQuests'), 
+                new BaseScene('civilQuests'),
+                new BaseScene('electricalQuests'),
+                new BaseScene('cert2Units'),
+                new BaseScene('cert3Units'),
+                new BaseScene('cert4Units'),
+                UnitChallengeScene
+            ]
+        };
+
+
+        // Start the game
+        const game = new Phaser.Game(config);
+
+
+        // Start with the guild hall pm
+        game.scene.start('guildHall');
+    </script>
+</body>
+</html>
+
+
+This demo shows how Phaser can handle complex branching scenarios using JSON data. Here are the key concepts:
+
+
+## **JSON-Driven Architecture:**
+
+
+**1. Scene Definition**
+Each scene (guild hall, quest selection, unit challenges) is defined in JSON with:
+- Title, description, visual properties
+- Available choices with requirements
+- Target scenes for transitions
+
+
+**2. Dynamic Scene Building**
+Scenes are built at runtime from JSON data, making it easy to:
+- Add new quests without coding
+- Modify progression requirements
+- Update content via API calls
+
+
+**3. Requirements System**
+JSON defines prerequisites (completed quests, levels) that determine:
+- Which choices are available
+- Visual feedback (greyed out vs active)
+- Progression validation
+
+
+## **Key Advantages for Your Use Case:**
+
+
+**Scalability** - Add hundreds of quests by updating JSON
+**Flexibility** - Change branching logic without code changes  
+**Data-Driven** - Pull from your AQTF database via API
+**Progress Tracking** - JSON stores completion states
+**Easy Updates** - Content teams can modify scenarios
+
+
+## **Integration Possibilities:**
+
+
+You could combine this with your existing HTML5/GSAP system:
+- Use Phaser for interactive quest selection
+- Keep HTML5 for information-heavy pages
+- Share data between both systems
+- Use GSAP for additional animations within Phaser scenes
+
+
+The JSON structure can easily scale to your full 54 training packages × dozens of qualifications × hundreds of units by organizing the data hierarchically and loading sections as needed.
+
+
+Would you like me to show how to integrate this with an API or expand on specific aspects like progress tracking or visual enhancements?
