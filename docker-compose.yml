@@ -28,11 +28,12 @@ services:
       context: ./backend
       dockerfile: Dockerfile.dev
     environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-learnonline}}
       - DB_NAME=${DB_NAME:-learnonline}
       - DB_USER=${DB_USER:-postgres}
       - DB_PASSWORD=${DB_PASSWORD:-postgres}
       - DB_HOST=db
-      - DB_PORT=5432  # Keep as 5432 since this is internal to docker network
+      - DB_PORT=5432
       - SECRET_KEY=${SECRET_KEY:-devsecrethardtoguess}
       - ALGORITHM=HS256
       - ACCESS_TOKEN_EXPIRE_MINUTES=30
