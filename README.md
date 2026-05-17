@@ -1,106 +1,121 @@
 # LearnOnline.cc
 
-## Introduction
+A gamified vocational training platform for Australian RTOs. Teachers self-host it, load the units they teach from Training.gov.au, and their students play through them as a card-based competency game.
 
-LearnOnline.cc is a gamified vocational training platform using the Australian Quality Training Framework (AQTF) data to provide structured, nationally recognized training content with game mechanics to enhance learner engagement and motivation. The platform integrates with Training.gov.au (TGA) to fetch and process training packages, units of competency, and their elements and performance criteria.
+Built with FastAPI, PostgreSQL, jQuery, and Bootstrap. No build step. MIT licensed.
 
-I was previously the developer of NTISthis, a website that leveraged AQTF qualifications to generate assessment templates for vocational education. While NTISthis provided valuable tools for educators, the operational costs became unsustainable, leading me to discontinue the service.
+---
 
-Now, with LearnOnline.cc, I'm experimenting with a more flexible and exploratory approach — what's' called "vibe programming". I'm using a mix of tools and AI assistants, including notbooklm, clive, roo, Copilot, Claude, and cline, to find what best fits my workflow. As a result, the codebase may appear a bit chaotic at times, reflecting this experimental process.
+## Quick Start (15 minutes)
 
-## Setup
+### Prerequisites
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
 
-To get started with LearnOnline.cc, you'll need [Docker](https://www.docker.com/products/docker-desktop/) installed on your system.
+### 1. Clone and configure
 
-1. **Clone the repository:**
-   ```sh
-   git clone https://github.com/botheredbybees/learnonline.cc.git
-   cd learnonline.cc
+```bash
+git clone https://github.com/your-username/learnonline.cc.git
+cd learnonline.cc
+cp env_example.txt .env
+```
+
+Edit `.env`:
+
+**Option A — Local development (default, no external DB needed):**
+The defaults in `env_example.txt` work as-is. Leave `DATABASE_URL` commented out.
+
+**Option B — Supabase (recommended for sharing with students):**
+1. Create a free project at [supabase.com](https://supabase.com)
+2. Go to **Project Settings → Database → Connection string → URI**
+3. Copy the URI and set it in `.env`:
+   ```
+   DATABASE_URL=postgresql://postgres:[your-password]@db.[project-ref].supabase.co:5432/postgres
    ```
 
-2. **Run the Docker containers:**
-   ```sh
-   docker-compose up --build
-   ```
+### 2. Start the app
 
-   This will build and start all required services.
+```bash
+docker-compose up --build
+```
 
-For detailed instructions, please see:
-- [Development Setup Guide](DEVELOPMENT_SETUP.md) - Complete setup guide for developers
-- [Administrator Guide](docs/technical/admin_setup.md) - Instructions for setting up and using admin features
-- [Updating Guide](UPDATING.md) - Instructions for updating an existing installation
+Wait for all three services (`db`, `backend`, `frontend`) to show as healthy (~60 seconds first run).
 
-## TGA Integration
+- **App:** http://localhost:8080
+- **API docs (Swagger):** http://localhost:8000/docs
 
-LearnOnline.cc integrates with Training.gov.au (TGA) to fetch and process training packages, units of competency, qualifications, and skillsets. The integration provides the following features:
+### 3. Create an admin user
 
-- Sync training packages from TGA API
-- Extract elements and performance criteria from unit XML files
-- Process locally stored XML files
-- Admin interface for managing TGA data
+```bash
+docker-compose exec db psql -U postgres -d learnonline -c "
+INSERT INTO users (email, password_hash, first_name, last_name, is_active, role_id)
+SELECT 'admin@example.com', crypt('changeme', gen_salt('bf')), 'Admin', 'User', true, id
+FROM roles WHERE name = 'admin'
+ON CONFLICT (email) DO NOTHING;
+"
+```
 
-For more information on the TGA integration, see the [TGA Integration Documentation](docs/technical/tga_integration.md) and [TGA Testing Documentation](docs/technical/tga_testing.md).
+Log in at http://localhost:8080/login with `admin@example.com` / `changeme`.
 
-## Troubleshooting
+### 4. Load training data
 
-If you encounter issues with Docker containers, try the following commands:
+In the admin UI: **Admin → TGA Sync → select training packages → Import**
 
-- **Stop and remove all containers and volumes:**
-  ```sh
-  docker-compose down --volumes
-  ```
+This fetches unit data from training.gov.au (public API, no credentials needed beyond the defaults in `.env`).
 
-- **List all containers (including stopped ones):**
-  ```sh
-  docker ps -a
-  ```
+---
 
-- **Remove all stopped containers:**
-  ```sh
-  docker container prune -f
-  ```
-## Accessing Services
+## Development
 
-Once the Docker containers are running, you can access the services in your browser at the following endpoints:
+### Running tests
 
-- **Frontend:**  
-  [http://localhost:8080](http://localhost:8080)  
-  The main user interface for LearnOnline.cc.
+```bash
+./run_tests.sh setup   # start test postgres container (first time)
+./run_tests.sh unit    # all tests
+./run_tests.sh auth    # auth tests only
+./run_tests.sh coverage # HTML coverage report → test-results/
+```
 
-- **Backend API (Swagger/OpenAPI docs):**  
-  [http://localhost:8000/docs](http://localhost:8000/docs)  
-  Interactive API documentation and testing.
+### Database migrations
 
-*Note: Additional services like Streamlit, Grafana, Prometheus, and the ELK stack will be added in future iterations as needed.*
+```bash
+cd backend
+alembic upgrade head                               # apply all migrations
+alembic revision --autogenerate -m "description"  # generate new migration
+```
 
-## Admin Interface
+### Project structure
 
-An administration interface is available at [http://localhost:8080/admin](http://localhost:8080/admin) for users with admin privileges. This interface allows:
+```
+backend/          FastAPI app
+  models/tables.py    Canonical ORM models
+  database.py         DB connection (reads DATABASE_URL)
+  routers/            One router per resource
+  services/tga/       TGA SOAP client
+  alembic/            Migrations
+frontend/         Static HTML + jQuery + Bootstrap, served by nginx
+docs/
+  concept.md          Product vision
+  architecture.md     Technical decisions
+  aqtf.md             AQTF data model and TGA sync
+  assessment_gameplay/ Game engine design (M3)
+  superpowers/        Implementation plans and specs
+```
 
-- Viewing all training packages in the system
-- Syncing training packages, units, qualifications, and skillsets from TGA
-- Monitoring background tasks
+---
 
-To create an admin user, set the `is_admin` flag to `true` in the database for your user.
+## Roadmap
 
-If you have changed any ports in your `docker-compose.yml` file, adjust the URLs accordingly.
+| Milestone | Status |
+|-----------|--------|
+| M1 — Clean Slate | In progress |
+| M2 — Quiz MVP | Planned |
+| M3 — Game Engine Alpha | Planned |
+| M4 — Adaptive Loop + SCORM Export | Planned |
 
-## Technical Documentation
+See `docs/superpowers/specs/2026-05-17-learnonline-roadmap-design.md` for the full spec.
 
-### [LearnOnline Concept Document](docs/learnonline_concept.md)
-This document outlines the vision, target audience, key features, and development roadmap for the LearnOnline.cc platform. It serves as a high-level overview of the project.
+---
 
-### [System Components Technical Specifications](docs/technical/system_components.md)
-This document provides detailed technical specifications for the LearnOnline.cc platform, including system components, AI/ML integrations, content delivery mechanisms, and development environment setup.
+## License
 
-### [User Interaction Technical Specifications](docs/technical/user_interaction.md)
-This document describes the technical details of user interaction features, including real-time progress tracking, points and achievement systems, team management, and performance metrics.
-
-### [Integration Points Technical Specifications](docs/technical/integration_points.md)
-This document explains the integration points with external systems, such as the Training.gov.au SOAP API, Gemini API, H5P, and Streamlit, along with error handling and monitoring strategies.
-
-### [Content Generation Technical Specifications](docs/technical/content_generation.md)
-This document details the content generation process using AI/ML models, including unit summaries, assessment questions, and learning resources, as well as quality assurance and caching strategies.
-
-### [AQTF Data Integration Technical Specifications](docs/technical/aqtf_integration.md)
-This document provides the technical details for integrating AQTF data, including SOAP API operations, database synchronization, XML data processing, and performance optimization.
+MIT
