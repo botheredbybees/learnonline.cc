@@ -5,7 +5,10 @@
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Skill(superpowers:writing-plans)",
-      "Bash(DATABASE_URL=postgresql://postgres:postgres@localhost:5332/learnonline python -c ' *)"
+      "Bash(DATABASE_URL=postgresql://postgres:postgres@localhost:5332/learnonline python -c ' *)",
+      "Skill(superpowers:executing-plans)",
+      "Bash(git commit *)",
+      "Bash([ -f \"/c/Users/peter_sha/Documents/sourcecode/learnonline.cc/$f\" ])"
     ]
   }
 }
