@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from passlib.context import CryptContext
 
-from db.database import get_db
+from database import get_db
 from models.tables import User, Role, Permission, RolePermission
 
 # Load environment variables

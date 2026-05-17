@@ -15,7 +15,7 @@ This module provides endpoints for:
 from fastapi import APIRouter, Depends, HTTPException, Query, status, BackgroundTasks
 from sqlalchemy.orm import Session
 from typing import List, Optional, Sequence, Dict, Any
-from db.database import get_db
+from database import get_db
 import models.tables as models
 from models.schemas import TrainingPackageSchema
 from auth.auth_bearer import JWTBearer

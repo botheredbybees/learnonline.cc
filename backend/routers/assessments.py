@@ -17,7 +17,7 @@ from sqlalchemy.orm import Session
 
 from models.tables import Assessment, AssessmentQuestion
 from models.schemas import AssessmentSchema, AssessmentQuestionSchema, AssessmentCreateSchema, AssessmentUpdateSchema, AssessmentQuestionCreateSchema, AssessmentQuestionUpdateSchema
-from db.database import get_db
+from database import get_db
 
 router = APIRouter(
     prefix="/assessments",

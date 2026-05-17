@@ -14,7 +14,7 @@ import logging
 from datetime import datetime
 from typing import List, Dict, Any, Optional
 from sqlalchemy.orm import Session
-from db.database import SessionLocal
+from database import SessionLocal
 import models.tables as models
 from services.tga.client import TrainingGovClient
 from services.tga.exceptions import TGAClientError

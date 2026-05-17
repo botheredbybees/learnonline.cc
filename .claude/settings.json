@@ -1,0 +1,27 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(jq -r '.tool_input.file_path // empty'); echo \"$FILE\" | grep -qE '(^|/)\\.env$' && echo '{\"decision\":\"block\",\"reason\":\"Blocking .env edit — update env_example.txt instead and apply changes to .env manually to avoid exposing credentials.\"}' || true"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(jq -r '.tool_input.file_path // empty'); echo \"$FILE\" | grep -qi '\\.py$' && command -v black > /dev/null 2>&1 && black \"$FILE\" 2>/dev/null && isort \"$FILE\" 2>/dev/null; true",
+            "statusMessage": "Auto-formatting Python..."
+          }
+        ]
+      }
+    ]
+  }
+}

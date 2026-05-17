@@ -19,7 +19,7 @@ from uuid import UUID
 
 from models.tables import User, UserProfile, Role
 from models.schemas import UserSchema, UserProfileSchema, UserUpdateSchema, UserProfileUpdateSchema
-from db.database import get_db
+from database import get_db
 from auth.auth_bearer import JWTBearer
 from auth.auth_handler import get_current_user
 

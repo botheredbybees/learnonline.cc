@@ -20,7 +20,7 @@ from datetime import datetime
 
 from models.tables import Badge, UserBadge
 from models.schemas import BadgeSchema, UserBadgeSchema, BadgeCreateSchema, BadgeUpdateSchema, UserBadgeCreateSchema
-from db.database import get_db
+from database import get_db
 
 router = APIRouter(
     prefix="/badges",

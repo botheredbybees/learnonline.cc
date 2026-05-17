@@ -19,7 +19,7 @@ from uuid import UUID
 
 from models.tables import UserProgress
 from models.schemas import UserProgressSchema, UserProgressCreateSchema, UserProgressUpdateSchema
-from db.database import get_db
+from database import get_db
 
 router = APIRouter(
     prefix="/user-progress",

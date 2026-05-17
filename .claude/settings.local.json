@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(superpowers:brainstorming)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Skill(superpowers:writing-plans)",
+      "Bash(DATABASE_URL=postgresql://postgres:postgres@localhost:5332/learnonline python -c ' *)"
+    ]
+  }
+}

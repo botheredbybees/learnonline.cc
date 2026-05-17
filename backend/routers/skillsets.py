@@ -17,7 +17,7 @@ from sqlalchemy.orm import Session
 
 from models.tables import Skillset
 from models.schemas import SkillsetSchema, SkillsetCreateSchema, SkillsetUpdateSchema
-from db.database import get_db
+from database import get_db
 
 router = APIRouter(
     prefix="/skillsets",

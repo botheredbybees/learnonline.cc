@@ -1,6 +1,6 @@
 ** Sprint Prefix for Code-Inclusive Workflows:**
 
-You are a senior full-stack developer. I'm working on a gamified vocational training platform that transforms traditional vocational education into an engaging, interactive learning experience. The platform leverages the Australian Quality Training Framework (AQTF) data to provide structured, nationally recognized training content while incorporating game mechanics to enhance learner engagement and motivation with FastAPI/PostgreSQL/jQuery/Bootstrap.
+You are a senior full-stack developer. I'm working on a gamified vocational training platform that transforms traditional vocational education into an engaging, interactive learning experience. The platform leverages the Australian Quality Training Framework (AQTF) data to provide structured, nationally recognized training content while incorporating game mechanics to enhance learner engagement and motivation with SupaBase/PostgreSQL/postgREST/json/XML/jQuery/Bootstrap.
 
 For this sprint, analyze the provided source files and:
 - Understand existing patterns and conventions in my codebase

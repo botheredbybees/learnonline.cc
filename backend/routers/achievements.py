@@ -20,7 +20,7 @@ from datetime import datetime
 
 from models.tables import Achievement, UserAchievement
 from models.schemas import AchievementSchema, UserAchievementSchema, AchievementCreateSchema, AchievementUpdateSchema, UserAchievementCreateSchema
-from db.database import get_db
+from database import get_db
 
 router = APIRouter(
     prefix="/achievements",

@@ -9,7 +9,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.tables import Role, Permission, RolePermission
-from db.database import DATABASE_URL
+from database import DATABASE_URL
 import logging
 
 logging.basicConfig(level=logging.INFO)

@@ -17,7 +17,7 @@ from sqlalchemy.orm import Session
 
 from models.tables import Qualification
 from models.schemas import QualificationSchema, QualificationCreateSchema, QualificationUpdateSchema
-from db.database import get_db
+from database import get_db
 
 router = APIRouter(
     prefix="/qualifications",

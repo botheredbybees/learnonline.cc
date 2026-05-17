@@ -38,7 +38,7 @@ from models.schemas import (
     UserRegisterSchema, UserLoginSchema, PasswordResetRequestSchema, 
     PasswordResetSchema, UserSchema, UserProfileSchema
 )
-from db.database import get_db
+from database import get_db
 from auth.auth_handler import (
     sign_jwt, decode_jwt, get_password_hash, verify_password, 
     refresh_access_token, get_user_permissions,
