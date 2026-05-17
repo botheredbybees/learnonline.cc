@@ -11,10 +11,15 @@ The active roadmap is a four-milestone plan. See the full spec at:
 
 | Milestone | Focus | Status |
 |-----------|-------|--------|
-| M1 — Clean Slate | Delete dead code, fix schema, write setup guide | **In progress** |
+| M1 — Clean Slate | Delete dead code, fix schema, write setup guide | **Plan written — ready to execute** |
 | M2 — Quiz MVP | Wire AQTF units → quizzes → XP/badges | Planned |
 | M3 — Game Engine Alpha | Card-based competency game | Planned |
 | M4 — Adaptive Loop + SCORM | Gap analysis + SCORM 1.2 export | Planned |
+
+**M1 implementation plan:** `docs/superpowers/plans/2026-05-17-m1-clean-slate.md`
+
+To execute M1 in a fresh context window, say:
+> "Execute the M1 Clean Slate plan at docs/superpowers/plans/2026-05-17-m1-clean-slate.md"
 
 ## Architecture
 
