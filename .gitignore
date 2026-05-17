@@ -45,4 +45,4 @@ learnonline.cc.code-workspace
 docker-compose.override.yml 
 
 # node modules
-frontend/node_modules/
+frontend/node_modules/.superpowers/
