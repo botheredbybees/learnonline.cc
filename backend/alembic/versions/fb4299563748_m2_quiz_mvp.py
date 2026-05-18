@@ -26,8 +26,10 @@ def upgrade() -> None:
         sa.Column("source_url", sa.String(length=500), nullable=True),
         sa.Column("version", sa.String(length=100), nullable=True),
         sa.Column("imported_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("question_count", sa.Integer(), nullable=True),
-        sa.Column("status", sa.String(length=20), nullable=True),
+        sa.Column("question_count", sa.Integer(), server_default="0", nullable=True),
+        sa.Column(
+            "status", sa.String(length=20), server_default="pending", nullable=True
+        ),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),
@@ -48,8 +50,10 @@ def upgrade() -> None:
         sa.Column("user_id", sa.Integer(), nullable=False),
         sa.Column("element_id", sa.Integer(), nullable=False),
         sa.Column("unit_id", sa.Integer(), nullable=False),
-        sa.Column("status", sa.String(length=20), nullable=True),
-        sa.Column("attempts", sa.Integer(), nullable=True),
+        sa.Column(
+            "status", sa.String(length=20), server_default="not_started", nullable=True
+        ),
+        sa.Column("attempts", sa.Integer(), server_default="0", nullable=True),
         sa.Column("xp_awarded", sa.Integer(), nullable=True),
         sa.Column("passed_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column(
@@ -123,26 +127,42 @@ def upgrade() -> None:
         sa.Column("options", postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     )
     op.add_column(
-        "assessment_questions", sa.Column("source", sa.String(length=20), nullable=True)
+        "assessment_questions",
+        sa.Column(
+            "source", sa.String(length=20), server_default="teacher", nullable=True
+        ),
     )
     op.add_column(
         "assessment_questions",
-        sa.Column("review_status", sa.String(length=20), nullable=True),
+        sa.Column(
+            "review_status", sa.String(length=20), server_default="draft", nullable=True
+        ),
     )
     op.add_column(
-        "assessment_questions", sa.Column("is_active", sa.Boolean(), nullable=True)
+        "assessment_questions",
+        sa.Column("is_active", sa.Boolean(), server_default="true", nullable=True),
     )
     op.create_foreign_key(
-        None, "assessment_questions", "unit_performance_criteria", ["pc_id"], ["id"]
+        "fk_aq_pc_id",
+        "assessment_questions",
+        "unit_performance_criteria",
+        ["pc_id"],
+        ["id"],
     )
 
     # Add element_id to assessments
     op.add_column("assessments", sa.Column("element_id", sa.Integer(), nullable=True))
-    op.create_foreign_key(None, "assessments", "unit_elements", ["element_id"], ["id"])
+    op.create_foreign_key(
+        "fk_assessments_element_id",
+        "assessments",
+        "unit_elements",
+        ["element_id"],
+        ["id"],
+    )
 
     # Add code to badges
     op.add_column("badges", sa.Column("code", sa.String(length=50), nullable=True))
-    op.create_unique_constraint(None, "badges", ["code"])
+    op.create_unique_constraint("uq_badges_code", "badges", ["code"])
 
     # Add plain_english_description to units
     op.add_column(
@@ -152,11 +172,11 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     op.drop_column("units", "plain_english_description")
-    op.drop_constraint(None, "badges", type_="unique")
+    op.drop_constraint("uq_badges_code", "badges", type_="unique")
     op.drop_column("badges", "code")
-    op.drop_constraint(None, "assessments", type_="foreignkey")
+    op.drop_constraint("fk_assessments_element_id", "assessments", type_="foreignkey")
     op.drop_column("assessments", "element_id")
-    op.drop_constraint(None, "assessment_questions", type_="foreignkey")
+    op.drop_constraint("fk_aq_pc_id", "assessment_questions", type_="foreignkey")
     op.drop_column("assessment_questions", "is_active")
     op.drop_column("assessment_questions", "review_status")
     op.drop_column("assessment_questions", "source")
