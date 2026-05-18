@@ -538,7 +538,7 @@ class AnswerSubmission(BaseSchema):
 
 class AnswerResponse(BaseSchema):
     is_correct: bool
-    explanation: str
+    explanation: Optional[str] = None
     element_passed: bool
     xp_awarded: Optional[int] = None
     unit_completed: bool
