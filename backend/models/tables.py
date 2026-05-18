@@ -264,7 +264,6 @@ class Assessment(Base, TimestampMixin):
     unit = relationship("Unit", back_populates="assessments")
     element = relationship("UnitElement", back_populates="assessments")
     questions = relationship("AssessmentQuestion", back_populates="assessment")
-    submissions = relationship("UserSubmission", back_populates="assessment")
 
 
 class AssessmentQuestion(Base, TimestampMixin):
@@ -285,22 +284,6 @@ class AssessmentQuestion(Base, TimestampMixin):
     assessment = relationship("Assessment", back_populates="questions")
     performance_criterion = relationship("UnitPerformanceCriteria")
     user_answers = relationship("UserAnswer", back_populates="question")
-
-
-class UserSubmission(Base, TimestampMixin):
-    __tablename__ = "user_submissions"
-
-    id = Column(Integer, primary_key=True)
-    assessment_id = Column(Integer, ForeignKey("assessments.id"))
-    user_id = Column(Integer, ForeignKey("users.id"))
-    status = Column(String(50), default="pending")
-    score = Column(Integer)
-    feedback = Column(Text)
-    submitted_at = Column(DateTime(timezone=True), default=func.now())
-    graded_at = Column(DateTime(timezone=True))
-
-    user = relationship("User")
-    assessment = relationship("Assessment", back_populates="submissions")
 
 
 class Achievement(Base, TimestampMixin):
