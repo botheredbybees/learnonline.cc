@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from auth.auth_bearer import JWTBearer
@@ -22,6 +23,13 @@ from models.schemas import (
 )
 
 router = APIRouter(prefix="/api/quiz", tags=["quiz"])
+
+_ANSWER_KEYS = {"correct", "correct_order", "keywords", "model_answer"}
+
+
+def _strip_answer_keys(options: dict) -> dict:
+    return {k: v for k, v in options.items() if k not in _ANSWER_KEYS}
+
 
 # ── auth helper ──────────────────────────────────────────────────────────────
 
@@ -87,11 +95,15 @@ def _session_correct_count(
     db: Session, user_id: int, assessment_id: int, session_id: str
 ) -> int:
     return (
-        db.query(models.UserAnswer)
-        .filter_by(user_id=user_id, session_id=session_id, is_correct=True)
+        db.query(func.count(models.UserAnswer.question_id.distinct()))
+        .filter(
+            models.UserAnswer.user_id == user_id,
+            models.UserAnswer.session_id == session_id,
+            models.UserAnswer.is_correct == True,
+        )
         .join(models.AssessmentQuestion)
         .filter(models.AssessmentQuestion.assessment_id == assessment_id)
-        .count()
+        .scalar()
     )
 
 
@@ -184,7 +196,7 @@ def get_element_questions(
             id=q.id,
             question_text=q.question_text,
             question_type=q.question_type,
-            options=q.options or {},
+            options=_strip_answer_keys(q.options or {}),
             pc_id=q.pc_id,
         )
         for q in questions
@@ -225,6 +237,10 @@ def submit_answer(
     assessment = (
         db.query(models.Assessment).filter_by(element_id=payload.element_id).first()
     )
+    if assessment and question.assessment_id != assessment.id:
+        raise HTTPException(
+            status_code=400, detail="Question does not belong to this element"
+        )
     xp_per_element = assessment.experience_points if assessment else 50
 
     element_passed = False
@@ -251,6 +267,8 @@ def submit_answer(
                     .filter_by(id=payload.element_id)
                     .first()
                 )
+                if element is None:
+                    raise HTTPException(status_code=404, detail="Element not found")
                 if prog is None:
                     prog = models.UserElementProgress(
                         user_id=current_user.id,

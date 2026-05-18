@@ -195,3 +195,9 @@ class TestAnswerSubmission:
         assert prog is not None
         assert prog.status == "passed"
         assert prog.xp_awarded == 50
+
+        from models.tables import UserProfile
+
+        profile = db.query(UserProfile).filter_by(user_id=quiz_data["user"].id).first()
+        db.refresh(profile)
+        assert profile.experience_points >= 50
