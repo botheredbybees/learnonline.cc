@@ -9,8 +9,8 @@ from sqlalchemy import (
     ForeignKey,
     DateTime,
     func,
-    JSON,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 from .base import Base, TimestampMixin
 
@@ -276,7 +276,7 @@ class AssessmentQuestion(Base, TimestampMixin):
     question_text = Column(Text, nullable=False)
     question_type = Column(String(50), nullable=False)
     correct_answer = Column(Text)
-    options = Column(JSON)
+    options = Column(JSONB)
     points = Column(Integer, default=10)
     source = Column(String(20), default="teacher")
     review_status = Column(String(20), default="draft")
@@ -379,7 +379,7 @@ class UserAnswer(Base, TimestampMixin):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     question_id = Column(Integer, ForeignKey("assessment_questions.id"), nullable=False)
     session_id = Column(String(36), nullable=False)
-    answer = Column(JSON, nullable=False)
+    answer = Column(JSONB, nullable=False)
     is_correct = Column(Boolean, nullable=False)
     answered_at = Column(DateTime(timezone=True), default=func.now())
 
