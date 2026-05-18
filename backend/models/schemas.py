@@ -499,3 +499,95 @@ class RolePermissionSchema(BaseSchema):
     role_id: int
     permission_id: int
     created_at: datetime
+
+
+# --- M2 Quiz Schemas ---
+
+
+class ElementStatusSchema(BaseSchema):
+    element_id: int
+    element_num: str
+    element_text: str
+    status: str
+    attempts: int
+    xp_awarded: Optional[int] = None
+
+
+class UnitQuizStateResponse(BaseSchema):
+    unit_id: int
+    unit_code: str
+    unit_title: str
+    plain_english_description: Optional[str] = None
+    elements: List[ElementStatusSchema]
+
+
+class QuestionResponse(BaseSchema):
+    id: int
+    question_text: str
+    question_type: str
+    options: dict
+    pc_id: Optional[int] = None
+
+
+class AnswerSubmission(BaseSchema):
+    question_id: int
+    element_id: int
+    session_id: str
+    answer: dict
+
+
+class AnswerResponse(BaseSchema):
+    is_correct: bool
+    explanation: str
+    element_passed: bool
+    xp_awarded: Optional[int] = None
+    unit_completed: bool
+    badge_awarded: Optional[str] = None
+
+
+class ElementProgressResponse(BaseSchema):
+    element_id: int
+    element_num: str
+    element_text: str
+    status: str
+    attempts: int
+    xp_awarded: Optional[int] = None
+    passed_at: Optional[datetime] = None
+
+
+class UnitProgressResponse(BaseSchema):
+    unit_id: int
+    elements: List[ElementProgressResponse]
+
+
+# --- M2 Pack Schemas ---
+
+
+class PackImportRequest(BaseSchema):
+    source_url: str
+
+
+class PackImportResponse(BaseSchema):
+    pack_id: int
+    training_package_code: str
+    unit_count: int
+    question_count: int
+    status: str
+
+
+class QuestionAdminItem(BaseSchema):
+    id: int
+    assessment_id: int
+    question_text: str
+    question_type: str
+    options: dict
+    source: str
+    review_status: str
+    is_active: bool
+
+
+class QuestionPatchRequest(BaseSchema):
+    question_text: Optional[str] = None
+    options: Optional[dict] = None
+    review_status: Optional[str] = None
+    is_active: Optional[bool] = None
