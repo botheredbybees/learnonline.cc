@@ -20,6 +20,7 @@ from routers import (
     gamification,
 )
 from routers.quiz import router as quiz_router
+from routers.packs import router as packs_router
 
 # Load environment variables
 load_dotenv()
@@ -73,6 +74,7 @@ app.include_router(achievements.router)
 app.include_router(badges.router)
 app.include_router(gamification.router)
 app.include_router(quiz_router)
+app.include_router(packs_router)
 
 if __name__ == "__main__":
     import uvicorn
