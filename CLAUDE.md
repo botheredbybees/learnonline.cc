@@ -11,15 +11,10 @@ The active roadmap is a four-milestone plan. See the full spec at:
 
 | Milestone | Focus | Status |
 |-----------|-------|--------|
-| M1 — Clean Slate | Delete dead code, fix schema, write setup guide | **Plan written — ready to execute** |
-| M2 — Quiz MVP | Wire AQTF units → quizzes → XP/badges | Planned |
+| M1 — Clean Slate | Delete dead code, fix schema, write setup guide | **Complete** |
+| M2 — Quiz MVP | Wire AQTF units → quizzes → XP/badges | **In progress** (quiz router, pack import, scoring, migrations all landed) |
 | M3 — Game Engine Alpha | Card-based competency game | Planned |
 | M4 — Adaptive Loop + SCORM | Gap analysis + SCORM 1.2 export | Planned |
-
-**M1 implementation plan:** `docs/superpowers/plans/2026-05-17-m1-clean-slate.md`
-
-To execute M1 in a fresh context window, say:
-> "Execute the M1 Clean Slate plan at docs/superpowers/plans/2026-05-17-m1-clean-slate.md"
 
 ## Architecture
 
@@ -61,20 +56,11 @@ learnonline.cc/
 - **TGA Integration**: SOAP client in `services/tga/client.py` fetches XML from training.gov.au. XML parsed with BeautifulSoup; hierarchy is training packages → qualifications → units → elements → performance criteria.
 - **Testing**: Tests run against a real PostgreSQL instance (not mocked). `ENVIRONMENT=test` suppresses `create_all()` in `main.py`; conftest handles schema setup.
 
-### Dead Code (M1 cleanup targets)
+### Dead Code
 
-These files exist but should not be referenced — they are scheduled for deletion in M1:
+M1 cleanup removed `backend/db/`, `tables_old.py`, `favorites.py`, `user.py`, `streamlit/`, `legacy_test_scripts/`, `schema_old.sql`, `debug_auth.py`. These are gone — don't reference them.
 
-| Path | Why it's dead |
-|------|--------------|
-| `backend/models/tables_old.py` | UUID-era models, superseded by `tables.py` |
-| `backend/models/favorites.py` | UUID-based Pydantic schemas, never wired up |
-| `backend/models/user.py` | UUID-based Pydantic user model, superseded |
-| `backend/db/` | Duplicate `database.py`, unused |
-| `streamlit/` | Empty shell |
-| `legacy_test_scripts/` | Dead exploratory scripts |
-| `schema_old.sql` | Old backup |
-| `debug_auth.py` (root) | One-off debug script |
+Remaining potentially stale artifacts (verify before use): `schema.sql` and `schema_updates/` are reference snapshots only — Alembic is the source of truth.
 
 ## Development Commands
 
